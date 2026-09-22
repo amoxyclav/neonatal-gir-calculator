@@ -332,7 +332,7 @@ function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w);const g=d
 function calcFluid(f,w){
  const v=f.volume||0,c=f.conc||0;
  if(f.custom)return{g:0,e:0,p:0,carb:0};
- const g=(f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS')?0:(v*c*10/(w*1440)||0);
+ const g=(f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS')?0:(w>0?v*c*10/(w*1440):0);
  const e=v*(f.energy||0)/100;const p=v*(f.protein||0)/100;const carb=v*(f.carb||0)/100;
  return{g,e,p,carb};
 }
