@@ -101,7 +101,7 @@ const fmt=(x,d=2)=>(Number.isFinite(x)?x:0).toFixed(d);
 function patient(){return{w:n('w'),tfi:n('tfi'),target:n('tg')}}
 function addFluid(name,custom=false){
  const p=PRODUCTS[name]||{conc:0,energy:0,protein:0,carb:0,gir:true,editable:true};
- fluids.push({id:++uid,name,custom,volume:0,volumeUnit:'mL/day',conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb});
+ fluids.push({id:++uid,name,custom,volume:0,volumeUnit:'mL/day',volumeInitialized:false,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb});
  renderFluids();recalc();
 }
 function removeFluid(id){fluids=fluids.filter(f=>f.id!==id);renderFluids();recalc()}
@@ -114,7 +114,7 @@ function productRow(f){
  const displayVol=unit==='mL/hr'?(f.volume||0)/24:(f.volume||0);
  return '<div class="fluid"><div class="fluid-head fluid-main-row">'+
  '<div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div>'+
- '<div class="fluid-volume"><label>Volume <span class="volume-unit-label">'+unit+'</span><input type="number" min="0" step="1" data-field="volumeDisplay" data-id="'+f.id+'" value="'+fmt(displayVol, unit==='mL/hr'?2:1)+'"></label>'+
+ '<div class="fluid-volume"><label>Volume<input type="number" min="0" step="1" data-field="volumeDisplay" data-id="'+f.id+'" value="'+(f.volumeInitialized?'':fmt(displayVol, unit==='mL/hr'?2:1))+'"></label>'+
  '<select class="volume-unit" data-unit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div>'+
  '<div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">0.00</b></span><span>Energy <b data-row-energy="'+f.id+'">0.00</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">0.00</b> g/day</span></div>'+
  '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
@@ -132,6 +132,7 @@ function renderFluids(){
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
  document.querySelectorAll('[data-details]').forEach(b=>b.onclick=()=>{const box=$('details-'+b.dataset.details);const open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
  document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day';const displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;const inp=document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]');if(inp)inp.value=fmt(x.value==='mL/hr'?f.volume/24:f.volume,x.value==='mL/hr'?2:1);recalc(false);updateFluidRowOnly(f);});
+ document.querySelectorAll('[data-field]').forEach(x=>x.onfocus=()=>{if(x.dataset.field==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.id);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
  document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}}}recalc(false);updateFluidRowOnly(f)})
 }
 function updateFluidRowOnly(f){const x=currentTotals(),r=calcFluid(f,x.p.w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2)}
