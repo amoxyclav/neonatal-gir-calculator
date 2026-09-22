@@ -112,6 +112,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="stat"><span>GIR after plan</span><strong id="nutPlanGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>Unused TFI after plan</span><strong id="nutPlanUnused">0</strong><small>mL/day</small></div>
 </div>
+<div id="nutPlanStatus" class="status ok" style="margin-top:14px">Automatic plan is set to achieve the target GIR.</div>
 </div>
 </div>
 
@@ -405,8 +406,9 @@ function syncNutritionPatient(){
  if($('nutTg'))$('nutTg').value=$('tg').value;
  if($('nutPermittedTfi'))$('nutPermittedTfi').textContent=fmt(p.w*p.tfi,1);
 }
+let nutritionPlanEditing=false;
 function syncNutritionPlan(){
- if(!$('nutPlanA'))return;
+ if(!$('nutPlanA')||nutritionPlanEditing)return;
  if(!$('nutPlanA').options.length){const opts=PLAN.map(x=>'<option>'+x+'</option>').join('');$('nutPlanA').innerHTML=opts;$('nutPlanB').innerHTML=opts;}
 
  $('nutPlanA').value=$('planA').value;$('nutPlanB').value=$('planB').value;
@@ -435,6 +437,17 @@ function updateNutrition(renderEditor=true){
  if($('nutPlanVolume'))$('nutPlanVolume').textContent=fmt(planVol,1);
  if($('nutPlanGir'))$('nutPlanGir').textContent=fmt(planGir);
  if($('nutPlanUnused'))$('nutPlanUnused').textContent=fmt(Math.max(x.remaining-planVol,0),1);
+ const planDiff=x.p.target-planGir;
+ let planFlags=[];
+ if(x.over)planFlags.push('Current fluids exceed permitted TFI.');
+ if(planVol>x.remaining+0.001)planFlags.push('Plan exceeds remaining TFI.');
+ if(a===b&&planVol>0)planFlags.push('Same fluid selected twice.');
+ if(x.gir>x.p.target+0.001)planFlags.push('Current GIR already exceeds target.');
+ if(planDiff>0.01)planFlags.push('Plan is below target GIR by '+fmt(planDiff,2)+' mg/kg/min.');
+ else if(planDiff<-0.01)planFlags.push('Plan is above target GIR by '+fmt(Math.abs(planDiff),2)+' mg/kg/min.');
+ else if(planVol>0&&Math.abs(planDiff)<=0.01)planFlags.push('Target GIR achieved.');
+ else planFlags.push('No additional GIR plan entered.');
+ if($('nutPlanStatus')){$('nutPlanStatus').textContent=planFlags.join(' ');$('nutPlanStatus').className='status '+(planFlags.some(s=>/exceed|above|below|twice/.test(s))?'warn':'ok')}
  let h='';
  fluids.forEach(f=>{const r=calcFluid(f,pt.w);h+='<tr><td>'+f.name+'</td><td>'+fmt(f.volume,1)+' mL/day</td><td>'+fmt(r.g,2)+'</td><td>'+fmt(r.e,1)+'</td><td>'+fmt(r.p,2)+'</td><td>'+fmt(r.carb,2)+'</td></tr>'});
  if(av>0){h+='<tr><td>Automatic plan — '+a+'</td><td>'+fmt(av,1)+' mL/day</td><td>'+fmt(ra.g,2)+'</td><td>'+fmt(ra.e,1)+'</td><td>'+fmt(ra.p,2)+'</td><td>'+fmt(ra.carb,2)+'</td></tr>'}
@@ -485,10 +498,18 @@ $('nutWeightUnit').onchange=()=>{
  $('weightUnit').value=u;$('w').value=fmt(raw,u==='kg'?2:1);
  nutritionPatientEditing=true;updatePatientInputs();nutritionPatientEditing=false;
 };
-$('nutPlanA').onchange=()=>{$('planA').value=$('nutPlanA').value;$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan('planA');recalc(false)};
-$('nutPlanB').onchange=()=>{$('planB').value=$('nutPlanB').value;$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan('planB');recalc(false)};
-$('nutPlanAV').oninput=()=>{$('planAV').value=n('nutPlanAV').toFixed(1);$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
-$('nutPlanBV').oninput=()=>{$('planBV').value=n('nutPlanBV').toFixed(1);$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
+$('nutPlanA').onchange=()=>{
+ const {av}=getPlanVolumes();$('planA').value=$('nutPlanA').value;$('planAV').value=String(av);$('planA').dataset.user='1';clearPlanExact();nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
+};
+$('nutPlanB').onchange=()=>{
+ const {bv}=getPlanVolumes();$('planB').value=$('nutPlanB').value;$('planBV').value=String(bv);$('planA').dataset.user='1';clearPlanExact();nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
+};
+$('nutPlanAV').oninput=()=>{
+ const raw=$('nutPlanAV').value; $('planAV').value=raw===''?'0':raw;$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
+};
+$('nutPlanBV').oninput=()=>{
+ const raw=$('nutPlanBV').value; $('planBV').value=raw===''?'0':raw;$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
+};
 
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(t>Math.min(a,b)&&t<Math.max(a,b)&&v>0){const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY'}else{$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks'}});
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
