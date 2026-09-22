@@ -117,13 +117,13 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 
 <div class="section">
 <h2>4. Additional Nutrition Sources</h2>
-<p class="mut">Turn on only the nutritional additions being used. Expand a source to edit its preset composition. These edits are patient/session-specific and immediately affect all nutrition calculations.</p>
+<p class="mut">Enter a quantity only for the nutritional additions being used. Leave blank to treat the source as 0. Expand a source to edit its preset composition. These edits are patient/session-specific and immediately affect all nutrition calculations.</p>
 
 <div class="nutrition-extra" id="hmfSource">
   <div class="nutrition-extra-head">
     <div class="nutrition-extra-main">
-      <label class="nutrition-extra-toggle"><input type="checkbox" id="hmfToggle"> HMF</label>
-      <div class="nutrition-extra-amount"><input id="hmf" type="number" min="0" step="1" value="0" disabled placeholder="Amount"><span class="mut">sachets/day</span></div>
+      <div class="nutrition-extra-toggle">HMF</div>
+      <div class="nutrition-extra-amount"><input id="hmf" type="number" min="0" step="1" value="" placeholder="Sachets/day"><span class="mut">sachets/day</span></div>
       <div class="nutrition-extra-live"><span>Energy <b id="hmfLiveEnergy">0.0</b> kcal/day</span><span>Protein <b id="hmfLiveProtein">0.00</b> g/day</span><span>Carb <b id="hmfLiveCarb">0.00</b> g/day</span></div>
     </div>
     <button class="details-toggle" type="button" data-extra-details="hmf" aria-expanded="false">⌄</button>
@@ -140,8 +140,8 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="nutrition-extra" id="hmfAdvanceSource">
   <div class="nutrition-extra-head">
     <div class="nutrition-extra-main">
-      <label class="nutrition-extra-toggle"><input type="checkbox" id="hmfAdvanceToggle"> HMF-Advance</label>
-      <div class="nutrition-extra-amount"><input id="hmfAdvance" type="number" min="0" step="1" value="0" disabled placeholder="Amount"><span class="mut">sachets/day</span></div>
+      <div class="nutrition-extra-toggle">HMF-Advance</div>
+      <div class="nutrition-extra-amount"><input id="hmfAdvance" type="number" min="0" step="1" value="" placeholder="Sachets/day"><span class="mut">sachets/day</span></div>
       <div class="nutrition-extra-live"><span>Energy <b id="hmfAdvanceLiveEnergy">0.0</b> kcal/day</span><span>Protein <b id="hmfAdvanceLiveProtein">0.00</b> g/day</span><span>Carb <b id="hmfAdvanceLiveCarb">0.00</b> g/day</span></div>
     </div>
     <button class="details-toggle" type="button" data-extra-details="hmfAdvance" aria-expanded="false">⌄</button>
@@ -158,8 +158,8 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="nutrition-extra" id="mctSource">
   <div class="nutrition-extra-head">
     <div class="nutrition-extra-main">
-      <label class="nutrition-extra-toggle"><input type="checkbox" id="mctToggle"> Simyl MCT oil</label>
-      <div class="nutrition-extra-amount"><input id="mct" type="number" min="0" step="0.1" value="0" disabled placeholder="Amount"><span class="mut">mL/day</span></div>
+      <div class="nutrition-extra-toggle">Simyl MCT oil</div>
+      <div class="nutrition-extra-amount"><input id="mct" type="number" min="0" step="0.1" value="" placeholder="mL/day"><span class="mut">mL/day</span></div>
       <div class="nutrition-extra-live"><span>Energy <b id="mctLiveEnergy">0.0</b> kcal/day</span><span>Protein <b id="mctLiveProtein">0.00</b> g/day</span><span>Carb <b id="mctLiveCarb">0.00</b> g/day</span></div>
     </div>
     <button class="details-toggle" type="button" data-extra-details="mct" aria-expanded="false">⌄</button>
@@ -439,7 +439,7 @@ function updateNutrition(renderEditor=true){
  if(av>0){h+='<tr><td>Automatic plan — '+a+'</td><td>'+fmt(av,1)+' mL/day</td><td>'+fmt(ra.g,2)+'</td><td>'+fmt(ra.e,1)+'</td><td>'+fmt(ra.p,2)+'</td><td>'+fmt(ra.carb,2)+'</td></tr>'}
  if(bv>0&&b!=='NS'){h+='<tr><td>Automatic plan — '+b+'</td><td>'+fmt(bv,1)+' mL/day</td><td>'+fmt(rb.g,2)+'</td><td>'+fmt(rb.e,1)+'</td><td>'+fmt(rb.p,2)+'</td><td>'+fmt(rb.carb,2)+'</td></tr>'}
  let e=x.energy+planE,p=x.protein+planP,c=x.carb+planC;
- const hm=$('hmfToggle')?.checked?n('hmf'):0,ha=$('hmfAdvanceToggle')?.checked?n('hmfAdvance'):0,mct=$('mctToggle')?.checked?n('mct'):0;
+ const hm=n('hmf'),ha=n('hmfAdvance'),mct=n('mct');
  const hmE=n('hmfEnergy'),hmP=n('hmfProtein'),hmC=n('hmfCarb');
  const haE=n('hmfAdvanceEnergy'),haP=n('hmfAdvanceProtein'),haC=n('hmfAdvanceCarb');
  const mctE=n('mctEnergy'),mctP=n('mctProtein'),mctC=n('mctCarb');
@@ -462,7 +462,6 @@ $('weightUnit').onchange=()=>{const f=patient(),u=$('weightUnit').value;const ra
 fillPlanOptions();
 ['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)});
 $('resetPlan').onclick=()=>{$('planA').dataset.user='';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
-['hmfToggle','hmfAdvanceToggle','mctToggle'].forEach(id=>$(id).onchange=()=>{const map={hmfToggle:'hmf',hmfAdvanceToggle:'hmfAdvance',mctToggle:'mct'};const input=$(map[id]);input.disabled=!$(id).checked;updateNutrition()});
 ['hmf','hmfAdvance','mct','hmfEnergy','hmfProtein','hmfCarb','hmfAdvanceEnergy','hmfAdvanceProtein','hmfAdvanceCarb','mctEnergy','mctProtein','mctCarb'].forEach(id=>$(id).oninput=updateNutrition);
 document.querySelectorAll('[data-extra-details]').forEach(b=>b.onclick=()=>{const box=$('extra-details-'+b.dataset.extraDetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
 $('nutritionAddFluid').innerHTML='<option value="">+ Add predefined fluid…</option>'+PREDEF.map(x=>'<option>'+x+'</option>').join('');
