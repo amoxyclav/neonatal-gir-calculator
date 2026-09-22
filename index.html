@@ -141,7 +141,7 @@ function recalc(renderRows=true){
  $('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');
  $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI.':'Current fluid total is within permitted TFI.';
  $('fluidStatus').className='status '+(x.over?'bad':'ok');
- if(renderRows){fluids.forEach(f=>{const r=calcFluid(f,x.p.w);if($('[data-row-gir="'+f.id+'"]'))$('[data-row-gir="'+f.id+'"]').textContent=fmt(r.g);if($('[data-row-energy="'+f.id+'"]'))$('[data-row-energy="'+f.id+'"]').textContent=fmt(r.e,1);if($('[data-row-protein="'+f.id+'"]'))$('[data-row-protein="'+f.id+'"]').textContent=fmt(r.p,2)})}
+ fluids.forEach(f=>updateFluidRowOnly(f));
  updateTarget(x);updateNutrition();
 }
 function autoPlan(x){
