@@ -49,22 +49,23 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 <div class="stats">
 <div class="stat"><span>Additional GIR required</span><strong id="additionalGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>Required average concentration</span><strong id="requiredConc">0</strong><small>%</small></div>
-
 <div class="stat"><span>Automated line type</span><strong id="lineType">—</strong><small>based on required concentration</small></div>
+</div>
+<div class="plan"><h3>Automatic plan — interactive</h3><p class="help">The automatic plan is the active plan. Change the preferred fluids or their actual mL/day and the calculation updates immediately. Fluid volumes can be entered to 1 decimal place.</p>
+<div class="grid g4">
+<label>Fluid A<select id="planA"></select></label>
+<label>Fluid A mL/day<input id="planAV" type="number" min="0" step="0.1" inputmode="decimal"></label>
+<label>Fluid B<select id="planB"></select></label>
+<label>Fluid B mL/day<input id="planBV" type="number" min="0" step="0.1" inputmode="decimal"></label>
+</div>
+<div class="actions"><button class="btn" id="resetPlan">↻ Reset to automatic plan</button></div>
+<div id="targetStatus" class="status">Enter patient inputs to generate a plan.</div></div>
+<div class="stats">
 <div class="stat"><span>Calculated GIR</span><strong id="achievedGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>GIR difference</span><strong id="girDifference">0</strong><small>target − calculated</small></div>
 <div class="stat"><span>Unused TFI</span><strong id="unusedTfi">0</strong><small>mL/day</small></div>
 </div>
-<div class="plan"><h3>Automatic plan — interactive</h3><p class="help">The automatic plan is the active plan. Change the preferred fluids or their actual mL/day and the calculation updates immediately. There is no separate manual-plan section.</p>
-<div class="grid g4">
-<label>Fluid A<select id="planA"></select></label>
-<label>Fluid A mL/day<input id="planAV" type="number" min="0" step="1" inputmode="numeric"></label>
-<label>Fluid B<select id="planB"></select></label>
-<label>Fluid B mL/day<input id="planBV" type="number" min="0" step="1" inputmode="numeric"></label>
-</div>
-<div class="actions"><button class="btn" id="resetPlan">↻ Reset to automatic plan</button></div>
-<div id="targetStatus" class="status">Enter patient inputs to generate a plan.</div></div>
-<div class="note" style="margin-top:14px">Automatic stock sequencing uses NS → D5 → D10 → D25 → D50. Isolyte P is available as an interactive preferred fluid but is not treated as a glucose stock in the automatic adjacent-stock algorithm.</div>
+<div class="note" style="margin-top:14px">Automatic planning defaults to D5 as Fluid A whenever the target can be achieved within the available stock range; Fluid B is selected from NS, D10, D25 or D50 as needed. Isolyte P remains available as an interactive preferred fluid but is not part of the automatic stock algorithm.</div>
 </div>
 </section>
 
@@ -155,22 +156,22 @@ function autoPlan(x){
  if(add<=0)return{a:'NS',b:'NS',av:0,bv:0};
  if(x.remaining<=0)return{a:'NS',b:'NS',av:0,bv:0};
  const req=add*x.p.w*144/x.remaining;
- const s=[5,10,25,50];
  if(req<=5){
-   return{a:'NS',b:'D5',av:x.remaining*(5-req)/5,bv:x.remaining*req/5};
+   return{a:'D5',b:'NS',av:x.remaining*req/5,bv:x.remaining*(5-req)/5};
  }
- for(let i=0;i<s.length-1;i++){
-   if(req>=s[i]&&req<=s[i+1]){
-     const low=s[i],high=s[i+1];
-     const av=x.remaining*(high-req)/(high-low);
-     const bv=x.remaining-av;
-     return{a:'D'+low,b:'D'+high,av,bv};
-   }
+ if(req<=10){
+   return{a:'D5',b:'D10',av:x.remaining*(10-req)/5,bv:x.remaining*(req-5)/5};
  }
- return{a:'D25',b:'D50',av:0,bv:x.remaining};
+ if(req<=25){
+   return{a:'D5',b:'D25',av:x.remaining*(25-req)/20,bv:x.remaining*(req-5)/20};
+ }
+ if(req<=50){
+   return{a:'D5',b:'D50',av:x.remaining*(50-req)/45,bv:x.remaining*(req-5)/45};
+ }
+ return{a:'D5',b:'D50',av:0,bv:x.remaining};
 }
 function fillPlanOptions(){['planA','planB'].forEach(id=>$(id).innerHTML=PLAN.map(x=>'<option>'+x+'</option>').join(''))}
-function setPlan(a,b,av,bv){$('planA').value=a;$('planB').value=b;$('planAV').value=Math.max(0,Math.round(av));$('planBV').value=Math.max(0,Math.round(bv))}
+function setPlan(a,b,av,bv){$('planA').value=a;$('planB').value=b;$('planAV').value=Math.max(0,av).toFixed(1);$('planBV').value=Math.max(0,bv).toFixed(1)}
 function planConc(name){return PRODUCTS[name]?.conc||0}
 function solveSelectedPlan(changed){
  const x=currentTotals(),a=$('planA').value,b=$('planB').value,ca=planConc(a),cb=planConc(b),R=x.remaining,need=Math.max(x.p.target-x.gir,0);
