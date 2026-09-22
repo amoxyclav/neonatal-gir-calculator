@@ -21,7 +21,17 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
 <nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
 <main>
-<section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div></div></section>
+<section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div>
+<div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
+<div id="quickGuide" class="section" style="display:none;margin-top:12px">
+<h2>Quick Start Guide</h2>
+<ol class="guide-list">
+<li><strong>GIR Calculator:</strong> Enter weight, TFI and target GIR. Add only the fluids actually being administered. Review the current GIR, remaining TFI and nutrition contribution, then review or edit the interactive target GIR plan.</li>
+<li><strong>Energy-Protein Ratio:</strong> The Nutrition page mirrors the patient inputs and current fluids from GIR. The automatic GIR plan is assumed to be added for nutrition calculations. Enter HMF, HMF-Advance or MCT quantities when used and review the resulting energy, protein/AA, carbohydrate and Energy-Protein ratio.</li>
+<li><strong>Fluid Mixer:</strong> Use <em>Making a New Bag</em> when preparing a target concentration from two stock concentrations. Use <em>Adjusting an Existing Bag</em> when you already have a fluid and need to add a stock solution to reach a target concentration.</li>
+<li>Preset compositions can be expanded and edited where permitted. Blank quantity fields are treated as zero. Always verify the actual product label, concentration, compatibility, preparation method, line access and local NICU protocol before administration.</li>
+</ol>
+</div></div></section>
 
 <section id="gir" class="page">
 <div class="section"><div class="ey">GIR CALCULATOR</div><h1>Neonatal GIR & Fluid Planner</h1><p class="mut">All three calculation stages remain on one page. Scroll down rather than moving between separate screens.</p></div>
@@ -227,7 +237,29 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 </div>
 </section>
 
-<section id="about" class="page"><div class="section"><div class="ey">ABOUT</div><h2>About</h2><p>This is a calculation aid derived from the neonatal GIR workbook. It is not a prescribing system or validated medical device.</p></div></section>
+<section id="about" class="page">
+<div class="section">
+<div class="ey">ABOUT</div>
+<h1>Neonatal GIR & Nutrition Calculator</h1>
+<p class="mut">A calculation aid for bedside neonatal fluid, glucose and nutrition planning.</p>
+<div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div>
+<h2>Formula References</h2>
+<div class="reference-list">
+<p><strong>Glucose infusion rate (GIR):</strong> GIR is calculated from glucose concentration and infusion rate, expressed in mg/kg/min. The calculator uses the equivalent daily-volume form: GIR = (% glucose × mL/kg/day) ÷ 144. citeturn0search3turn0search5</p>
+<p><strong>Glucose energy:</strong> The nutrition calculations use 3.4 kcal per gram of glucose. Published neonatal parenteral-nutrition literature reports glucose energy at approximately 3.4–4.0 kcal/g; the calculator uses 3.4 kcal/g for its preset glucose calculations. citeturn0search7turn0search12</p>
+<p><strong>Maintenance fluid reference:</strong> Holliday-Segar is a commonly used weight-based maintenance-fluid method; it is included here as a reference for the general pediatric calculation framework, not as an individualized neonatal fluid prescription. citeturn0search0turn0search1</p>
+<p><strong>Fluid mixing:</strong> The Fluid Mixer uses standard two-solution alligation/mass-balance calculations to determine the volume of each stock required to obtain a specified final concentration.</p>
+</div>
+<h2>References</h2>
+<ol class="reference-list">
+<li>Holliday MA, Segar WE. The maintenance need for water in parenteral fluid therapy. <em>Pediatrics.</em> 1957;19(5):823–832. citeturn0search1</li>
+<li>Glucose infusion rate calculation reference: NCBI/StatPearls, <em>Neonatal Hyperglycemia</em>. citeturn0search3</li>
+<li>Hay WW Jr et al. Neonatal nutrition/parenteral nutrition references describing glucose energy density and nutrient calculations. citeturn0search7turn0search12</li>
+</ol>
+<h2>Creator</h2>
+<p><strong>Created by Dr. Damam Sreeharsha, MBBS, MD in Pediatrics.</strong></p>
+</div>
+</section>
 </main><footer style="text-align:center;padding:24px;color:#63736f;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only</footer>
 
 <script>
@@ -551,6 +583,12 @@ $('nutPlanBV').oninput=()=>{
 
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(v<=0){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Enter a final volume.';return}if(a===b){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Stock concentrations must be different.';return}if(t<Math.min(a,b)||t>Math.max(a,b)){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks.';return}const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY';});
 ['mt2','me2','mv2','ms2'].forEach(id=>$(id).oninput=()=>{const t=n('mt2'),e=n('me2'),v=n('mv2'),s=n('ms2');if(v<=0){$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Enter existing fluid volume.';return}if(t===s){$('mxv2').textContent='0';$('mfinal2').textContent=fmt(v,1);$('mfinalc2').textContent=fmt(t,1);$('ms2out').textContent='Target equals stock concentration; no stock is required if the target is already achieved, otherwise dilution is not represented.';return}if((t-e)*(t-s)<=0){const x=v*(t-e)/(s-t);if(x>=0){const fv=v+x;const fc=(e*v+s*x)/fv;$('mxv2').textContent=fmt(x,1);$('mfinal2').textContent=fmt(fv,1);$('mfinalc2').textContent=fmt(fc,1);$('ms2out').textContent='READY';}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}});;
+const quickGuideToggle=$('quickGuideToggle'),quickGuide=$('quickGuide');
+if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
+ const open=quickGuide.style.display!=='none';
+ quickGuide.style.display=open?'none':'block';
+ quickGuideToggle.textContent=open?'Quick Start Guide':'Hide Quick Start Guide';
+};
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
 recalc();
 </script></body></html>
