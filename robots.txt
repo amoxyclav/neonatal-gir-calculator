@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amoxyclav.github.io/neonatal-gir-calculator/sitemap.xml
