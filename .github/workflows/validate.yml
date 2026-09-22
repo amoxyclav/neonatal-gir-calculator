@@ -1,0 +1,59 @@
+name: Validate calculator
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate HTML structure and embedded JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, json, xml.etree.ElementTree as ET
+
+          html = Path("index.html").read_text(encoding="utf-8")
+
+          required = [
+              "<!doctype html>",
+              "</style>",
+              "</head>",
+              "<body>",
+              "</body>",
+              "</html>",
+          ]
+          missing = [x for x in required if x not in html]
+          if missing:
+              raise SystemExit("Missing required HTML markers: " + ", ".join(missing))
+
+          scripts = re.findall(r"<script(?![^>]*type=['"]application/ld\+json['"])[^>]*>(.*?)</script>", html, flags=re.S|re.I)
+          if not scripts:
+              raise SystemExit("No application JavaScript block found.")
+          Path("/tmp/app.js").write_text("\n".join(scripts), encoding="utf-8")
+
+          json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          ET.parse("sitemap.xml")
+
+          print("HTML markers, manifest.json and sitemap.xml validated.")
+          PY
+          node --check /tmp/app.js
+
+      - name: Validate required site files
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f manifest.json
+          test -f robots.txt
+          test -f sitemap.xml
+          test -f favicon.svg
+          echo "Required site files are present."
