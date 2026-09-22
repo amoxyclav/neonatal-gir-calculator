@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#1d4ed8"><title>Neonatal GIR & Nutrition Calculator</title>
+<meta name="theme-color" content="#1d4ed8">
+<meta name="description" content="Free neonatal GIR, fluid and nutrition calculation aid for bedside planning. Calculate glucose infusion rate, TFI, energy, protein and carbohydrate contributions.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://amoxyclav.github.io/neonatal-gir-calculator/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Neonatal GIR & Nutrition Calculator">
+<meta property="og:description" content="A calculation aid for neonatal glucose, fluids and nutrition planning.">
+<meta property="og:url" content="https://amoxyclav.github.io/neonatal-gir-calculator/">
+<meta property="og:site_name" content="Neonatal GIR & Nutrition Calculator">
+<title>Neonatal GIR & Nutrition Calculator | Free Neonatal Fluid & Nutrition Tool</title>
 <style>
 :root{--teal:#1d4ed8;--ink:#172554;--mut:#64748b;--bg:#f4f7fb;--line:#dbe4f0;--ok:#24613b;--bad:#9b2c2c;--warn:#76510b}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
@@ -16,7 +26,19 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9efed;color:var(--mut);font-size:12px}.note{background:#fff8e8;border:1px solid #f0dfb1;color:#73500b;padding:12px;border-radius:9px}
 .divider{height:1px;background:var(--line);margin:18px 0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}.home-tool{display:flex;align-items:center;justify-content:center;min-height:82px;padding:18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:20px;font-weight:800;cursor:pointer;text-align:center}.home-tool:hover{border-color:#9bc7c1;background:#f8fbfa;color:var(--teal)}@media(max-width:760px){.home-tools{grid-template-columns:1fr}}
 @media(max-width:900px){.fluid-main-row{flex-wrap:wrap}.fluid-live{width:100%;order:5}.fluid-volume{min-width:220px}}@media(max-width:760px){.g2,.g3,.g4,.stats{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.nav{width:100%}.fluid-main-row{align-items:stretch}.fluid-name{min-width:100%}.fluid-volume{width:100%}.fluid-live{gap:10px;flex-wrap:wrap}}
-</style></head>
+</style><script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"Neonatal GIR & Nutrition Calculator",
+  "url":"https://amoxyclav.github.io/neonatal-gir-calculator/",
+  "applicationCategory":"HealthApplication",
+  "operatingSystem":"Web",
+  "description":"A calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.",
+  "author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}
+}
+</script></head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
 <nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
