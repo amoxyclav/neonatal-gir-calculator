@@ -4,7 +4,7 @@
 <style>
 :root{--teal:#0f766e;--ink:#17332f;--mut:#63736f;--bg:#f5f8f7;--line:#dce7e4;--ok:#24633c;--bad:#9b2c2c;--warn:#76510b}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}.bar,main{max-width:1120px;margin:auto}.bar{padding:14px 18px;display:flex;justify-content:space-between;gap:15px;align-items:center}.brand{font-weight:800}.brand small{display:block;color:var(--mut);font-weight:500}.nav{display:flex;gap:4px;flex-wrap:wrap}.nav button{border:0;background:transparent;padding:8px 10px;border-radius:8px;color:var(--mut)}.nav button.active{background:#e5f3f0;color:var(--teal)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}.bar,main{max-width:1120px;margin:auto}.bar{padding:14px 18px;display:flex;justify-content:space-between;gap:15px;align-items:center}.header-tools{display:flex;align-items:center;gap:10px}.theme-picker{width:auto;margin:0;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:inherit;font-size:12px}.brand{font-weight:800}.brand small{display:block;color:var(--mut);font-weight:500}.nav{display:flex;gap:4px;flex-wrap:wrap}.nav button{border:0;background:transparent;padding:8px 10px;border-radius:8px;color:var(--mut)}.nav button.active{background:#e5f3f0;color:var(--teal)}
 main{padding:24px 18px}.page{display:none}.page.active{display:block}.section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}.section>h2{margin-top:0}.ey{font-size:12px;letter-spacing:.12em;font-weight:800;color:var(--teal)}.mut,.help{color:var(--mut)}
 .grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
 label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #cbdad6;border-radius:8px;background:#fff;color:var(--ink)}input[type=number]{appearance:auto}button{font:inherit}.btn{padding:10px 14px;border-radius:8px;border:1px solid #9bc7c1;background:#fff;color:var(--teal);cursor:pointer}.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -15,11 +15,19 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .plan{background:#f8fbfa;border:1px solid #cfe4df;border-radius:10px;padding:15px;margin-top:14px}.plan h3,.plan h4{margin-top:0}
 .badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9efed;color:var(--mut);font-size:12px}.note{background:#fff8e8;border:1px solid #f0dfb1;color:#73500b;padding:12px;border-radius:9px}
 .divider{height:1px;background:var(--line);margin:18px 0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}.home-tool{display:flex;align-items:center;justify-content:center;min-height:82px;padding:18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:20px;font-weight:800;cursor:pointer;text-align:center}.home-tool:hover{border-color:#9bc7c1;background:#f8fbfa;color:var(--teal)}@media(max-width:760px){.home-tools{grid-template-columns:1fr}}
-@media(max-width:900px){.fluid-main-row{flex-wrap:wrap}.fluid-live{width:100%;order:5}.fluid-volume{min-width:220px}}@media(max-width:760px){.g2,.g3,.g4,.stats{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.nav{width:100%}.fluid-main-row{align-items:stretch}.fluid-name{min-width:100%}.fluid-volume{width:100%}.fluid-live{gap:10px;flex-wrap:wrap}}
-</style></head>
+@media(max-width:900px){.fluid-main-row{flex-wrap:wrap}.fluid-live{width:100%;order:5}.fluid-volume{min-width:220px}}@media(max-width:760px){.header-tools{width:100%;flex-wrap:wrap}.theme-picker{flex:1}.g2,.g3,.g4,.stats{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.nav{width:100%}.fluid-main-row{align-items:stretch}.fluid-name{min-width:100%}.fluid-volume{width:100%}.fluid-live{gap:10px;flex-wrap:wrap}}
+<style>
+body[data-theme="navy"]{--teal:#1d4ed8;--ink:#172554;--mut:#64748b;--bg:#f4f7fb;--line:#dbe4f0}
+body[data-theme="indigo"]{--teal:#4f46e5;--ink:#25204a;--mut:#6b6b85;--bg:#f6f6fb;--line:#deddf0}
+body[data-theme="sage"]{--teal:#3f6b57;--ink:#21372d;--mut:#6b7b72;--bg:#f4f7f3;--line:#dbe5dc}
+body[data-theme="navy"] header,body[data-theme="indigo"] header,body[data-theme="sage"] header{border-bottom-color:var(--line)}
+body[data-theme="navy"] .nav button.active{background:#e8efff;color:var(--teal)}
+body[data-theme="indigo"] .nav button.active{background:#ecebff;color:var(--teal)}
+body[data-theme="sage"] .nav button.active{background:#e8f1eb;color:var(--teal)}
+</style></style></head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
-<nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
+<nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav><div class="header-tools"><select id="themePicker" class="theme-picker" aria-label="Colour theme"><option value="teal">Clinical Teal</option><option value="navy">Clinical Navy</option><option value="indigo">Clinical Indigo</option><option value="sage">Clinical Sage</option></select></div></div></header>
 <main>
 <section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div>
 <div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
@@ -577,5 +585,8 @@ if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  quickGuideToggle.textContent=open?'Quick Start Guide':'Hide Quick Start Guide';
 };
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
+const themePicker=$('themePicker');
+function applyTheme(theme){const valid=['teal','navy','indigo','sage'];const t=valid.includes(theme)?theme:'teal';document.body.dataset.theme=t;localStorage.setItem('neonatalCalcTheme',t);if(themePicker)themePicker.value=t}
+if(themePicker){themePicker.onchange=()=>applyTheme(themePicker.value);applyTheme(localStorage.getItem('neonatalCalcTheme')||'teal')}
 recalc();
 </script></body></html>
