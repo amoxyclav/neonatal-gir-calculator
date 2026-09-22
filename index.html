@@ -145,12 +145,22 @@ function recalc(renderRows=true){
  updateTarget(x);updateNutrition();
 }
 function autoPlan(x){
- const add=Math.max(x.p.target-x.gir,0);if(add<=0)return{a:'NS',b:'NS',av:0,bv:0};
- if(x.remaining<=0)return{a:'NS',b:'D5',av:0,bv:0};
- const req=add*x.p.w*144/x.remaining;const s=[5,10,25,50];
- if(req<=5)return{a:'NS',b:'D5',av:x.remaining*(5-req)/5,bv:x.remaining*req/5};
- for(let i=0;i<3;i++)if(req>=s[i]&&req<=s[i+1])return{a:'D'+s[i],b:'D'+s[i+1],av:x.remaining*(s[i+1]-req)/(s[i+1]-s[i]),bv:x.remaining*x.remaining*0+x.remaining-x.remaining*(s[i+1]-req)/(s[i+1]-s[i])};
- return{a:'D25',b:'D50',av:0,bv:x.remaining};
+ const add=Math.max(x.p.target-x.gir,0);
+ if(add<=0)return{a:'NS',b:'NS',av:0,bv:0};
+ if(x.remaining<=0)return{a:'NS',b:'NS',av:0,bv:0};
+ const req=add*x.p.w*144/x.remaining;
+ const s=[5,10,25,50];
+ if(req<=5){
+   const v=add*x.p.w*144/5;
+   return{a:'D5',b:'NS',av:Math.min(v,x.remaining),bv:0};
+ }
+ for(let i=1;i<s.length;i++){
+   if(req<=s[i]){
+     const v=add*x.p.w*144/s[i];
+     return{a:'D'+s[i],b:'NS',av:Math.min(v,x.remaining),bv:0};
+   }
+ }
+ return{a:'D50',b:'NS',av:x.remaining,bv:0};
 }
 function fillPlanOptions(){['planA','planB'].forEach(id=>$(id).innerHTML=PLAN.map(x=>'<option>'+x+'</option>').join(''))}
 function setPlan(a,b,av,bv){$('planA').value=a;$('planB').value=b;$('planAV').value=Math.max(0,Math.round(av));$('planBV').value=Math.max(0,Math.round(bv))}
