@@ -36,7 +36,8 @@ jobs:
           if missing:
               raise SystemExit("Missing required HTML markers: " + ", ".join(missing))
 
-          scripts = re.findall(r"<script(?![^>]*type=['"]application/ld\+json['"])[^>]*>(.*?)</script>", html, flags=re.S|re.I)
+          script_blocks = re.findall(r'<script[^>]*>(.*?)</script>', html, flags=re.S|re.I)
+          scripts = [s for s in script_blocks if '"@context":"https://schema.org"' not in s and '"@type":"WebApplication"' not in s]
           if not scripts:
               raise SystemExit("No application JavaScript block found.")
           Path("/tmp/app.js").write_text("\n".join(scripts), encoding="utf-8")
