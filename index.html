@@ -11,6 +11,13 @@
 <meta property="og:description" content="A calculation aid for neonatal glucose, fluids and nutrition planning.">
 <meta property="og:url" content="https://amoxyclav.github.io/neonatal-gir-calculator/">
 <meta property="og:site_name" content="Neonatal GIR & Nutrition Calculator">
+<meta property="og:image" content="https://amoxyclav.github.io/neonatal-gir-calculator/social-preview.svg">
+<meta property="og:image:type" content="image/svg+xml">
+<meta property="og:image:alt" content="Neonatal GIR & Nutrition Calculator">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Neonatal GIR & Nutrition Calculator">
+<meta name="twitter:description" content="A calculation aid for neonatal glucose, fluids and nutrition planning.">
+<meta name="twitter:image" content="https://amoxyclav.github.io/neonatal-gir-calculator/social-preview.svg">
 <title>Neonatal GIR & Nutrition Calculator | Free Neonatal Fluid & Nutrition Tool</title>
 <style>
 :root{--teal:#1d4ed8;--ink:#172554;--mut:#64748b;--bg:#f4f7fb;--line:#dbe4f0;--ok:#24613b;--bad:#9b2c2c;--warn:#76510b}
@@ -44,8 +51,8 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
 <nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
 <main>
-<section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div>
-<div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
+<section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="actions" style="margin-bottom:14px"><button class="btn primary" id="shareTool" type="button">Share calculator</button><button class="btn" id="copyToolLink" type="button">Copy link</button></div><div id="shareStatus" class="status" style="display:none"></div><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div>
+<div class="mut" style="margin-top:14px;font-size:12px">Version 1.0 • Last updated September 2026</div><div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
 <div id="quickGuide" class="section" style="display:none;margin-top:12px">
 <h2>Quick Start Guide</h2>
 <ol class="guide-list">
@@ -601,6 +608,16 @@ $('nutPlanBV').oninput=()=>{
 function calculateMixerNewBag(){['mt','ma','mb','mv'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 function calculateMixerExistingBag(){['mt2','me2','mv2','ms2'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 const quickGuideToggle=$('quickGuideToggle'),quickGuide=$('quickGuide');
+const shareTool=$('shareTool'),copyToolLink=$('copyToolLink'),shareStatus=$('shareStatus');
+function showShareStatus(msg,kind='ok'){if(!shareStatus)return;shareStatus.textContent=msg;shareStatus.className='status '+kind;shareStatus.style.display='block';setTimeout(()=>shareStatus.style.display='none',3500)}
+if(shareTool)shareTool.onclick=async()=>{
+ const data={title:'Neonatal GIR & Nutrition Calculator',text:'Neonatal GIR, fluid and nutrition calculation aid',url:location.href};
+ try{if(navigator.share){await navigator.share(data);showShareStatus('Share sheet opened.')}else{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}}catch(e){if(e?.name!=='AbortError')showShareStatus('Could not open sharing. Use Copy link instead.','warn')}
+};
+if(copyToolLink)copyToolLink.onclick=async()=>{
+ try{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}
+ catch(e){showShareStatus('Copy is unavailable in this browser. You can copy the address from the browser bar.','warn')}
+};
 if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  const open=quickGuide.style.display!=='none';
  quickGuide.style.display=open?'none':'block';
