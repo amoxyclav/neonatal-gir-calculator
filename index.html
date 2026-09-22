@@ -154,13 +154,43 @@ function autoPlan(x){
 }
 function fillPlanOptions(){['planA','planB'].forEach(id=>$(id).innerHTML=PLAN.map(x=>'<option>'+x+'</option>').join(''))}
 function setPlan(a,b,av,bv){$('planA').value=a;$('planB').value=b;$('planAV').value=Math.max(0,Math.round(av));$('planBV').value=Math.max(0,Math.round(bv))}
+function planConc(name){return PRODUCTS[name]?.conc||0}
+function solveSelectedPlan(changed){
+ const x=currentTotals(),a=$('planA').value,b=$('planB').value,ca=planConc(a),cb=planConc(b),R=x.remaining,need=Math.max(x.p.target-x.gir,0);
+ if(!x.p.w||R<0)return;
+ if(need<=0){$('planAV').value=0;$('planBV').value=0;return}
+ const req=R>0?need*x.p.w*144/R:Infinity;
+ let av=0,bv=0,possible=true,reason='';
+ if(R<=0){possible=false;reason='No remaining TFI is available.'}
+ else if(a===b){
+   if(ca<=0){possible=false;reason='The selected fluid contains no glucose.'}
+   else {const vol=need*x.p.w*144/ca;if(vol<=R+1e-9){av=vol;bv=0}else{possible=false;reason='The selected concentration is too low to reach target GIR within the remaining TFI.'}}
+ } else if(Math.abs(ca-cb)<1e-12){
+   if(ca<=0){possible=false;reason='Neither selected fluid provides glucose.'}
+   else {const vol=need*x.p.w*144/ca;if(vol<=R+1e-9){av=changed==='planB'?0:vol;bv=changed==='planB'?vol:0}else{possible=false;reason='The selected concentration is too low to reach target GIR within the remaining TFI.'}}
+ } else {
+   const lo=Math.min(ca,cb),hi=Math.max(ca,cb);
+   if(req>=lo-1e-9&&req<=hi+1e-9){
+     av=R*(cb-req)/(cb-ca);bv=R-av;
+   } else if(req<lo){
+     const lower=ca<cb?'a':'b',cl=Math.min(ca,cb);
+     const vol=need*x.p.w*144/cl;
+     if(cl>0&&vol<=R+1e-9){av=lower==='a'?vol:0;bv=lower==='b'?vol:0}
+     else {possible=false;reason='Both selected fluids are more concentrated than required and cannot use the full remaining TFI without exceeding target GIR.'}
+   } else {
+     possible=false;reason='The selected fluids are too dilute to achieve the target GIR within the remaining TFI. Choose a higher glucose concentration or increase available TFI.'
+   }
+ }
+ if(possible){$('planAV').value=fmt(Math.max(0,av),1);$('planBV').value=fmt(Math.max(0,bv),1);$('planA').dataset.solveError=''}
+ else {$('planAV').value='0';$('planBV').value='0';$('planA').dataset.solveError=reason}
+}
 function updateTarget(x){
  const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;const max=x.p.w>0?x.remaining*50*10/(x.p.w*1440):0;
  $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('maxAdditional').textContent=fmt(max);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
  if(!$('planA').dataset.user){const a=autoPlan(x);setPlan(a.a,a.b,a.av,a.bv)}
  const a=$('planA').value,b=$('planB').value,av=n('planAV'),bv=n('planBV');const ach=x.gir+(av*(PLAN.includes(a)?PRODUCTS[a].conc:0)+bv*(PLAN.includes(b)?PRODUCTS[b].conc:0))*10/(x.p.w*1440||1);const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
  $('planVolume').textContent=fmt(pv,1);$('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
- let flags=[];if(x.over)flags.push('Current fluids exceed permitted TFI.');if(x.gir>x.p.target+0.001)flags.push('Current GIR already exceeds target.');if(a===b&&pv>0)flags.push('Same fluid selected twice.');if(pv>x.remaining+0.001)flags.push('Plan exceeds remaining TFI.');if(req>50&&add>0)flags.push('Target not achievable within the configured central limit.');if(diff>0.01)flags.push('Preferred plan is below target.');else if(diff<-0.01)flags.push('Preferred plan is above target.');else if(pv>0&&unused<0.01)flags.push('Target achieved with TFI balanced.');else if(pv>0)flags.push('Target achieved but unused TFI remains.');
+ let flags=[];const solveError=$('planA').dataset.solveError||'';if(solveError)flags.push(solveError);if(x.over)flags.push('Current fluids exceed permitted TFI.');if(x.gir>x.p.target+0.001)flags.push('Current GIR already exceeds target.');if(a===b&&pv>0)flags.push('Same fluid selected twice.');if(pv>x.remaining+0.001)flags.push('Plan exceeds remaining TFI.');if(req>50&&add>0)flags.push('Target not achievable within the configured central limit.');if(diff>0.01)flags.push('Preferred plan is below target.');else if(diff<-0.01)flags.push('Preferred plan is above target.');else if(pv>0&&unused<0.01)flags.push('Target achieved with TFI balanced.');else if(pv>0)flags.push('Target achieved but unused TFI remains.');
  if(add<=0)flags.push('No additional GIR is required.');
  $('targetStatus').textContent=flags.join(' ');$('targetStatus').className='status '+(flags.some(s=>/exceed|above|below|not achievable|twice/.test(s))?'warn':'ok');
 }
@@ -172,8 +202,8 @@ $('addFluid').onchange=e=>{if(e.target.value){addFluid(e.target.value);e.target.
 $('addCustom').onclick=()=>{const name=prompt('Enter custom fluid name (e.g. 3% NaCl, KCl fluid):','Custom fluid');if(name&&name.trim())addFluid(name.trim(),true)};
 $('w').oninput=$('tfi').oninput=$('tg').oninput=()=>recalc();
 fillPlanOptions();
-['planA','planB','planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';recalc(false)});
-$('resetPlan').onclick=()=>{$('planA').dataset.user='';recalc(false)};
+['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';$('planA').dataset.solveError='';recalc(false)});
+$('resetPlan').onclick=()=>{$('planA').dataset.user='';$('planA').dataset.solveError='';recalc(false)};
 $('hmf').oninput=updateNutrition;
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(t>Math.min(a,b)&&t<Math.max(a,b)&&v>0){const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY'}else{$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks'}});
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(b.dataset.page).classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z===b));});
