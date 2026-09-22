@@ -395,7 +395,9 @@ function renderNutritionFluids(){
    if(x.dataset.nfield==='conc'){const e=document.querySelector('[data-nfield="energy"][data-nid="'+f.id+'"]'),p=document.querySelector('[data-nfield="protein"][data-nid="'+f.id+'"]'),c=document.querySelector('[data-nfield="carb"][data-nid="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb}
  });
 }
+let nutritionPatientEditing=false;
 function syncNutritionPatient(){
+ if(nutritionPatientEditing)return;
  const p=patient(),u=$('weightUnit')?.value||'kg';
  if($('nutWeightUnit'))$('nutWeightUnit').value=u;
  if($('nutW'))$('nutW').value=$('w').value;
@@ -474,11 +476,14 @@ $('nutritionAddCustom').onclick=()=>{const name=prompt('Enter custom fluid name 
  if(id==='nutW'){$('w').value=fmt(u==='g'?kg*1000:u==='lb'?kg/0.45359237:kg, u==='kg'?2:1)}
  if(id==='nutTfiInput')$('tfi').value=raw;
  if(id==='nutTg')$('tg').value=raw;
+ nutritionPatientEditing=true;
  updatePatientInputs();
+ nutritionPatientEditing=false;
 }));
 $('nutWeightUnit').onchange=()=>{
  const old=patient(),u=$('nutWeightUnit').value,raw=u==='g'?old.w*1000:u==='lb'?old.w/0.45359237:old.w;
- $('weightUnit').value=u;$('w').value=fmt(raw,u==='kg'?2:1);updatePatientInputs();
+ $('weightUnit').value=u;$('w').value=fmt(raw,u==='kg'?2:1);
+ nutritionPatientEditing=true;updatePatientInputs();nutritionPatientEditing=false;
 };
 $('nutPlanA').onchange=()=>{$('planA').value=$('nutPlanA').value;$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan('planA');recalc(false)};
 $('nutPlanB').onchange=()=>{$('planB').value=$('nutPlanB').value;$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan('planB');recalc(false)};
