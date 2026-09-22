@@ -115,7 +115,7 @@ function productRow(f){
  '<div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div>'+
  '<div class="fluid-volume"><input type="number" min="0" step="1" class="volume-input" data-field="volumeDisplay" data-id="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol, unit==='mL/hr'?2:1):'')+'">'+
  '<select class="volume-unit" data-unit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div>'+
- '<div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-row-energy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span></div>'+
+ '<div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-row-energy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span><span>Carb <b data-row-carb="'+f.id+'">'+fmt(r.carb,2)+'</b> g/day</span></div>'+
  '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
  '<button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
  '<div class="fluid-details" id="details-'+f.id+'" hidden><div class="grid g4">'+
@@ -133,14 +133,14 @@ function renderFluids(){
  document.querySelectorAll('[data-field]').forEach(x=>x.onfocus=()=>{if(x.dataset.field==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.id);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
  document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}}}recalc(false);updateFluidRowOnly(f)})
 }
-function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2)}
+function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2);if(c)c.textContent=fmt(r.carb,2)}
 function calcFluid(f,w){
  const v=f.volume||0,c=f.conc||0;
  const g=(f.name==='Aminoven'||f.name==='Intralipid'||(!f.custom&&f.name==='NS'))?0:(v*c*10/(w*1440)||0);
  const e=v*(f.energy||0)/100;const p=v*(f.protein||0)/100;const carb=v*(f.carb||0)/100;
  return{g,e,p,carb};
 }
-function currentTotals(){const p=patient();let t=0,g=0,e=0,pr=0,c=0;fluids.forEach(f=>{t+=f.volume||0;const r=calcFluid(f,p.w);g+=r.g;e+=r.e;pr+=r.p;c+=r.c});return{p,total:t,gir:g,energy:e,protein:pr,carb:c,permitted:p.w*p.tfi,remaining:Math.max(p.w*p.tfi-t,0),over:t>p.w*p.tfi+1e-9}}
+function currentTotals(){const p=patient();let t=0,g=0,e=0,pr=0,c=0;fluids.forEach(f=>{t+=f.volume||0;const r=calcFluid(f,p.w);g+=r.g;e+=r.e;pr+=r.p;c+=r.carb});return{p,total:t,gir:g,energy:e,protein:pr,carb:c,permitted:p.w*p.tfi,remaining:Math.max(p.w*p.tfi-t,0),over:t>p.w*p.tfi+1e-9}}
 function recalc(renderRows=true){
  if(renderRows)renderFluids();
  const x=currentTotals();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);$('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);$('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);$('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);
@@ -229,7 +229,7 @@ function updateTarget(x){
  $('targetStatus').textContent=flags.join(' ');$('targetStatus').className='status '+(flags.some(s=>/exceed|above|below|not achievable|twice/.test(s))?'warn':'ok');
 }
 function updateNutrition(){
- const x=currentTotals();let h='',e=0,p=0,c=0;fluids.forEach(f=>{const r=calcFluid(f,x.p.w);e+=r.e;p+=r.p;c+=r.c;h+='<tr><td>'+f.name+'</td><td>'+fmt(f.volume,1)+'</td><td>'+fmt(r.e,1)+'</td><td>'+fmt(r.p,2)+'</td><td>'+fmt(r.c,2)+'</td></tr>'});const hm=n('hmf');e+=hm*3.4;p+=hm*.27;c+=hm*.49;$('nutritionRows').innerHTML=h;$('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nEnergyKg').textContent=fmt(x.p.w?e/x.p.w:0,1)
+ const x=currentTotals();let h='',e=0,p=0,c=0;fluids.forEach(f=>{const r=calcFluid(f,x.p.w);e+=r.e;p+=r.p;c+=r.carb;h+='<tr><td>'+f.name+'</td><td>'+fmt(f.volume,1)+'</td><td>'+fmt(r.e,1)+'</td><td>'+fmt(r.p,2)+'</td><td>'+fmt(r.carb,2)+'</td></tr>'});const hm=n('hmf');e+=hm*3.4;p+=hm*.27;c+=hm*.49;$('nutritionRows').innerHTML=h;$('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nEnergyKg').textContent=fmt(x.p.w?e/x.p.w:0,1)
 }
 $('addFluid').innerHTML='<option value="">+ Add predefined fluid…</option>'+PREDEF.map(x=>'<option>'+x+'</option>').join('');
 $('addFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
