@@ -124,7 +124,7 @@ function productRow(f){
 function renderFluids(){
  $('fluidList').innerHTML=fluids.length?fluids.map(productRow).join(''):'<div class="status">No current fluids selected. Unselected fluids are treated as zero.</div>';
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
- document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{let f=fluids.find(z=>z.id==x.dataset.id);if(f){f[x.dataset.field]=valNum(x.value);recalc(false)}})
+ document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{let f=fluids.find(z=>z.id==x.dataset.id);if(f){f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc/20*2}}recalc(true)}})
 }
 function calcFluid(f,w){
  const v=f.volume||0,c=f.conc||0;
