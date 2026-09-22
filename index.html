@@ -83,13 +83,13 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 <script>
 const PRODUCTS={
 NS:{conc:0,energy:0,protein:0,carb:0,gir:true,editable:false},
-'D5':{conc:5,energy:0,protein:0,carb:5,gir:true,editable:false},
-'D10':{conc:10,energy:0,protein:0,carb:10,gir:true,editable:false},
-'D25':{conc:25,energy:0,protein:0,carb:25,gir:true,editable:false},
-'D50':{conc:50,energy:0,protein:0,carb:50,gir:true,editable:false},
+'D5':{conc:5,energy:17,protein:0,carb:5,gir:true,editable:false},
+'D10':{conc:10,energy:34,protein:0,carb:10,gir:true,editable:false},
+'D25':{conc:25,energy:85,protein:0,carb:25,gir:true,editable:false},
+'D50':{conc:50,energy:170,protein:0,carb:50,gir:true,editable:false},
 'Isolyte P':{conc:5,energy:17,protein:0,carb:5,gir:true,editable:true},
 'Aminoven':{conc:10,energy:40,protein:10,carb:0,gir:false,editable:true},
-'Intralipid':{conc:20,energy:2,protein:0,carb:0,gir:false,editable:true},
+'Intralipid':{conc:20,energy:200,protein:0,carb:0,gir:false,editable:true},
 'Breast milk':{conc:7,energy:72,protein:.9,carb:7,gir:true,editable:true},
 'Formula milk':{conc:7,energy:67,protein:1.8,carb:7,gir:true,editable:true}
 };
@@ -124,7 +124,7 @@ function productRow(f){
 function renderFluids(){
  $('fluidList').innerHTML=fluids.length?fluids.map(productRow).join(''):'<div class="status">No current fluids selected. Unselected fluids are treated as zero.</div>';
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
- document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc/20*2}}recalc(false);updateFluidRowOnly(f)})
+ document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}}recalc(false);updateFluidRowOnly(f)})
 }
 function updateFluidRowOnly(f){const x=currentTotals(),r=calcFluid(f,x.p.w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2)}
 function calcFluid(f,w){
