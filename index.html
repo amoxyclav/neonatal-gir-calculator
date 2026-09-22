@@ -49,7 +49,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 <div class="stats">
 <div class="stat"><span>Additional GIR required</span><strong id="additionalGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>Required average concentration</span><strong id="requiredConc">0</strong><small>%</small></div>
-<div class="stat"><span>Maximum additional GIR</span><strong id="maxAdditional">0</strong><small>mg/kg/min</small></div>
+
 <div class="stat"><span>Automated line type</span><strong id="lineType">—</strong><small>based on required concentration</small></div>
 <div class="stat"><span>Plan volume</span><strong id="planVolume">0</strong><small>mL/day</small></div>
 <div class="stat"><span>Calculated GIR</span><strong id="achievedGir">0</strong><small>mg/kg/min</small></div>
@@ -219,8 +219,8 @@ function autoSolveSelectedPlan(){
  setPlan(a,b,av,bv);recalc(false);
 }
 function updateTarget(x){
- const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;const max=x.p.w>0?x.remaining*50*10/(x.p.w*1440):0;
- $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('maxAdditional').textContent=fmt(max);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
+ const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;
+ $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
  if(!$('planA').dataset.user){const a=autoPlan(x);setPlan(a.a,a.b,a.av,a.bv)}
  const a=$('planA').value,b=$('planB').value,av=n('planAV'),bv=n('planBV');const ach=x.gir+(av*(PLAN.includes(a)?PRODUCTS[a].conc:0)+bv*(PLAN.includes(b)?PRODUCTS[b].conc:0))*10/(x.p.w*1440||1);const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
  $('planVolume').textContent=fmt(pv,1);$('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
