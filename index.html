@@ -9,7 +9,7 @@ main{padding:24px 18px}.page{display:none}.page.active{display:block}.section{ba
 .grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
 label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #cbdad6;border-radius:8px;background:#fff;color:var(--ink)}input[type=number]{appearance:auto}button{font:inherit}.btn{padding:10px 14px;border-radius:8px;border:1px solid #9bc7c1;background:#fff;color:var(--teal);cursor:pointer}.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
 .actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.status{padding:11px 13px;border-radius:8px;background:#edf2f1;color:var(--mut);margin-top:12px}.ok{background:#e7f5ec;color:var(--ok)}.bad{background:#fdecec;color:var(--bad)}.warn{background:#fff5dc;color:var(--warn)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border:1px solid var(--line);border-radius:10px;padding:14px}.stat span{display:block;color:var(--mut);font-size:12px}.stat strong{display:block;font-size:24px;margin:4px 0}.stat small{color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border:1px solid var(--line);border-radius:10px;padding:14px}.stat span{display:block;color:var(--mut);font-size:12px}.stat strong{display:block;font-size:24px;margin:4px 0}.stat small{color:var(--mut)}.combined-stat strong+small{display:block;margin-bottom:7px}.combined-stat strong:nth-of-type(2){margin-top:2px}
 .fluid{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}.fluid-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.fluid-head b{font-size:16px}.fluid-main-row{min-height:56px}.fluid-name{min-width:130px}.fluid-volume{display:flex;align-items:end;gap:7px;min-width:250px}.fluid-volume label{flex:1}.fluid-volume input{margin-top:4px}.volume-unit{width:105px;margin-top:0}.fluid-live{display:flex;gap:18px;align-items:center;color:var(--mut);font-size:12px;white-space:nowrap}.fluid-live b{color:var(--ink);font-size:14px}.details-toggle{border:1px solid #cbdad6;background:#fff;color:var(--teal);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:20px;line-height:1}.details-toggle[aria-expanded="true"]{transform:rotate(180deg);background:#f1f8f6}.fluid-details{padding:12px 2px 2px;border-top:1px solid var(--line);margin-top:10px}.remove{border:0;background:#fbecec;color:var(--bad);padding:8px 10px;border-radius:8px;cursor:pointer}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #e8efed;text-align:left;white-space:nowrap}.table{overflow:auto}
 .plan{background:#f8fbfa;border:1px solid #cfe4df;border-radius:10px;padding:15px;margin-top:14px}.plan h3,.plan h4{margin-top:0}
@@ -40,11 +40,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 <div class="stat"><span>Total current fluid</span><strong id="currentTotal">0</strong><small>mL/day</small></div>
 <div class="stat"><span>Remaining TFI</span><strong id="remaining">0</strong><small>mL/day</small></div>
 <div class="stat"><span>Current GIR</span><strong id="currentGir">0</strong><small>mg/kg/min</small></div>
-<div class="stat"><span>Energy</span><strong id="currentEnergy">0</strong><small>kcal/day</small></div>
-<div class="stat"><span>Protein / amino acids</span><strong id="currentProtein">0</strong><small>g/day</small></div>
+<div class="stat combined-stat"><span>Energy</span><strong id="currentEnergy">0</strong><small>kcal/day</small><strong id="energyKg">0</strong><small>kcal/kg/day</small></div>
+<div class="stat combined-stat"><span>Protein / amino acids</span><strong id="currentProtein">0</strong><small>g/day</small><strong id="proteinKg">0</strong><small>g/kg/day</small></div>
 <div class="stat"><span>Carbohydrate</span><strong id="currentCarb">0</strong><small>g/day</small></div>
-<div class="stat"><span>Energy/kg/day</span><strong id="energyKg">0</strong><small>kcal/kg/day</small></div>
-<div class="stat"><span>Protein/kg/day</span><strong id="proteinKg">0</strong><small>g/kg/day</small></div>
 </div><div id="fluidStatus" class="status">No current fluids selected.</div></div>
 
 <div class="section" id="targetSection"><h2>3. Target GIR + TFI-Aware Interactive Automatic Plan</h2>
