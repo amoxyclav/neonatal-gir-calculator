@@ -286,7 +286,24 @@ function autoPlan(x){
  return{a:'D5',b:'D50',av:0,bv:x.remaining};
 }
 function fillPlanOptions(){['planA','planB'].forEach(id=>$(id).innerHTML=PLAN.map(x=>'<option>'+x+'</option>').join(''))}
-function setPlan(a,b,av,bv){$('planA').value=a;$('planB').value=b;$('planAV').value=Math.max(0,av).toFixed(1);$('planBV').value=Math.max(0,bv).toFixed(1)}
+function setPlan(a,b,av,bv){
+ $('planA').value=a;$('planB').value=b;
+ const exactA=Math.max(0,av),exactB=Math.max(0,bv);
+ $('planAV').value=exactA.toFixed(1);$('planBV').value=exactB.toFixed(1);
+ $('planA').dataset.exactAv=String(exactA);$('planA').dataset.exactBv=String(exactB);
+ $('planA').dataset.exactValid='1';
+}
+function getPlanVolumes(){
+ const automatic=$('planA')?.dataset.exactValid==='1';
+ if(automatic){
+   const av=Number($('planA').dataset.exactAv),bv=Number($('planA').dataset.exactBv);
+   if(Number.isFinite(av)&&Number.isFinite(bv))return{av,bv};
+ }
+ return{av:n('planAV'),bv:n('planBV')};
+}
+function clearPlanExact(){
+ delete $('planA').dataset.exactAv;delete $('planA').dataset.exactBv;$('planA').dataset.exactValid='';
+}
 function planConc(name){return PRODUCTS[name]?.conc||0}
 function solveSelectedPlan(changed){
  const x=currentTotals(),a=$('planA').value,b=$('planB').value,ca=planConc(a),cb=planConc(b),R=x.remaining,need=Math.max(x.p.target-x.gir,0);
@@ -337,7 +354,7 @@ function updateTarget(x){
  const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;
  $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
  if(!$('planA').dataset.user){const a=autoPlan(x);setPlan(a.a,a.b,a.av,a.bv)}
- const a=$('planA').value,b=$('planB').value,av=n('planAV'),bv=n('planBV');const ach=x.gir+(av*(PLAN.includes(a)?PRODUCTS[a].conc:0)+bv*(PLAN.includes(b)?PRODUCTS[b].conc:0))*10/(x.p.w*1440||1);const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
+ const a=$('planA').value,b=$('planB').value,{av,bv}=getPlanVolumes();const ach=x.gir+(av*(PLAN.includes(a)?PRODUCTS[a].conc:0)+bv*(PLAN.includes(b)?PRODUCTS[b].conc:0))*10/(x.p.w*1440||1);const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
  $('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
  let flags=[];const solveError=$('planA').dataset.solveError||'';if(solveError)flags.push(solveError);if(x.over)flags.push('Current fluids exceed permitted TFI.');if(x.gir>x.p.target+0.001)flags.push('Current GIR already exceeds target.');if(a===b&&pv>0)flags.push('Same fluid selected twice.');if(pv>x.remaining+0.001)flags.push('Plan exceeds remaining TFI.');if(req>50&&add>0)flags.push('Target not achievable within the configured central limit.');if(diff>0.01)flags.push('Preferred plan is below target.');else if(diff<-0.01)flags.push('Preferred plan is above target.');else if(pv>0&&unused<0.01)flags.push('Target achieved with TFI balanced.');else if(pv>0)flags.push('Target achieved but unused TFI remains.');
  if(add<=0)flags.push('No additional GIR is required.');
@@ -409,7 +426,7 @@ function updateNutrition(renderEditor=true){
  if($('nutProteinKg'))$('nutProteinKg').textContent=fmt(pt.w?x.protein/pt.w:0,2);
  if($('nutCarbKg'))$('nutCarbKg').textContent=fmt(pt.w?x.carb/pt.w:0,2);
  syncNutritionPlan();
- const a=$('planA')?.value||'NS',b=$('planB')?.value||'NS',av=n('planAV'),bv=n('planBV');
+ const a=$('planA')?.value||'NS',b=$('planB')?.value||'NS',{av,bv}=getPlanVolumes();
  const planAFluid={name:a,volume:av,conc:PRODUCTS[a]?.conc||0,energy:PRODUCTS[a]?.energy||0,protein:PRODUCTS[a]?.protein||0,carb:PRODUCTS[a]?.carb||0};
  const planBFluid={name:b,volume:bv,conc:PRODUCTS[b]?.conc||0,energy:PRODUCTS[b]?.energy||0,protein:PRODUCTS[b]?.protein||0,carb:PRODUCTS[b]?.carb||0};
  const ra=calcFluid(planAFluid,pt.w),rb=calcFluid(planBFluid,pt.w);
@@ -443,8 +460,8 @@ function updatePatientInputs(){const x=patient();if($('patientPermittedTfi'))$('
 ['w','tfi','tg'].forEach(id=>{const el=$(id);el.addEventListener('input',updatePatientInputs);el.addEventListener('change',updatePatientInputs);});
 $('weightUnit').onchange=()=>{const f=patient(),u=$('weightUnit').value;const raw=u==='g'?f.w*1000:u==='lb'?f.w/0.45359237:f.w;$('w').value=fmt(raw,u==='kg'?2:1);updatePatientInputs()};
 fillPlanOptions();
-['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';$('planA').dataset.solveError='';recalc(false)});
-$('resetPlan').onclick=()=>{$('planA').dataset.user='';$('planA').dataset.solveError='';recalc(false)};
+['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)});
+$('resetPlan').onclick=()=>{$('planA').dataset.user='';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
 ['hmfToggle','hmfAdvanceToggle','mctToggle'].forEach(id=>$(id).onchange=()=>{const map={hmfToggle:'hmf',hmfAdvanceToggle:'hmfAdvance',mctToggle:'mct'};const input=$(map[id]);input.disabled=!$(id).checked;updateNutrition()});
 ['hmf','hmfAdvance','mct','hmfEnergy','hmfProtein','hmfCarb','hmfAdvanceEnergy','hmfAdvanceProtein','hmfAdvanceCarb','mctEnergy','mctProtein','mctCarb'].forEach(id=>$(id).oninput=updateNutrition);
 document.querySelectorAll('[data-extra-details]').forEach(b=>b.onclick=()=>{const box=$('extra-details-'+b.dataset.extraDetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
@@ -462,10 +479,10 @@ $('nutWeightUnit').onchange=()=>{
  const old=patient(),u=$('nutWeightUnit').value,raw=u==='g'?old.w*1000:u==='lb'?old.w/0.45359237:old.w;
  $('weightUnit').value=u;$('w').value=fmt(raw,u==='kg'?2:1);updatePatientInputs();
 };
-$('nutPlanA').onchange=()=>{$('planA').value=$('nutPlanA').value;$('planA').dataset.user='1';solveSelectedPlan('planA');recalc(false)};
-$('nutPlanB').onchange=()=>{$('planB').value=$('nutPlanB').value;$('planA').dataset.user='1';solveSelectedPlan('planB');recalc(false)};
-$('nutPlanAV').oninput=()=>{$('planAV').value=n('nutPlanAV').toFixed(1);$('planA').dataset.user='1';$('planA').dataset.solveError='';recalc(false)};
-$('nutPlanBV').oninput=()=>{$('planBV').value=n('nutPlanBV').toFixed(1);$('planA').dataset.user='1';$('planA').dataset.solveError='';recalc(false)};
+$('nutPlanA').onchange=()=>{$('planA').value=$('nutPlanA').value;$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan('planA');recalc(false)};
+$('nutPlanB').onchange=()=>{$('planB').value=$('nutPlanB').value;$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan('planB');recalc(false)};
+$('nutPlanAV').oninput=()=>{$('planAV').value=n('nutPlanAV').toFixed(1);$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
+$('nutPlanBV').oninput=()=>{$('planBV').value=n('nutPlanBV').toFixed(1);$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
 
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(t>Math.min(a,b)&&t<Math.max(a,b)&&v>0){const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY'}else{$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks'}});
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
