@@ -69,7 +69,42 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 </div>
 </section>
 
-<section id="nutrition" class="page"><div class="section"><div class="ey">NUTRITION</div><h2>Nutrition Calculator</h2><p class="mut">Uses the current GIR fluid list and editable product values. Aminoven contributes amino acids and calories but not GIR.</p><div class="grid g3"><label>HMF sachets/day<input id="hmf" type="number" min="0" step="1" value="0"></label></div></div><div class="section table"><table><thead><tr><th>Source</th><th>mL/day</th><th>Energy kcal</th><th>Protein/AA g</th><th>Carb g</th></tr></thead><tbody id="nutritionRows"></tbody></table><div class="stats" style="margin-top:14px"><div class="stat"><span>Total energy</span><strong id="nEnergy">0</strong><small>kcal/day</small></div><div class="stat"><span>Total protein/AA</span><strong id="nProtein">0</strong><small>g/day</small></div><div class="stat"><span>Energy/kg/day</span><strong id="nEnergyKg">0</strong><small>kcal/kg/day</small></div></div></div></section>
+<section id="nutrition" class="page">
+<div class="section"><div class="ey">NUTRITION</div><h2>Nutrition Calculator</h2><p class="mut">Patient inputs and current fluids entered in GIR are reflected here automatically. Nutritional additions can be entered below.</p></div>
+
+<div class="section">
+<h2>1. Patient / Initial Inputs</h2>
+<div class="stats">
+<div class="stat"><span>Weight</span><strong id="nutWeight">0</strong><small id="nutWeightUnit">kg</small></div>
+<div class="stat"><span>TFI</span><strong id="nutTfi">0</strong><small>mL/kg/day</small></div>
+<div class="stat"><span>Permitted TFI</span><strong id="nutPermittedTfi">0</strong><small>mL/day</small></div>
+<div class="stat"><span>Target GIR</span><strong id="nutTargetGir">0</strong><small>mg/kg/min</small></div>
+</div>
+</div>
+
+<div class="section">
+<h2>2. Current IV / Oral Fluids</h2>
+<p class="mut">These values mirror the Current IV / Oral Fluids section from GIR and update automatically.</p>
+<div class="section table" style="margin-top:12px"><table><thead><tr><th>Source</th><th>Volume</th><th>GIR</th><th>Energy kcal/day</th><th>Protein/AA g/day</th><th>Carb g/day</th></tr></thead><tbody id="nutritionFluidRows"></tbody></table></div>
+<div class="stats" style="margin-top:14px">
+<div class="stat"><span>Total current fluid</span><strong id="nutCurrentFluid">0</strong><small>mL/day</small></div>
+<div class="stat"><span>Remaining TFI</span><strong id="nutRemainingTfi">0</strong><small>mL/day</small></div>
+<div class="stat"><span>Current GIR</span><strong id="nutCurrentGir">0</strong><small>mg/kg/min</small></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Additional Nutrition Sources</h2>
+<p class="mut">Turn on only the nutritional additions being used. Enter the amount and the nutrition totals update immediately.</p>
+<div class="grid g3">
+<label><input type="checkbox" id="hmfToggle"> HMF sachets/day<input id="hmf" type="number" min="0" step="1" value="0" disabled></label>
+<label><input type="checkbox" id="hmfAdvanceToggle"> HMF-Advance sachets/day<input id="hmfAdvance" type="number" min="0" step="1" value="0" disabled></label>
+<label><input type="checkbox" id="mctToggle"> Simyl MCT oil mL/day<input id="mct" type="number" min="0" step="0.1" value="0" disabled></label>
+</div>
+</div>
+
+<div class="section table"><table><thead><tr><th>Source</th><th>mL/day</th><th>Energy kcal</th><th>Protein/AA g</th><th>Carb g</th></tr></thead><tbody id="nutritionRows"></tbody></table>
+<div class="stats" style="margin-top:14px"><div class="stat"><span>Total energy</span><strong id="nEnergy">0</strong><small>kcal/day</small></div><div class="stat"><span>Total protein/AA</span><strong id="nProtein">0</strong><small>g/day</small></div><div class="stat"><span>Energy/kg/day</span><strong id="nEnergyKg">0</strong><small>kcal/kg/day</small></div></div></div></section>
 
 <section id="mixer" class="page"><div class="section"><div class="ey">MIXER</div><h2>Two-stock Fluid Mixer</h2><div class="grid g4"><label>Target %<input id="mt" type="number" value="10" step="1"></label><label>Stock A %<input id="ma" type="number" value="5" step="1"></label><label>Stock B %<input id="mb" type="number" value="25" step="1"></label><label>Final volume mL<input id="mv" type="number" value="100" step="1"></label></div><div class="stats" style="margin-top:12px"><div class="stat"><span>Stock A</span><strong id="mav">0</strong><small>mL</small></div><div class="stat"><span>Stock B</span><strong id="mbv">0</strong><small>mL</small></div><div class="stat"><span>Status</span><strong id="ms">—</strong></div></div></div></section>
 
@@ -229,7 +264,27 @@ function updateTarget(x){
  $('targetStatus').textContent=flags.join(' ');$('targetStatus').className='status '+(flags.some(s=>/exceed|above|below|not achievable|twice/.test(s))?'warn':'ok');
 }
 function updateNutrition(){
- const x=currentTotals();let h='',e=0,p=0,c=0;fluids.forEach(f=>{const r=calcFluid(f,x.p.w);e+=r.e;p+=r.p;c+=r.carb;h+='<tr><td>'+f.name+'</td><td>'+fmt(f.volume,1)+'</td><td>'+fmt(r.e,1)+'</td><td>'+fmt(r.p,2)+'</td><td>'+fmt(r.carb,2)+'</td></tr>'});const hm=n('hmf');e+=hm*3.4;p+=hm*.27;c+=hm*.49;$('nutritionRows').innerHTML=h;$('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nEnergyKg').textContent=fmt(x.p.w?e/x.p.w:0,1)
+ const x=currentTotals();
+ const pt=patient();
+ if($('nutWeight'))$('nutWeight').textContent=fmt(pt.w,2);
+ if($('nutWeightUnit'))$('nutWeightUnit').textContent='kg';
+ if($('nutTfi'))$('nutTfi').textContent=fmt(pt.tfi,1);
+ if($('nutPermittedTfi'))$('nutPermittedTfi').textContent=fmt(x.permitted,1);
+ if($('nutTargetGir'))$('nutTargetGir').textContent=fmt(pt.target,2);
+ if($('nutCurrentFluid'))$('nutCurrentFluid').textContent=fmt(x.total,1);
+ if($('nutRemainingTfi'))$('nutRemainingTfi').textContent=fmt(x.remaining,1);
+ if($('nutCurrentGir'))$('nutCurrentGir').textContent=fmt(x.gir);
+ let h='',e=0,p=0,c=0;
+ fluids.forEach(f=>{const r=calcFluid(f,x.p.w);e+=r.e;p+=r.p;c+=r.carb;h+='<tr><td>'+f.name+'</td><td>'+fmt(f.volume,1)+'</td><td>'+fmt(r.g,2)+'</td><td>'+fmt(r.e,1)+'</td><td>'+fmt(r.p,2)+'</td><td>'+fmt(r.carb,2)+'</td></tr>'});
+ $('nutritionFluidRows').innerHTML=h||'<tr><td colspan="6">No current fluids selected.</td></tr>';
+ const hm=$('hmfToggle')?.checked?n('hmf'):0;
+ const ha=$('hmfAdvanceToggle')?.checked?n('hmfAdvance'):0;
+ const mct=$('mctToggle')?.checked?n('mct'):0;
+ if(hm>0){e+=hm*3.4;p+=hm*.27;c+=hm*.49;h+='<tr><td>HMF</td><td>'+fmt(hm,1)+'</td><td>—</td><td>'+fmt(hm*3.4,1)+'</td><td>'+fmt(hm*.27,2)+'</td><td>'+fmt(hm*.49,2)+'</td></tr>'}
+ if(ha>0){e+=ha*4.5;p+=ha*.35;c+=ha*.24;h+='<tr><td>HMF-Advance</td><td>'+fmt(ha,1)+'</td><td>—</td><td>'+fmt(ha*4.5,1)+'</td><td>'+fmt(ha*.35,2)+'</td><td>'+fmt(ha*.24,2)+'</td></tr>'}
+ if(mct>0){e+=mct*7.8;h+='<tr><td>Simyl MCT oil</td><td>'+fmt(mct,1)+'</td><td>—</td><td>'+fmt(mct*7.8,1)+'</td><td>0.00</td><td>0.00</td></tr>'}
+ $('nutritionRows').innerHTML=h||'<tr><td colspan="5">No nutrition sources selected.</td></tr>';
+ $('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nEnergyKg').textContent=fmt(x.p.w?e/x.p.w:0,1);
 }
 $('addFluid').innerHTML='<option value="">+ Add predefined fluid…</option>'+PREDEF.map(x=>'<option>'+x+'</option>').join('');
 $('addFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
@@ -240,7 +295,7 @@ $('weightUnit').onchange=()=>{const f=patient(),u=$('weightUnit').value;const ra
 fillPlanOptions();
 ['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';$('planA').dataset.solveError='';recalc(false)});
 $('resetPlan').onclick=()=>{$('planA').dataset.user='';$('planA').dataset.solveError='';recalc(false)};
-$('hmf').oninput=updateNutrition;
+['hmfToggle','hmfAdvanceToggle','mctToggle'].forEach(id=>$(id).onchange=()=>{const map={hmfToggle:'hmf',hmfAdvanceToggle:'hmfAdvance',mctToggle:'mct'};const input=$(map[id]);input.disabled=!$(id).checked;updateNutrition()});['hmf','hmfAdvance','mct'].forEach(id=>$(id).oninput=updateNutrition);
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(t>Math.min(a,b)&&t<Math.max(a,b)&&v>0){const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY'}else{$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks'}});
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
 recalc();
