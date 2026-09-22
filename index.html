@@ -233,6 +233,6 @@ fillPlanOptions();
 $('resetPlan').onclick=()=>{$('planA').dataset.user='';$('planA').dataset.solveError='';recalc(false)};
 $('hmf').oninput=updateNutrition;
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(t>Math.min(a,b)&&t<Math.max(a,b)&&v>0){const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY'}else{$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks'}});
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(b.dataset.page).classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z===b));});
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
 recalc();
 </script></body></html>
