@@ -10,12 +10,12 @@ main{padding:24px 18px}.page{display:none}.page.active{display:block}.section{ba
 label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #cbdad6;border-radius:8px;background:#fff;color:var(--ink)}input[type=number]{appearance:auto}button{font:inherit}.btn{padding:10px 14px;border-radius:8px;border:1px solid #9bc7c1;background:#fff;color:var(--teal);cursor:pointer}.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
 .actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.status{padding:11px 13px;border-radius:8px;background:#edf2f1;color:var(--mut);margin-top:12px}.ok{background:#e7f5ec;color:var(--ok)}.bad{background:#fdecec;color:var(--bad)}.warn{background:#fff5dc;color:var(--warn)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border:1px solid var(--line);border-radius:10px;padding:14px}.stat span{display:block;color:var(--mut);font-size:12px}.stat strong{display:block;font-size:24px;margin:4px 0}.stat small{color:var(--mut)}
-.fluid{border:1px solid var(--line);border-radius:10px;padding:14px;margin:10px 0}.fluid-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.fluid-head b{font-size:16px}.remove{border:0;background:#fbecec;color:var(--bad);padding:8px 10px;border-radius:8px;cursor:pointer}
+.fluid{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}.fluid-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.fluid-head b{font-size:16px}.fluid-main-row{min-height:56px}.fluid-name{min-width:130px}.fluid-volume{display:flex;align-items:end;gap:7px;min-width:250px}.fluid-volume label{flex:1}.fluid-volume input{margin-top:4px}.volume-unit{width:105px;margin-top:0}.fluid-live{display:flex;gap:18px;align-items:center;color:var(--mut);font-size:12px;white-space:nowrap}.fluid-live b{color:var(--ink);font-size:14px}.details-toggle{border:1px solid #cbdad6;background:#fff;color:var(--teal);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:20px;line-height:1}.details-toggle[aria-expanded="true"]{transform:rotate(180deg);background:#f1f8f6}.fluid-details{padding:12px 2px 2px;border-top:1px solid var(--line);margin-top:10px}.remove{border:0;background:#fbecec;color:var(--bad);padding:8px 10px;border-radius:8px;cursor:pointer}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #e8efed;text-align:left;white-space:nowrap}.table{overflow:auto}
 .plan{background:#f8fbfa;border:1px solid #cfe4df;border-radius:10px;padding:15px;margin-top:14px}.plan h3,.plan h4{margin-top:0}
 .badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9efed;color:var(--mut);font-size:12px}.note{background:#fff8e8;border:1px solid #f0dfb1;color:#73500b;padding:12px;border-radius:9px}
 .divider{height:1px;background:var(--line);margin:18px 0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}.home-tool{display:flex;align-items:center;justify-content:center;min-height:82px;padding:18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:20px;font-weight:800;cursor:pointer;text-align:center}.home-tool:hover{border-color:#9bc7c1;background:#f8fbfa;color:var(--teal)}@media(max-width:760px){.home-tools{grid-template-columns:1fr}}
-@media(max-width:760px){.g2,.g3,.g4,.stats{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.nav{width:100%}}
+@media(max-width:900px){.fluid-main-row{flex-wrap:wrap}.fluid-live{width:100%;order:5}.fluid-volume{min-width:220px}}@media(max-width:760px){.g2,.g3,.g4,.stats{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.nav{width:100%}.fluid-main-row{align-items:stretch}.fluid-name{min-width:100%}.fluid-volume{width:100%}.fluid-live{gap:10px;flex-wrap:wrap}}
 </style></head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
@@ -101,30 +101,38 @@ const fmt=(x,d=2)=>(Number.isFinite(x)?x:0).toFixed(d);
 function patient(){return{w:n('w'),tfi:n('tfi'),target:n('tg')}}
 function addFluid(name,custom=false){
  const p=PRODUCTS[name]||{conc:0,energy:0,protein:0,carb:0,gir:true,editable:true};
- fluids.push({id:++uid,name,custom,volume:0,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb});
+ fluids.push({id:++uid,name,custom,volume:0,volumeUnit:'mL/day',conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb});
  renderFluids();recalc();
 }
 function removeFluid(id){fluids=fluids.filter(f=>f.id!==id);renderFluids();recalc()}
 function valNum(v){return parseFloat(v)||0}
 function productRow(f){
- const standard=PRODUCTS[f.name];const editable=!!f.custom||!!standard?.editable;
+ const standard=PRODUCTS[f.name];
+ const editable=!!f.custom||!!standard?.editable;
  const label=f.custom?'Custom fluid':f.name;
- return '<div class="fluid"><div class="fluid-head"><div><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div><button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
- '<div class="grid g4" style="margin-top:12px">'+
- '<label>Volume mL/day<input type="number" min="0" step="1" data-field="volume" data-id="'+f.id+'" value="'+f.volume+'"></label>'+
+ const unit=f.volumeUnit||'mL/day';
+ const displayVol=unit==='mL/hr'?(f.volume||0)/24:(f.volume||0);
+ return '<div class="fluid"><div class="fluid-head fluid-main-row">'+
+ '<div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div>'+
+ '<div class="fluid-volume"><label>Volume <span class="volume-unit-label">'+unit+'</span><input type="number" min="0" step="1" data-field="volumeDisplay" data-id="'+f.id+'" value="'+fmt(displayVol, unit==='mL/hr'?2:1)+'"></label>'+
+ '<select class="volume-unit" data-unit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div>'+
+ '<div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">0.00</b></span><span>Energy <b data-row-energy="'+f.id+'">0.00</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">0.00</b> g/day</span></div>'+
+ '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
+ '<button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
+ '<div class="fluid-details" id="details-'+f.id+'" hidden>'+
+ '<div class="grid g4">'+
  '<label>Glucose %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
  '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'"></label>'+
  '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
  '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(editable?'':'readonly')+'></label>'+
- '<div><small>GIR</small><br><b data-row-gir="'+f.id+'">0.00</b> mg/kg/min</div>'+
- '<div><small>Energy</small><br><b data-row-energy="'+f.id+'">0.00</b> kcal/day</div>'+
- '<div><small>Protein/AA</small><br><b data-row-protein="'+f.id+'">0.00</b> g/day</div>'+
- '</div></div>';
+ '</div></div></div>';
 }
 function renderFluids(){
  $('fluidList').innerHTML=fluids.length?fluids.map(productRow).join(''):'<div class="status">No current fluids selected. Unselected fluids are treated as zero.</div>';
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
- document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}}recalc(false);updateFluidRowOnly(f)})
+ document.querySelectorAll('[data-details]').forEach(b=>b.onclick=()=>{const box=$('details-'+b.dataset.details);const open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
+ document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day';const displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;const inp=document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]');if(inp)inp.value=fmt(x.value==='mL/hr'?f.volume/24:f.volume,x.value==='mL/hr'?2:1);recalc(false);updateFluidRowOnly(f);});
+ document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}}}recalc(false);updateFluidRowOnly(f)})
 }
 function updateFluidRowOnly(f){const x=currentTotals(),r=calcFluid(f,x.p.w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2)}
 function calcFluid(f,w){
