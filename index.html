@@ -184,6 +184,16 @@ function solveSelectedPlan(changed){
  if(possible){$('planAV').value=fmt(Math.max(0,av),1);$('planBV').value=fmt(Math.max(0,bv),1);$('planA').dataset.solveError=''}
  else {$('planAV').value='0';$('planBV').value='0';$('planA').dataset.solveError=reason}
 }
+function autoSolveSelectedPlan(){
+ const x=currentTotals(),a=$('planA').value,b=$('planB').value,R=x.remaining,W=x.p.w,T=x.p.target-x.gir;
+ $('planA').dataset.user='1';
+ if(!(W>0)||T<=0||!(R>0)){setPlan(a,b,0,0);recalc(false);return}
+ const ca=PRODUCTS[a]?.conc||0,cb=PRODUCTS[b]?.conc||0,req=T*W*144/R;
+ let av=0,bv=0;
+ if(Math.abs(ca-cb)<1e-9){if(Math.abs(req-ca)<1e-9){av=R}}
+ else {av=R*(cb-req)/(cb-ca);bv=R-av;if(av<0||bv<0){av=0;bv=0}}
+ setPlan(a,b,av,bv);recalc(false);
+}
 function updateTarget(x){
  const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;const max=x.p.w>0?x.remaining*50*10/(x.p.w*1440):0;
  $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('maxAdditional').textContent=fmt(max);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
