@@ -331,8 +331,8 @@ function solveSelectedPlan(changed){
      possible=false;reason='The selected fluids are too dilute to achieve the target GIR within the remaining TFI. Choose a higher glucose concentration or increase available TFI.'
    }
  }
- if(possible){$('planAV').value=fmt(Math.max(0,av),1);$('planBV').value=fmt(Math.max(0,bv),1);$('planA').dataset.solveError=''}
- else {$('planAV').value='0';$('planBV').value='0';$('planA').dataset.solveError=reason}
+ if(possible){setPlan(a,b,av,bv);$('planA').dataset.solveError=''}
+ else {$('planAV').value='0';$('planBV').value='0';clearPlanExact();$('planA').dataset.solveError=reason}
 }
 function autoSolveSelectedPlan(){
  const x=currentTotals(),a=$('planA').value,b=$('planB').value,R=x.remaining,W=x.p.w,T=x.p.target-x.gir;
