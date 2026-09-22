@@ -11,7 +11,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.status{padding:11px 13px;border-radius:8px;background:#edf2f1;color:var(--mut);margin-top:12px}.ok{background:#e7f5ec;color:var(--ok)}.bad{background:#fdecec;color:var(--bad)}.warn{background:#fff5dc;color:var(--warn)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border:1px solid var(--line);border-radius:10px;padding:14px}.stat span{display:block;color:var(--mut);font-size:12px}.stat strong{display:block;font-size:24px;margin:4px 0}.stat small{color:var(--mut)}.combined-stat strong+small{display:block;margin-bottom:7px}.combined-stat strong:nth-of-type(2){margin-top:2px}.nutrition-toggle{display:inline-block;width:auto;margin:0 7px 0 0;vertical-align:middle}
 .fluid{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}.fluid-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.fluid-head b{font-size:16px}.fluid-main-row{min-height:56px}.fluid-name{min-width:130px}.fluid-volume{display:flex;align-items:end;gap:7px;min-width:250px}.weight-input-row{display:flex;gap:7px;align-items:end}.weight-input-row input{flex:1}.weight-input-row select{width:82px}.tfi-permitted{margin-top:7px;color:var(--mut);font-size:12px}.volume-input{min-width:180px}.volume-input::placeholder{opacity:1;color:var(--mut)}.add-fluid-select{font:inherit;color:inherit}.add-fluid-buttonlike{width:auto;min-width:0;height:auto;padding:10px 14px;border:1px solid #9bc7c1;background:#fff;color:var(--teal);border-radius:8px;font:inherit;font-size:16px;cursor:pointer}.add-fluid-buttonlike:focus{outline:2px solid #9bc7c1;outline-offset:1px;box-shadow:none}.tfi-permitted strong{color:var(--ink);font-size:14px}.fluid-volume label{flex:1}.fluid-volume input{margin-top:4px}.volume-unit{width:105px;margin-top:0}.fluid-live{display:flex;gap:18px;align-items:center;color:var(--mut);font-size:12px;white-space:nowrap}.fluid-live b{color:var(--ink);font-size:14px}.details-toggle{border:1px solid #cbdad6;background:#fff;color:var(--teal);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:20px;line-height:1}.details-toggle[aria-expanded="true"]{transform:rotate(180deg);background:#f1f8f6}.fluid-details{padding:12px 2px 2px;border-top:1px solid var(--line);margin-top:10px}.remove{border:0;background:#fbecec;color:var(--bad);padding:8px 10px;border-radius:8px;cursor:pointer}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #e8efed;text-align:left;white-space:nowrap}.table{overflow:auto}
+.nutrition-extra{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}.nutrition-extra-head{display:flex;align-items:center;gap:12px;min-height:56px}.nutrition-extra-main{display:flex;align-items:center;gap:12px;flex:1;min-width:0}.nutrition-extra-toggle{display:flex;align-items:center;gap:8px;font-weight:700;min-width:190px}.nutrition-extra-toggle input{display:inline-block;width:auto;margin:0}.nutrition-extra-amount{display:flex;align-items:center;gap:8px;min-width:220px;flex:1}.nutrition-extra-amount input{margin:0;max-width:150px}.nutrition-extra-live{display:flex;gap:18px;align-items:center;color:var(--mut);font-size:12px;white-space:nowrap}.nutrition-extra-live b{color:var(--ink);font-size:14px}.nutrition-extra-details{padding:12px 2px 2px;border-top:1px solid var(--line);margin-top:10px}.nutrition-extra-details input{margin-top:4px}.nutrition-extra .details-toggle{flex:0 0 34px}@media(max-width:900px){.nutrition-extra-head{flex-wrap:wrap}.nutrition-extra-main{flex-wrap:wrap}.nutrition-extra-live{width:100%;order:3}.nutrition-extra-amount{min-width:220px}}@media(max-width:760px){.nutrition-extra-toggle{min-width:100%}.nutrition-extra-amount{width:100%;min-width:0}.nutrition-extra-live{gap:10px;flex-wrap:wrap}.nutrition-extra-head{align-items:stretch}}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #e8efed;text-align:left;white-space:nowrap}.table{overflow:auto}
 .plan{background:#f8fbfa;border:1px solid #cfe4df;border-radius:10px;padding:15px;margin-top:14px}.plan h3,.plan h4{margin-top:0}
 .badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e9efed;color:var(--mut);font-size:12px}.note{background:#fff8e8;border:1px solid #f0dfb1;color:#73500b;padding:12px;border-radius:9px}
 .divider{height:1px;background:var(--line);margin:18px 0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}.home-tool{display:flex;align-items:center;justify-content:center;min-height:82px;padding:18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:20px;font-weight:800;cursor:pointer;text-align:center}.home-tool:hover{border-color:#9bc7c1;background:#f8fbfa;color:var(--teal)}@media(max-width:760px){.home-tools{grid-template-columns:1fr}}
@@ -19,7 +19,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 </style></head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
-<nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="settings">Settings</button><button data-page="about">About</button></nav></div></header>
+<nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
 <main>
 <section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR</button><button class="home-tool" data-page="nutrition">Energy Protein ratio</button><button class="home-tool" data-page="mixer">Mixer</button></div></div></section>
 
@@ -117,11 +117,60 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 
 <div class="section">
 <h2>4. Additional Nutrition Sources</h2>
-<p class="mut">Turn on only the nutritional additions being used. Enter the amount and the nutrition totals update immediately.</p>
-<div class="grid g3">
-<label><input class="nutrition-toggle" type="checkbox" id="hmfToggle"> HMF sachets/day<input id="hmf" type="number" min="0" step="1" value="0" disabled></label>
-<label><input class="nutrition-toggle" type="checkbox" id="hmfAdvanceToggle"> HMF-Advance sachets/day<input id="hmfAdvance" type="number" min="0" step="1" value="0" disabled></label>
-<label><input class="nutrition-toggle" type="checkbox" id="mctToggle"> Simyl MCT oil mL/day<input id="mct" type="number" min="0" step="0.1" value="0" disabled></label>
+<p class="mut">Turn on only the nutritional additions being used. Expand a source to edit its preset composition. These edits are patient/session-specific and immediately affect all nutrition calculations.</p>
+
+<div class="nutrition-extra" id="hmfSource">
+  <div class="nutrition-extra-head">
+    <div class="nutrition-extra-main">
+      <label class="nutrition-extra-toggle"><input type="checkbox" id="hmfToggle"> HMF</label>
+      <div class="nutrition-extra-amount"><input id="hmf" type="number" min="0" step="1" value="0" disabled placeholder="Amount"><span class="mut">sachets/day</span></div>
+      <div class="nutrition-extra-live"><span>Energy <b id="hmfLiveEnergy">0.0</b> kcal/day</span><span>Protein <b id="hmfLiveProtein">0.00</b> g/day</span><span>Carb <b id="hmfLiveCarb">0.00</b> g/day</span></div>
+    </div>
+    <button class="details-toggle" type="button" data-extra-details="hmf" aria-expanded="false">⌄</button>
+  </div>
+  <div class="nutrition-extra-details" id="extra-details-hmf" hidden>
+    <div class="grid g3">
+      <label>Energy kcal/sachet<input id="hmfEnergy" type="number" min="0" step="0.1" value="3.4"></label>
+      <label>Protein/AA g/sachet<input id="hmfProtein" type="number" min="0" step="0.01" value="0.27"></label>
+      <label>Carbohydrate g/sachet<input id="hmfCarb" type="number" min="0" step="0.01" value="0.49"></label>
+    </div>
+  </div>
+</div>
+
+<div class="nutrition-extra" id="hmfAdvanceSource">
+  <div class="nutrition-extra-head">
+    <div class="nutrition-extra-main">
+      <label class="nutrition-extra-toggle"><input type="checkbox" id="hmfAdvanceToggle"> HMF-Advance</label>
+      <div class="nutrition-extra-amount"><input id="hmfAdvance" type="number" min="0" step="1" value="0" disabled placeholder="Amount"><span class="mut">sachets/day</span></div>
+      <div class="nutrition-extra-live"><span>Energy <b id="hmfAdvanceLiveEnergy">0.0</b> kcal/day</span><span>Protein <b id="hmfAdvanceLiveProtein">0.00</b> g/day</span><span>Carb <b id="hmfAdvanceLiveCarb">0.00</b> g/day</span></div>
+    </div>
+    <button class="details-toggle" type="button" data-extra-details="hmfAdvance" aria-expanded="false">⌄</button>
+  </div>
+  <div class="nutrition-extra-details" id="extra-details-hmfAdvance" hidden>
+    <div class="grid g3">
+      <label>Energy kcal/sachet<input id="hmfAdvanceEnergy" type="number" min="0" step="0.1" value="4.5"></label>
+      <label>Protein/AA g/sachet<input id="hmfAdvanceProtein" type="number" min="0" step="0.01" value="0.35"></label>
+      <label>Carbohydrate g/sachet<input id="hmfAdvanceCarb" type="number" min="0" step="0.01" value="0.24"></label>
+    </div>
+  </div>
+</div>
+
+<div class="nutrition-extra" id="mctSource">
+  <div class="nutrition-extra-head">
+    <div class="nutrition-extra-main">
+      <label class="nutrition-extra-toggle"><input type="checkbox" id="mctToggle"> Simyl MCT oil</label>
+      <div class="nutrition-extra-amount"><input id="mct" type="number" min="0" step="0.1" value="0" disabled placeholder="Amount"><span class="mut">mL/day</span></div>
+      <div class="nutrition-extra-live"><span>Energy <b id="mctLiveEnergy">0.0</b> kcal/day</span><span>Protein <b id="mctLiveProtein">0.00</b> g/day</span><span>Carb <b id="mctLiveCarb">0.00</b> g/day</span></div>
+    </div>
+    <button class="details-toggle" type="button" data-extra-details="mct" aria-expanded="false">⌄</button>
+  </div>
+  <div class="nutrition-extra-details" id="extra-details-mct" hidden>
+    <div class="grid g3">
+      <label>Energy kcal/mL<input id="mctEnergy" type="number" min="0" step="0.1" value="7.8"></label>
+      <label>Protein/AA g/mL<input id="mctProtein" type="number" min="0" step="0.01" value="0"></label>
+      <label>Carbohydrate g/mL<input id="mctCarb" type="number" min="0" step="0.01" value="0"></label>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -140,7 +189,6 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 
 <section id="mixer" class="page"><div class="section"><div class="ey">MIXER</div><h2>Two-stock Fluid Mixer</h2><div class="grid g4"><label>Target %<input id="mt" type="number" value="10" step="1"></label><label>Stock A %<input id="ma" type="number" value="5" step="1"></label><label>Stock B %<input id="mb" type="number" value="25" step="1"></label><label>Final volume mL<input id="mv" type="number" value="100" step="1"></label></div><div class="stats" style="margin-top:12px"><div class="stat"><span>Stock A</span><strong id="mav">0</strong><small>mL</small></div><div class="stat"><span>Stock B</span><strong id="mbv">0</strong><small>mL</small></div><div class="stat"><span>Status</span><strong id="ms">—</strong></div></div></div></section>
 
-<section id="settings" class="page"><div class="section"><div class="ey">SETTINGS</div><h2>Master Product Defaults</h2><p class="mut">These are defaults. Patient-specific edits in the Current IV / Oral Fluids section do not change the master values.</p><div class="note">Aminoven: 5% = 5 g amino acids + 20 kcal/100 mL; 10% = 10 g + 40 kcal/100 mL. GIR contribution = 0. Verify the exact local product label.</div></div></section>
 <section id="about" class="page"><div class="section"><div class="ey">ABOUT</div><h2>About</h2><p>This is a calculation aid derived from the neonatal GIR workbook. It is not a prescribing system or validated medical device.</p></div></section>
 </main><footer style="text-align:center;padding:24px;color:#63736f;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only</footer>
 
@@ -375,9 +423,15 @@ function updateNutrition(renderEditor=true){
  if(bv>0&&b!=='NS'){h+='<tr><td>Automatic plan — '+b+'</td><td>'+fmt(bv,1)+' mL/day</td><td>'+fmt(rb.g,2)+'</td><td>'+fmt(rb.e,1)+'</td><td>'+fmt(rb.p,2)+'</td><td>'+fmt(rb.carb,2)+'</td></tr>'}
  let e=x.energy+planE,p=x.protein+planP,c=x.carb+planC;
  const hm=$('hmfToggle')?.checked?n('hmf'):0,ha=$('hmfAdvanceToggle')?.checked?n('hmfAdvance'):0,mct=$('mctToggle')?.checked?n('mct'):0;
- if(hm>0){e+=hm*3.4;p+=hm*.27;c+=hm*.49;h+='<tr><td>HMF</td><td>'+fmt(hm,1)+' sachet/day</td><td>—</td><td>'+fmt(hm*3.4,1)+'</td><td>'+fmt(hm*.27,2)+'</td><td>'+fmt(hm*.49,2)+'</td></tr>'}
- if(ha>0){e+=ha*4.5;p+=ha*.35;c+=ha*.24;h+='<tr><td>HMF-Advance</td><td>'+fmt(ha,1)+' sachet/day</td><td>—</td><td>'+fmt(ha*4.5,1)+'</td><td>'+fmt(ha*.35,2)+'</td><td>'+fmt(ha*.24,2)+'</td></tr>'}
- if(mct>0){e+=mct*7.8;h+='<tr><td>Simyl MCT oil</td><td>'+fmt(mct,1)+' mL/day</td><td>—</td><td>'+fmt(mct*7.8,1)+'</td><td>0.00</td><td>0.00</td></tr>'}
+ const hmE=n('hmfEnergy'),hmP=n('hmfProtein'),hmC=n('hmfCarb');
+ const haE=n('hmfAdvanceEnergy'),haP=n('hmfAdvanceProtein'),haC=n('hmfAdvanceCarb');
+ const mctE=n('mctEnergy'),mctP=n('mctProtein'),mctC=n('mctCarb');
+ if(hm>0){const ee=hm*hmE,pp=hm*hmP,cc=hm*hmC;e+=ee;p+=pp;c+=cc;h+='<tr><td>HMF</td><td>'+fmt(hm,1)+' sachet/day</td><td>—</td><td>'+fmt(ee,1)+'</td><td>'+fmt(pp,2)+'</td><td>'+fmt(cc,2)+'</td></tr>'}
+ if(ha>0){const ee=ha*haE,pp=ha*haP,cc=ha*haC;e+=ee;p+=pp;c+=cc;h+='<tr><td>HMF-Advance</td><td>'+fmt(ha,1)+' sachet/day</td><td>—</td><td>'+fmt(ee,1)+'</td><td>'+fmt(pp,2)+'</td><td>'+fmt(cc,2)+'</td></tr>'}
+ if(mct>0){const ee=mct*mctE,pp=mct*mctP,cc=mct*mctC;e+=ee;p+=pp;c+=cc;h+='<tr><td>Simyl MCT oil</td><td>'+fmt(mct,1)+' mL/day</td><td>—</td><td>'+fmt(ee,1)+'</td><td>'+fmt(pp,2)+'</td><td>'+fmt(cc,2)+'</td></tr>'}
+ if($('hmfLiveEnergy'))$('hmfLiveEnergy').textContent=fmt(hm*hmE,1);if($('hmfLiveProtein'))$('hmfLiveProtein').textContent=fmt(hm*hmP,2);if($('hmfLiveCarb'))$('hmfLiveCarb').textContent=fmt(hm*hmC,2);
+ if($('hmfAdvanceLiveEnergy'))$('hmfAdvanceLiveEnergy').textContent=fmt(ha*haE,1);if($('hmfAdvanceLiveProtein'))$('hmfAdvanceLiveProtein').textContent=fmt(ha*haP,2);if($('hmfAdvanceLiveCarb'))$('hmfAdvanceLiveCarb').textContent=fmt(ha*haC,2);
+ if($('mctLiveEnergy'))$('mctLiveEnergy').textContent=fmt(mct*mctE,1);if($('mctLiveProtein'))$('mctLiveProtein').textContent=fmt(mct*mctP,2);if($('mctLiveCarb'))$('mctLiveCarb').textContent=fmt(mct*mctC,2);
  $('nutritionRows').innerHTML=h||'<tr><td colspan="6">No current or planned nutrition sources selected.</td></tr>';
  $('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nCarb').textContent=fmt(c,2);$('nEnergyKg').textContent=fmt(pt.w?e/pt.w:0,1);$('nProteinKg').textContent=fmt(pt.w?p/pt.w:0,2);
 }
@@ -391,7 +445,9 @@ $('weightUnit').onchange=()=>{const f=patient(),u=$('weightUnit').value;const ra
 fillPlanOptions();
 ['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';$('planA').dataset.solveError='';recalc(false)});
 $('resetPlan').onclick=()=>{$('planA').dataset.user='';$('planA').dataset.solveError='';recalc(false)};
-['hmfToggle','hmfAdvanceToggle','mctToggle'].forEach(id=>$(id).onchange=()=>{const map={hmfToggle:'hmf',hmfAdvanceToggle:'hmfAdvance',mctToggle:'mct'};const input=$(map[id]);input.disabled=!$(id).checked;updateNutrition()});['hmf','hmfAdvance','mct'].forEach(id=>$(id).oninput=updateNutrition);
+['hmfToggle','hmfAdvanceToggle','mctToggle'].forEach(id=>$(id).onchange=()=>{const map={hmfToggle:'hmf',hmfAdvanceToggle:'hmfAdvance',mctToggle:'mct'};const input=$(map[id]);input.disabled=!$(id).checked;updateNutrition()});
+['hmf','hmfAdvance','mct','hmfEnergy','hmfProtein','hmfCarb','hmfAdvanceEnergy','hmfAdvanceProtein','hmfAdvanceCarb','mctEnergy','mctProtein','mctCarb'].forEach(id=>$(id).oninput=updateNutrition);
+document.querySelectorAll('[data-extra-details]').forEach(b=>b.onclick=()=>{const box=$('extra-details-'+b.dataset.extraDetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
 $('nutritionAddFluid').innerHTML='<option value="">+ Add predefined fluid…</option>'+PREDEF.map(x=>'<option>'+x+'</option>').join('');
 $('nutritionAddFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
 $('nutritionAddCustom').onclick=()=>{const name=prompt('Enter custom fluid name (e.g. 3% NaCl, KCl fluid):','Custom fluid');if(name&&name.trim())addFluid(name.trim(),true)};
