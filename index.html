@@ -314,10 +314,10 @@ function productRow(f){
  '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
  '<button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
  '<div class="fluid-details" id="details-'+f.id+'" hidden><div class="grid g4">'+
- '<label>Glucose %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
- '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(f.custom||standard?.name==='Breast milk'||standard?.name==='Formula milk'?'':'readonly')+'></label>'+
+ '<label>${f.custom?'Concentration % (TFI-only)':'Glucose %'}<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable&&!f.custom?'':'readonly')+'></label>'+
+ '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'" '+(f.custom?'readonly':(f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly'))+'></label>'+
+ '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable&&!f.custom?'':'readonly')+'></label>'+
+ '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(f.custom?'readonly':(f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly'))+'></label>'+
  '</div></div></div>';
 }
 function renderFluids(){
@@ -452,10 +452,10 @@ function nutritionFluidRow(f){
  '<div class="fluid-live"><span>GIR <b data-ngir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-nenergy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-nprotein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span><span>Carb <b data-ncarb="'+f.id+'">'+fmt(r.carb,2)+'</b> g/day</span></div>'+
  '<button class="details-toggle" type="button" data-ndetails="'+f.id+'" aria-expanded="false">⌄</button><button class="remove" data-nremove="'+f.id+'">Remove</button></div>'+
  '<div class="fluid-details" id="ndetails-'+f.id+'" hidden><div class="grid g4">'+
- '<label>Concentration %<input type="number" min="0" step="0.1" data-nfield="conc" data-nid="'+f.id+'" value="'+f.conc+'" '+(f.custom?'readonly':(editable?'':'readonly'))+'></label>'+
- '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-nfield="energy" data-nid="'+f.id+'" value="'+f.energy+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
- '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-nfield="protein" data-nid="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-nfield="carb" data-nid="'+f.id+'" value="'+f.carb+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
+ '<label>${f.custom?'Concentration % (TFI-only)':'Concentration %'}<input type="number" min="0" step="0.1" data-nfield="conc" data-nid="'+f.id+'" value="'+f.conc+'" '+(editable&&!f.custom?'':'readonly')+'></label>'+
+ '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-nfield="energy" data-nid="'+f.id+'" value="'+f.energy+'" '+(f.custom?'readonly':(f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly'))+'></label>'+
+ '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-nfield="protein" data-nid="'+f.id+'" value="'+f.protein+'" '+(editable&&!f.custom?'':'readonly')+'></label>'+
+ '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-nfield="carb" data-nid="'+f.id+'" value="'+f.carb+'" '+(f.custom?'readonly':(f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly'))+'></label>'+
  '</div></div></div>';
 }
 function updateNutritionFluidRow(f){
