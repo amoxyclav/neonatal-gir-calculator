@@ -51,7 +51,6 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;borde
 <div class="stat"><span>Required average concentration</span><strong id="requiredConc">0</strong><small>%</small></div>
 
 <div class="stat"><span>Automated line type</span><strong id="lineType">—</strong><small>based on required concentration</small></div>
-<div class="stat"><span>Plan volume</span><strong id="planVolume">0</strong><small>mL/day</small></div>
 <div class="stat"><span>Calculated GIR</span><strong id="achievedGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>GIR difference</span><strong id="girDifference">0</strong><small>target − calculated</small></div>
 <div class="stat"><span>Unused TFI</span><strong id="unusedTfi">0</strong><small>mL/day</small></div>
@@ -223,7 +222,7 @@ function updateTarget(x){
  $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
  if(!$('planA').dataset.user){const a=autoPlan(x);setPlan(a.a,a.b,a.av,a.bv)}
  const a=$('planA').value,b=$('planB').value,av=n('planAV'),bv=n('planBV');const ach=x.gir+(av*(PLAN.includes(a)?PRODUCTS[a].conc:0)+bv*(PLAN.includes(b)?PRODUCTS[b].conc:0))*10/(x.p.w*1440||1);const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
- $('planVolume').textContent=fmt(pv,1);$('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
+ $('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
  let flags=[];const solveError=$('planA').dataset.solveError||'';if(solveError)flags.push(solveError);if(x.over)flags.push('Current fluids exceed permitted TFI.');if(x.gir>x.p.target+0.001)flags.push('Current GIR already exceeds target.');if(a===b&&pv>0)flags.push('Same fluid selected twice.');if(pv>x.remaining+0.001)flags.push('Plan exceeds remaining TFI.');if(req>50&&add>0)flags.push('Target not achievable within the configured central limit.');if(diff>0.01)flags.push('Preferred plan is below target.');else if(diff<-0.01)flags.push('Preferred plan is above target.');else if(pv>0&&unused<0.01)flags.push('Target achieved with TFI balanced.');else if(pv>0)flags.push('Target achieved but unused TFI remains.');
  if(add<=0)flags.push('No additional GIR is required.');
  $('targetStatus').textContent=flags.join(' ');$('targetStatus').className='status '+(flags.some(s=>/exceed|above|below|not achievable|twice/.test(s))?'warn':'ok');
