@@ -75,9 +75,9 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="section">
 <h2>1. Patient / Initial Inputs</h2>
 <div class="grid g3">
-<div><label>Weight</label><div class="weight-input-row"><input id="nutW" type="number" min="0" step="0.1" inputmode="decimal"><select id="nutWeightUnit" aria-label="Nutrition weight unit"><option value="kg" selected>kg</option><option value="g">g</option><option value="lb">lb</option></select></div></div>
-<div><label>TFI (mL/kg/day)<input id="nutTfiInput" type="number" min="0" step="1" inputmode="numeric"></label><div class="tfi-permitted">Permitted TFI: <strong id="nutPermittedTfi">0.0</strong> mL/day</div></div>
-<label>Target GIR (mg/kg/min)<input id="nutTg" type="number" min="0" step="0.1" inputmode="decimal"></label>
+<div><label>Weight</label><div class="weight-input-row"><input id="nutW" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Weight"><select id="nutWeightUnit" aria-label="Nutrition weight unit"><option value="kg" selected>kg</option><option value="g">g</option><option value="lb">lb</option></select></div></div>
+<div><label>TFI (mL/kg/day)<input id="nutTfiInput" type="number" min="0" step="1" inputmode="decimal" placeholder="TFI"></label><div class="tfi-permitted">Permitted TFI: <strong id="nutPermittedTfi">0.0</strong> mL/day</div></div>
+<label>Target GIR (mg/kg/min)<input id="nutTg" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Target GIR"></label>
 </div>
 </div>
 
@@ -178,11 +178,9 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <table><thead><tr><th>Source</th><th>Amount</th><th>GIR</th><th>Energy kcal</th><th>Protein/AA g</th><th>Carb g</th></tr></thead>
 <tbody id="nutritionRows"></tbody></table>
 <div class="stats" style="margin-top:14px">
-<div class="stat"><span>Total energy</span><strong id="nEnergy">0</strong><small>kcal/day</small></div>
-<div class="stat"><span>Total protein/AA</span><strong id="nProtein">0</strong><small>g/day</small></div>
-<div class="stat"><span>Total carbohydrate</span><strong id="nCarb">0</strong><small>g/day</small></div>
-<div class="stat"><span>Energy/kg/day</span><strong id="nEnergyKg">0</strong><small>kcal/kg/day</small></div>
-<div class="stat"><span>Protein/AA/kg/day</span><strong id="nProteinKg">0</strong><small>g/kg/day</small></div>
+<div class="stat combined-stat"><span>Total energy</span><strong id="nEnergy">0</strong><small>kcal/day</small><strong id="nEnergyKg">0</strong><small>kcal/kg/day</small></div>
+<div class="stat combined-stat"><span>Total protein/AA</span><strong id="nProtein">0</strong><small>g/day</small><strong id="nProteinKg">0</strong><small>g/kg/day</small></div>
+<div class="stat combined-stat"><span>Total carbohydrate</span><strong id="nCarb">0</strong><small>g/day</small><strong id="nCarbKg">0</strong><small>g/kg/day</small></div>
 </div>
 </div>
 </section>
@@ -366,7 +364,7 @@ function nutritionFluidRow(f){
  const displayVol=unit==='mL/hr'?(f.volume||0)/24:(f.volume||0),r=calcFluid(f,patient().w||0);
  return '<div class="fluid"><div class="fluid-head fluid-main-row">'+
  '<div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div>'+
- '<div class="fluid-volume"><input type="number" min="0" step="1" class="volume-input" data-nfield="volumeDisplay" data-nid="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol,unit==='mL/hr'?2:1):'')+'">'+
+ '<div class="fluid-volume"><input type="number" min="0" step="0.1" inputmode="decimal" class="volume-input" data-nfield="volumeDisplay" data-nid="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol,unit==='mL/hr'?2:1):'')+'">'+
  '<select class="volume-unit" data-nunit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div>'+
  '<div class="fluid-live"><span>GIR <b data-ngir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-nenergy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-nprotein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span><span>Carb <b data-ncarb="'+f.id+'">'+fmt(r.carb,2)+'</b> g/day</span></div>'+
  '<button class="details-toggle" type="button" data-ndetails="'+f.id+'" aria-expanded="false">⌄</button><button class="remove" data-nremove="'+f.id+'">Remove</button></div>'+
