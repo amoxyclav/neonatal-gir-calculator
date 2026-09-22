@@ -262,7 +262,7 @@ function recalc(renderRows=true){
  $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI.':'Current fluid total is within permitted TFI.';
  $('fluidStatus').className='status '+(x.over?'bad':'ok');
  fluids.forEach(f=>updateFluidRowOnly(f));
- updateTarget(x);updateNutrition();
+ updateTarget(x);updateNutrition(renderRows);
 }
 function autoPlan(x){
  const add=Math.max(x.p.target-x.gir,0);
