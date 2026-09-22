@@ -308,16 +308,16 @@ function productRow(f){
  const r=calcFluid(f,w);
  return '<div class="fluid"><div class="fluid-head fluid-main-row">'+
  '<div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div>'+
- '<div class="fluid-volume"><input type="number" min="0" step="1" class="volume-input" data-field="volumeDisplay" data-id="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol, unit==='mL/hr'?2:1):'')+'">'+
+ '<div class="fluid-volume"><input type="number" min="0" step="0.1" class="volume-input" data-field="volumeDisplay" data-id="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol, unit==='mL/hr'?2:1):'')+'">'+
  '<select class="volume-unit" data-unit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div>'+
  '<div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-row-energy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span><span>Carb <b data-row-carb="'+f.id+'">'+fmt(r.carb,2)+'</b> g/day</span></div>'+
  '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
  '<button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
  '<div class="fluid-details" id="details-'+f.id+'" hidden><div class="grid g4">'+
  '<label>Glucose %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'"></label>'+
+ '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'" '+(f.custom||standard?.name==='Breast milk'||standard?.name==='Formula milk'?'':'readonly')+'></label>'+
  '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'"></label>'+
+ '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(f.custom||standard?.name==='Breast milk'||standard?.name==='Formula milk'?'':'readonly')+'></label>'+
  '</div></div></div>';
 }
 function renderFluids(){
@@ -331,7 +331,8 @@ function renderFluids(){
 function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2);if(c)c.textContent=fmt(r.carb,2)}
 function calcFluid(f,w){
  const v=f.volume||0,c=f.conc||0;
- const g=(f.name==='Aminoven'||f.name==='Intralipid'||(!f.custom&&f.name==='NS'))?0:(v*c*10/(w*1440)||0);
+ if(f.custom)return{g:0,e:0,p:0,carb:0};
+ const g=(f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS')?0:(v*c*10/(w*1440)||0);
  const e=v*(f.energy||0)/100;const p=v*(f.protein||0)/100;const carb=v*(f.carb||0)/100;
  return{g,e,p,carb};
 }
@@ -593,6 +594,8 @@ $('nutPlanBV').oninput=()=>{
 
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(v<=0){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Enter a final volume.';return}if(a===b){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Stock concentrations must be different.';return}if(t<Math.min(a,b)||t>Math.max(a,b)){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks.';return}const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY';});
 ['mt2','me2','mv2','ms2'].forEach(id=>$(id).oninput=()=>{const t=n('mt2'),e=n('me2'),v=n('mv2'),s=n('ms2');if(v<=0){$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Enter existing fluid volume.';return}if(t===s){$('mxv2').textContent='0';$('mfinal2').textContent=fmt(v,1);$('mfinalc2').textContent=fmt(t,1);$('ms2out').textContent='Target equals stock concentration; no stock is required if the target is already achieved, otherwise dilution is not represented.';return}if((t-e)*(t-s)<=0){const x=v*(t-e)/(s-t);if(x>=0){const fv=v+x;const fc=(e*v+s*x)/fv;$('mxv2').textContent=fmt(x,1);$('mfinal2').textContent=fmt(fv,1);$('mfinalc2').textContent=fmt(fc,1);$('ms2out').textContent='READY';}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}});;
+function calculateMixerNewBag(){['mt','ma','mb','mv'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
+function calculateMixerExistingBag(){['mt2','me2','mv2','ms2'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 const quickGuideToggle=$('quickGuideToggle'),quickGuide=$('quickGuide');
 if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  const open=quickGuide.style.display!=='none';
@@ -601,4 +604,6 @@ if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
 };
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
 recalc();
+calculateMixerNewBag();
+calculateMixerExistingBag();
 </script></body></html>
