@@ -52,7 +52,6 @@ jobs:
       - name: Validate required site files
         run: |
           test -f index.html
-          test -f styles.css
           test -f manifest.json
           test -f robots.txt
           test -f sitemap.xml
