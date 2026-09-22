@@ -116,7 +116,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 
 <div class="section">
 <h2>2. Current IV / Oral Fluids</h2>
-<p class="mut">These are the same interactive fluid entries used in GIR. Changes made here are reflected in GIR immediately. Select only fluids actually being administered. Custom fluids are TFI-only and do not contribute to GIR or nutrition.</p>
+<p class="mut">These are the same interactive fluid entries used in GIR. Changes made here are reflected in GIR immediately. Select only fluids actually being administered. Custom fluids use the composition entered by the user for TFI, GIR and nutrition calculations.</p>
 <div id="nutritionFluidEditor"></div>
 <div class="actions"><select id="nutritionAddFluid" class="add-fluid-select add-fluid-buttonlike"><option value="">+ Add predefined fluid…</option></select><button class="btn" id="nutritionAddCustom">+ Add custom fluid</button></div>
 <div class="divider"></div>
@@ -314,7 +314,7 @@ function productRow(f){
  '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
  '<button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
  '<div class="fluid-details" id="details-'+f.id+'" hidden><div class="grid g4">'+
- '<label>Concentration %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
+ '<label>Glucose %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
  '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
  '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
  '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
@@ -331,7 +331,7 @@ function renderFluids(){
 function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2);if(c)c.textContent=fmt(r.carb,2)}
 function calcFluid(f,w){
  const v=f.volume||0,c=f.conc||0;
- const g=(f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS')?0:(w>0?v*c*10/(w*1440):0);
+ const g=f.custom?(w>0?v*c*10/(w*1440):0):((f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS')?0:(w>0?v*c*10/(w*1440):0));
  const e=v*(f.energy||0)/100;const p=v*(f.protein||0)/100;const carb=v*(f.carb||0)/100;
  return{g,e,p,carb};
 }
@@ -451,7 +451,7 @@ function nutritionFluidRow(f){
  '<div class="fluid-live"><span>GIR <b data-ngir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-nenergy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-nprotein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span><span>Carb <b data-ncarb="'+f.id+'">'+fmt(r.carb,2)+'</b> g/day</span></div>'+
  '<button class="details-toggle" type="button" data-ndetails="'+f.id+'" aria-expanded="false">⌄</button><button class="remove" data-nremove="'+f.id+'">Remove</button></div>'+
  '<div class="fluid-details" id="ndetails-'+f.id+'" hidden><div class="grid g4">'+
- '<label>Concentration %<input type="number" min="0" step="0.1" data-nfield="conc" data-nid="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
+ '<label>Glucose %<input type="number" min="0" step="0.1" data-nfield="conc" data-nid="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
  '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-nfield="energy" data-nid="'+f.id+'" value="'+f.energy+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
  '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-nfield="protein" data-nid="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
  '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-nfield="carb" data-nid="'+f.id+'" value="'+f.carb+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
