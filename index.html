@@ -143,7 +143,7 @@ function calcFluid(f,w){
 function currentTotals(){const p=patient();let t=0,g=0,e=0,pr=0,c=0;fluids.forEach(f=>{t+=f.volume||0;const r=calcFluid(f,p.w);g+=r.g;e+=r.e;pr+=r.p;c+=r.c});return{p,total:t,gir:g,energy:e,protein:pr,carb:c,permitted:p.w*p.tfi,remaining:Math.max(p.w*p.tfi-t,0),over:t>p.w*p.tfi+1e-9}}
 function recalc(renderRows=true){
  if(renderRows)renderFluids();
- const x=currentTotals();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);$('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);$('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);$('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);$('targetShow').textContent=fmt(x.p.target);
+ const x=currentTotals();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);$('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);$('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);$('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);
  $('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';
  $('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');
  $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI.':'Current fluid total is within permitted TFI.';
