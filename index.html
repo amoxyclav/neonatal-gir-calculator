@@ -151,16 +151,17 @@ function autoPlan(x){
  const req=add*x.p.w*144/x.remaining;
  const s=[5,10,25,50];
  if(req<=5){
-   const v=add*x.p.w*144/5;
-   return{a:'D5',b:'NS',av:Math.min(v,x.remaining),bv:0};
+   return{a:'NS',b:'D5',av:x.remaining*(5-req)/5,bv:x.remaining*req/5};
  }
- for(let i=1;i<s.length;i++){
-   if(req<=s[i]){
-     const v=add*x.p.w*144/s[i];
-     return{a:'D'+s[i],b:'NS',av:Math.min(v,x.remaining),bv:0};
+ for(let i=0;i<s.length-1;i++){
+   if(req>=s[i]&&req<=s[i+1]){
+     const low=s[i],high=s[i+1];
+     const av=x.remaining*(high-req)/(high-low);
+     const bv=x.remaining-av;
+     return{a:'D'+low,b:'D'+high,av,bv};
    }
  }
- return{a:'D50',b:'NS',av:x.remaining,bv:0};
+ return{a:'D25',b:'D50',av:0,bv:x.remaining};
 }
 function fillPlanOptions(){['planA','planB'].forEach(id=>$(id).innerHTML=PLAN.map(x=>'<option>'+x+'</option>').join(''))}
 function setPlan(a,b,av,bv){$('planA').value=a;$('planB').value=b;$('planAV').value=Math.max(0,Math.round(av));$('planBV').value=Math.max(0,Math.round(bv))}
@@ -198,10 +199,16 @@ function autoSolveSelectedPlan(){
  const x=currentTotals(),a=$('planA').value,b=$('planB').value,R=x.remaining,W=x.p.w,T=x.p.target-x.gir;
  $('planA').dataset.user='1';
  if(!(W>0)||T<=0||!(R>0)){setPlan(a,b,0,0);recalc(false);return}
- const ca=PRODUCTS[a]?.conc||0,cb=PRODUCTS[b]?.conc||0,req=T*W*144/R;
+ const ca=PRODUCTS[a]?.conc||0,cb=PRODUCTS[b]?.conc||0;
+ const req=T*W*144/R;
  let av=0,bv=0;
- if(Math.abs(ca-cb)<1e-9){if(Math.abs(req-ca)<1e-9){av=R}}
- else {av=R*(cb-req)/(cb-ca);bv=R-av;if(av<0||bv<0){av=0;bv=0}}
+ if(Math.abs(ca-cb)<1e-9){
+   if(Math.abs(req-ca)<0.001){av=R;bv=0}
+ } else {
+   av=R*(cb-req)/(cb-ca);
+   bv=R-av;
+   if(av<0||bv<0){av=0;bv=0}
+ }
  setPlan(a,b,av,bv);recalc(false);
 }
 function updateTarget(x){
