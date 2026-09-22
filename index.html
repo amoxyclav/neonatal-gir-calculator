@@ -181,6 +181,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="stat combined-stat"><span>Total energy</span><strong id="nEnergy">0</strong><small>kcal/day</small><strong id="nEnergyKg">0</strong><small>kcal/kg/day</small></div>
 <div class="stat combined-stat"><span>Total protein/AA</span><strong id="nProtein">0</strong><small>g/day</small><strong id="nProteinKg">0</strong><small>g/kg/day</small></div>
 <div class="stat combined-stat"><span>Total carbohydrate</span><strong id="nCarb">0</strong><small>g/day</small><strong id="nCarbKg">0</strong><small>g/kg/day</small></div>
+<div class="stat combined-stat"><span>Energy-Protein ratio <small>(Calorie-Protein ratio)</small></span><strong id="nEPRatio">0.00</strong><small>kcal per g protein/AA</small></div>
 </div>
 </div>
 </section>
@@ -441,6 +442,9 @@ function updateNutrition(renderEditor=true){
  const hmE=n('hmfEnergy'),hmP=n('hmfProtein'),hmC=n('hmfCarb');
  const haE=n('hmfAdvanceEnergy'),haP=n('hmfAdvanceProtein'),haC=n('hmfAdvanceCarb');
  const mctE=n('mctEnergy'),mctP=n('mctProtein'),mctC=n('mctCarb');
+ const totalProteinForRatio=x.protein+planP+(hm*hmP)+(ha*haP)+(mct*mctP);
+ const totalEnergyForRatio=x.energy+planE+(hm*hmE)+(ha*haE)+(mct*mctE);
+ if($('nEPRatio'))$('nEPRatio').textContent=totalProteinForRatio>0?fmt(totalEnergyForRatio/totalProteinForRatio,2):'0.00';
  if(hm>0){const ee=hm*hmE,pp=hm*hmP,cc=hm*hmC;e+=ee;p+=pp;c+=cc;h+='<tr><td>HMF</td><td>'+fmt(hm,1)+' sachet/day</td><td>—</td><td>'+fmt(ee,1)+'</td><td>'+fmt(pp,2)+'</td><td>'+fmt(cc,2)+'</td></tr>'}
  if(ha>0){const ee=ha*haE,pp=ha*haP,cc=ha*haC;e+=ee;p+=pp;c+=cc;h+='<tr><td>HMF-Advance</td><td>'+fmt(ha,1)+' sachet/day</td><td>—</td><td>'+fmt(ee,1)+'</td><td>'+fmt(pp,2)+'</td><td>'+fmt(cc,2)+'</td></tr>'}
  if(mct>0){const ee=mct*mctE,pp=mct*mctP,cc=mct*mctC;e+=ee;p+=pp;c+=cc;h+='<tr><td>Simyl MCT oil</td><td>'+fmt(mct,1)+' mL/day</td><td>—</td><td>'+fmt(ee,1)+'</td><td>'+fmt(pp,2)+'</td><td>'+fmt(cc,2)+'</td></tr>'}
