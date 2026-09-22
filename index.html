@@ -187,7 +187,45 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 </div>
 </section>
 
-<section id="mixer" class="page"><div class="section"><div class="ey">MIXER</div><h2>Two-stock Fluid Mixer</h2><div class="grid g4"><label>Target %<input id="mt" type="number" value="10" step="1"></label><label>Stock A %<input id="ma" type="number" value="5" step="1"></label><label>Stock B %<input id="mb" type="number" value="25" step="1"></label><label>Final volume mL<input id="mv" type="number" value="100" step="1"></label></div><div class="stats" style="margin-top:12px"><div class="stat"><span>Stock A</span><strong id="mav">0</strong><small>mL</small></div><div class="stat"><span>Stock B</span><strong id="mbv">0</strong><small>mL</small></div><div class="stat"><span>Status</span><strong id="ms">—</strong></div></div></div></section>
+<section id="mixer" class="page">
+<div class="section">
+<div class="ey">MIXER</div>
+<h2>Fluid Mixer</h2>
+
+<div class="section" style="margin-top:16px">
+<h3>1. Making a New Bag</h3>
+<p class="mut">Enter the target concentration, the two stock concentrations available, and the final volume required. The calculator determines how many mL of each stock are needed.</p>
+<div class="grid g4">
+<label>Target concentration %<input id="mt" type="number" min="0" step="0.1" value="10"></label>
+<label>Stock A concentration %<input id="ma" type="number" min="0" step="0.1" value="5"></label>
+<label>Stock B concentration %<input id="mb" type="number" min="0" step="0.1" value="25"></label>
+<label>Final bag volume mL<input id="mv" type="number" min="0" step="0.1" value="100"></label>
+</div>
+<div class="stats" style="margin-top:12px">
+<div class="stat"><span>Use Stock A</span><strong id="mav">0</strong><small>mL</small></div>
+<div class="stat"><span>Use Stock B</span><strong id="mbv">0</strong><small>mL</small></div>
+<div class="stat"><span>Status</span><strong id="ms">—</strong></div>
+</div>
+</div>
+
+<div class="section" style="margin-top:16px">
+<h3>2. Adjusting an Existing Bag</h3>
+<p class="mut">Enter the concentration and volume of the bag you already have, then choose the concentration of the stock to add. The calculator determines how much stock must be added to reach the target concentration.</p>
+<div class="grid g4">
+<label>Target concentration %<input id="mt2" type="number" min="0" step="0.1" value="10"></label>
+<label>Existing fluid concentration %<input id="me2" type="number" min="0" step="0.1" value="5"></label>
+<label>Existing fluid volume mL<input id="mv2" type="number" min="0" step="0.1" value="100"></label>
+<label>Stock to add concentration %<input id="ms2" type="number" min="0" step="0.1" value="25"></label>
+</div>
+<div class="stats" style="margin-top:12px">
+<div class="stat"><span>Stock to add</span><strong id="mxv2">0</strong><small>mL</small></div>
+<div class="stat"><span>Final volume</span><strong id="mfinal2">0</strong><small>mL</small></div>
+<div class="stat"><span>Final concentration</span><strong id="mfinalc2">0</strong><small>%</small></div>
+<div class="stat"><span>Status</span><strong id="ms2out">—</strong></div>
+</div>
+</div>
+</div>
+</section>
 
 <section id="about" class="page"><div class="section"><div class="ey">ABOUT</div><h2>About</h2><p>This is a calculation aid derived from the neonatal GIR workbook. It is not a prescribing system or validated medical device.</p></div></section>
 </main><footer style="text-align:center;padding:24px;color:#63736f;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only</footer>
@@ -511,7 +549,8 @@ $('nutPlanBV').oninput=()=>{
  const raw=$('nutPlanBV').value; $('planBV').value=raw===''?'0':raw;$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
 };
 
-['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(t>Math.min(a,b)&&t<Math.max(a,b)&&v>0){const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY'}else{$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks'}});
+['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(v<=0){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Enter a final volume.';return}if(a===b){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Stock concentrations must be different.';return}if(t<Math.min(a,b)||t>Math.max(a,b)){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks.';return}const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY';});
+['mt2','me2','mv2','ms2'].forEach(id=>$(id).oninput=()=>{const t=n('mt2'),e=n('me2'),v=n('mv2'),s=n('ms2');if(v<=0){$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Enter existing fluid volume.';return}if(t===s){$('mxv2').textContent='0';$('mfinal2').textContent=fmt(v,1);$('mfinalc2').textContent=fmt(t,1);$('ms2out').textContent='Target equals stock concentration; no stock is required if the target is already achieved, otherwise dilution is not represented.';return}if((t-e)*(t-s)<=0){const x=v*(t-e)/(s-t);if(x>=0){const fv=v+x;const fc=(e*v+s*x)/fv;$('mxv2').textContent=fmt(x,1);$('mfinal2').textContent=fmt(fv,1);$('mfinalc2').textContent=fmt(fc,1);$('ms2out').textContent='READY';}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}});;
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const page=b.dataset.page;const target=$(page);if(!target)return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(z=>z.classList.toggle('active',z.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});});
 recalc();
 </script></body></html>
