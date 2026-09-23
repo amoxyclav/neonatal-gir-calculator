@@ -19,6 +19,12 @@ https://amoxyclav.github.io/neonatal-gir-calculator/
 - Mobile-friendly static web application
 - No login required
 
+## Calculation guides
+
+- [Neonatal GIR calculator: formula and examples](guides/neonatal-gir-calculator.html)
+- [Neonatal fluid and nutrition calculator](guides/neonatal-fluid-nutrition-calculator.html)
+- [Neonatal fluid mixer](guides/neonatal-fluid-mixer.html)
+
 ## Safety
 
 This is a calculation aid, not a prescribing system or validated medical device. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before clinical use.
