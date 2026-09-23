@@ -474,6 +474,7 @@ function renderNutritionFluids(){
  document.querySelectorAll('[data-nfield]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.nid);if(!f)return;
    if(x.dataset.nfield==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}
    else{f[x.dataset.nfield]=valNum(x.value);if(x.dataset.nfield==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.0465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}}
+   syncProductFromFluid(f);
    recalc(false);updateNutritionFluidRow(f);
    if(x.dataset.nfield==='conc'){const e=document.querySelector('[data-nfield="energy"][data-nid="'+f.id+'"]'),p=document.querySelector('[data-nfield="protein"][data-nid="'+f.id+'"]'),c=document.querySelector('[data-nfield="carb"][data-nid="'+f.id+'"]'),na=document.querySelector('[data-nfield="sodium"][data-nid="'+f.id+'"]'),k=document.querySelector('[data-nfield="potassium"][data-nid="'+f.id+'"]'),ca=document.querySelector('[data-nfield="calcium"][data-nid="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}
  });
