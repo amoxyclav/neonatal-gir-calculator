@@ -12,7 +12,7 @@ const { spawn } = require('child_process');
     page.on('pageerror', e => errors.push(String(e)));
     await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
 
-    await page.locator('[data-page="gir"]').click();
+    await page.locator('[data-page="gir"]').first().click();
     await page.locator('#w').fill('1.5');
     await page.locator('#tfi').fill('100');
     await page.locator('#tg').fill('6');
