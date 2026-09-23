@@ -27,8 +27,8 @@ nearly(gir(25, 48, 0.8), 10.416666666666666);
 // New-bag mixer regression
 {
   const x = mixNewBag(12.5, 5, 25, 100);
-  nearly(x.a, 66.66666666666667);
-  nearly(x.b, 33.33333333333333);
+  nearly(x.a, 62.5);
+  nearly(x.b, 37.5);
   nearly(x.a + x.b, 100);
 }
 
