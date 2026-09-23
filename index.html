@@ -317,6 +317,16 @@ document.addEventListener('click',e=>{
  e.preventDefault();
  if(location.hash!=='#'+page)history.pushState({page},'', '#'+page);
 },true);
+// Fluid detail controls use event delegation so every current-fluid card, including dynamically added presets, behaves identically.
+document.addEventListener('click',e=>{
+ const button=e.target.closest('.details-toggle[data-details]');
+ if(!button)return;
+ const box=document.getElementById('details-'+button.dataset.details);
+ if(!box)return;
+ const open=button.getAttribute('aria-expanded')==='true';
+ box.hidden=open;
+ button.setAttribute('aria-expanded',String(!open));
+});
 window.addEventListener('popstate',()=>activatePage(location.hash.replace('#','')||'home',true));
 window.addEventListener('hashchange',()=>activatePage(location.hash.replace('#','')||'home',true));
 const n=(id)=>parseFloat($(id)?.value)||0;
@@ -352,7 +362,6 @@ function productRow(f){
 function renderFluids(){
  $('fluidList').innerHTML=fluids.length?fluids.map(productRow).join(''):'<div class="status">No current fluids selected. Unselected fluids are treated as zero.</div>';
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
- document.querySelectorAll('[data-details]').forEach(b=>b.onclick=()=>{const box=$('details-'+b.dataset.details),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
  document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day',displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;recalc(false);updateFluidRowOnly(f);});
  document.querySelectorAll('[data-field]').forEach(x=>x.onfocus=()=>{if(x.dataset.field==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.id);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
  document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else if(x.dataset.field==='carrierIncluded'){f.carrierIncluded=x.checked}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}if(x.dataset.field==='conc'){const e=document.querySelector('[data-field="energy"][data-id="'+f.id+'"]'),p=document.querySelector('[data-field="protein"][data-id="'+f.id+'"]'),c=document.querySelector('[data-field="carb"][data-id="'+f.id+'"]'),na=document.querySelector('[data-field="sodium"][data-id="'+f.id+'"]'),k=document.querySelector('[data-field="potassium"][data-id="'+f.id+'"]'),ca=document.querySelector('[data-field="calcium"][data-id="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}}syncProductFromFluid(f);recalc(false);updateFluidRowOnly(f);});
