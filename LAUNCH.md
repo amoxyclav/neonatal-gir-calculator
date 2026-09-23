@@ -13,6 +13,8 @@ https://amoxyclav.github.io/neonatal-gir-calculator/
 - PWA manifest and favicon
 - Social sharing metadata and preview image
 - Privacy and safety information
+- Public calculation guides for GIR, nutrition and fluid mixing
+- GitHub issue templates with patient-privacy safeguards
 - GitHub issue-based feedback route
 - Automated validation and GitHub Pages deployment
 
@@ -58,5 +60,6 @@ When users report a calculation or product-data issue:
 - Custom domain
 - Professional paid Excel edition
 - Etsy/Gumroad distribution
-- Usage analytics only if a privacy-respecting approach is chosen
+- Usage analytics only if a privacy-respecting approach is chosen and configured by the owner
 - Expanded pediatric calculation modules
+- Custom domain after domain purchase and DNS setup
