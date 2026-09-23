@@ -24,7 +24,9 @@ const { spawn } = require('child_process');
     if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
 
     await page.locator('#addFluid').selectOption('D5');
-    await page.locator('#fluidList [data-field="volumeDisplay"]').first().fill('10');
+    const fluidVolume = page.locator('#fluidList [data-field="volumeDisplay"]').first();
+    await fluidVolume.click();
+    await fluidVolume.pressSequentially('10');
     const totalAfterFluid = await page.locator('#currentTotal').textContent();
     if(totalAfterFluid !== '10.0') throw new Error('Entering D5 volume did not update current fluid total; got '+totalAfterFluid);
 
