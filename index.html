@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1d4ed8">
 <meta name="description" content="Free neonatal GIR, fluid and nutrition calculation aid for bedside planning. Calculate glucose infusion rate, TFI, energy, protein and carbohydrate contributions.">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" content="index,follow,max-image-preview:large"><meta name="author" content="Dr. Damam Sreeharsha">
 <meta name="google-site-verification" content="KEIWbeS9bc-9CR2UkSGAGOQHG7cIbTFrPCANzRLGJ8k" />
 <link rel="canonical" href="https://amoxyclav.github.io/neonatal-gir-calculator/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -23,7 +23,7 @@
 <style>
 :root{--teal:#1d4ed8;--ink:#172554;--mut:#64748b;--bg:#f4f7fb;--line:#dbe4f0;--ok:#24613b;--bad:#9b2c2c;--warn:#76510b}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}.bar,main{max-width:1120px;margin:auto}.bar{padding:14px 18px;display:flex;justify-content:space-between;gap:15px;align-items:center}.header-tools{display:flex;align-items:center;gap:10px}.theme-picker{width:auto;margin:0;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:inherit;font-size:12px}.brand{font-weight:800}.brand small{display:block;color:var(--mut);font-weight:500}.nav{display:flex;gap:4px;flex-wrap:wrap}.nav button{border:0;background:transparent;padding:8px 10px;border-radius:8px;color:var(--mut)}.nav button.active{background:#e5f3f0;color:var(--teal)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}.bar,main{max-width:1120px;margin:auto}.bar{padding:14px 18px;display:flex;justify-content:space-between;gap:15px;align-items:center}.header-tools{display:flex;align-items:center;gap:10px}.brand{font-weight:800}.brand small{display:block;color:var(--mut);font-weight:500}.nav{display:flex;gap:4px;flex-wrap:wrap}.nav button{border:0;background:transparent;padding:8px 10px;border-radius:8px;color:var(--mut)}.nav button.active{background:#e5f3f0;color:var(--teal)}
 main{padding:24px 18px}.page{display:none}.page.active{display:block}.section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}.section>h2{margin-top:0}.ey{font-size:12px;letter-spacing:.12em;font-weight:800;color:var(--teal)}.mut,.help{color:var(--mut)}
 .grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
 label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #cbdad6;border-radius:8px;background:#fff;color:var(--ink)}input[type=number]{appearance:auto}button{font:inherit}.btn{padding:10px 14px;border-radius:8px;border:1px solid #9bc7c1;background:#fff;color:var(--teal);cursor:pointer}.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -45,7 +45,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
   "operatingSystem":"Web",
   "description":"A calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.",
   "author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},
-  "offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"isAccessibleForFree":true,"inLanguage":"en","softwareVersion":"1.1"
 }
 </script></head>
 <body>
@@ -53,7 +53,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
 <main>
 <section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="actions" style="margin-bottom:14px"><button class="btn primary" id="shareTool" type="button">Share calculator</button><button class="btn" id="copyToolLink" type="button">Copy link</button></div><div id="shareStatus" class="status" style="display:none"></div><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div>
-<div class="mut" style="margin-top:14px;font-size:12px">Version 1.0 • Last updated September 2026</div><div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
+<div class="mut" style="margin-top:14px;font-size:12px">Version 1.1 • Last updated September 2026</div><div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
 <div id="quickGuide" class="section" style="display:none;margin-top:12px">
 <h2>Quick Start Guide</h2>
 <ol class="guide-list">
@@ -62,7 +62,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <li><strong>Fluid Mixer:</strong> Use <em>Making a New Bag</em> when preparing a target concentration from two stock concentrations. Use <em>Adjusting an Existing Bag</em> when you already have a fluid and need to add a stock solution to reach a target concentration.</li>
 <li>Preset compositions can be expanded and edited where permitted. Blank quantity fields are treated as zero. Always verify the actual product label, concentration, compatibility, preparation method, line access and local NICU protocol before administration.</li>
 </ol>
-</div></div></section>
+</div><div class="section" style="margin-top:18px"><h2>Neonatal calculation guides</h2><p class="mut">Short reference pages explaining the calculation methods and how the tool handles GIR, nutrition and fluid mixing.</p><p><a href="guides/neonatal-gir-calculator.html">Neonatal GIR calculator: formula and examples</a><br><a href="guides/neonatal-fluid-nutrition-calculator.html">Neonatal fluid and nutrition calculator guide</a><br><a href="guides/neonatal-fluid-mixer.html">Neonatal fluid mixer guide</a></p></div></div></section>
 
 <section id="gir" class="page">
 <div class="section"><div class="ey">GIR CALCULATOR</div><h1>Neonatal GIR & Fluid Planner</h1><p class="mut">All three calculation stages remain on one page. Scroll down rather than moving between separate screens.</p></div>
@@ -278,12 +278,12 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <p><strong>Created by Dr. Damam Sreeharsha, MBBS, MD in Pediatrics.</strong></p>
 <h2>Privacy</h2>
 <p class="mut">No account or patient information is required to use the calculator. Patient inputs are processed in the browser and are not intentionally collected or stored by this calculator.</p>
-<h2>Feedback</h2>
+<h2>Calculation references</h2><p class="mut">The calculation guides provide references for the GIR formula and selected product composition information. Product labels and local protocols remain the final source for clinical verification.</p><p><a href="guides/neonatal-gir-calculator.html">GIR calculation reference</a><br><a href="guides/neonatal-fluid-nutrition-calculator.html">Nutrition calculation reference</a><br><a href="guides/neonatal-fluid-mixer.html">Fluid mixing calculation reference</a></p><h2>Feedback</h2>
 <p class="mut">If you find a calculation issue, product-data issue or usability problem, please report it through the project's GitHub issue tracker so it can be reviewed and corrected.</p>
 <p><a href="https://github.com/amoxyclav/neonatal-gir-calculator/issues" target="_blank" rel="noopener noreferrer">Report an issue or send feedback</a></p>
 </div>
 </section>
-</main><footer style="text-align:center;padding:24px;color:#63736f;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • © 2026</footer>
+</main><footer style="text-align:center;padding:24px;color:#63736f;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="guides/neonatal-gir-calculator.html">GIR Guide</a> • <a href="guides/neonatal-fluid-nutrition-calculator.html">Nutrition Guide</a> • © 2026</footer>
 
 <script>
 const PRODUCTS={
