@@ -60,9 +60,9 @@ function achievedGir(currentGir, weightKg, aConc, aVol, bConc, bVol) {
 // Target GIR planning regression cases
 {
   const p = autoPlan(6.944444444444445, 0, 1, 100);
-  nearly(p.av, 100);
-  nearly(p.bv, 0);
-  nearly(achievedGir(0,1,5,p.av,0,p.bv), 3.4722222222222223);
+  nearly(p.av, 80);
+  nearly(p.bv, 20);
+  nearly(achievedGir(0,1,5,p.av,10,p.bv), 6.944444444444445);
 }
 
 {
