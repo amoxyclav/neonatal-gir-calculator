@@ -13,6 +13,9 @@ const { spawn } = require('child_process');
     await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
 
     await page.locator('[data-page="gir"]').first().click();
+    if(await page.locator('#gir h1').textContent() !== 'Neonatal GIR & Fluid Planner') throw new Error('GIR page did not load.');
+    if(await page.locator('#gir .section').first().locator('p.mut').count()) throw new Error('Legacy GIR intro text is still present.');
+
     await page.locator('#w').fill('1.5');
     await page.locator('#tfi').fill('100');
     await page.locator('#tg').fill('6');
@@ -23,6 +26,12 @@ const { spawn } = require('child_process');
     const status = await page.locator('#patientStatus').textContent();
     if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
 
+    await page.locator('#addFluid').selectOption('Formula milk');
+    const formulaEdit=page.locator('#fluidList .details-toggle').last();
+    if(await formulaEdit.textContent() !== 'Edit contents') throw new Error('Fluid edit control text is incorrect.');
+    await formulaEdit.click();
+    if(!(await page.locator('#fluidList .fluid-details').last().isVisible())) throw new Error('Formula milk edit panel did not open.');
+    if(!(await page.locator('#fluidList .fluid-details').last().textContent()).includes('Preset note: For this calculator, glucose is used for GIR')) throw new Error('Formula milk preset note is missing.');
     await page.locator('#addFluid').selectOption('D5');
     const fluidVolume = page.locator('#fluidList [data-field="volumeDisplay"]').first();
     await fluidVolume.click();
