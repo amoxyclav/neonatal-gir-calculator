@@ -36,7 +36,7 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="mixer"]').first().click();
     if(!(await page.locator('#mixer').evaluate(el=>el.classList.contains('active')))) throw new Error('Mixer navigation failed.');
 
-    await page.locator('[data-page="gir"]').click();
+    await page.locator('[data-page="gir"]').first().click();
     if(!(await page.locator('#gir').evaluate(el=>el.classList.contains('active')))) throw new Error('GIR navigation failed.');
 
     if(errors.length) throw new Error('Browser runtime error: '+errors.join(' | '));
