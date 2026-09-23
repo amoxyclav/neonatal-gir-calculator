@@ -45,7 +45,34 @@ jobs:
           json.loads(Path("manifest.json").read_text(encoding="utf-8"))
           ET.parse("sitemap.xml")
 
-          print("HTML markers, manifest.json and sitemap.xml validated.")
+          guide_paths = [
+              "guides/neonatal-gir-calculator.html",
+              "guides/neonatal-fluid-nutrition-calculator.html",
+              "guides/neonatal-fluid-mixer.html",
+          ]
+          sitemap_text = Path("sitemap.xml").read_text(encoding="utf-8")
+          expected_urls = [
+              "https://amoxyclav.github.io/neonatal-gir-calculator/",
+              *["https://amoxyclav.github.io/neonatal-gir-calculator/" + p for p in guide_paths],
+          ]
+          missing_sitemap_urls = [u for u in expected_urls if u not in sitemap_text]
+          if missing_sitemap_urls:
+              raise SystemExit("Sitemap is missing expected URLs: " + ", ".join(missing_sitemap_urls))
+
+          for path in guide_paths:
+              guide = Path(path)
+              if not guide.is_file():
+                  raise SystemExit("Missing guide page: " + path)
+              text = guide.read_text(encoding="utf-8")
+              for marker in ["<!doctype html>", "<head>", "</head>", "<body>", "</body>", "</html>"]:
+                  if marker not in text.lower():
+                      raise SystemExit(f"Guide {path} is missing {marker}")
+              if 'meta name="robots" content="index,follow"' not in text:
+                  raise SystemExit(f"Guide {path} must remain indexable.")
+              if 'rel="canonical"' not in text:
+                  raise SystemExit(f"Guide {path} is missing a canonical URL.")
+
+          print("HTML markers, manifest.json, sitemap.xml and guide pages validated.")
           PY
           node --check /tmp/app.js
 
@@ -56,4 +83,7 @@ jobs:
           test -f robots.txt
           test -f sitemap.xml
           test -f favicon.svg
+          test -f guides/neonatal-gir-calculator.html
+          test -f guides/neonatal-fluid-nutrition-calculator.html
+          test -f guides/neonatal-fluid-mixer.html
           echo "Required site files are present."
