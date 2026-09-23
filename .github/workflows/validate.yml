@@ -49,6 +49,7 @@ jobs:
               "guides/neonatal-gir-calculator.html",
               "guides/neonatal-fluid-nutrition-calculator.html",
               "guides/neonatal-fluid-mixer.html",
+              "about.html",
           ]
           sitemap_text = Path("sitemap.xml").read_text(encoding="utf-8")
           expected_urls = [
@@ -86,4 +87,5 @@ jobs:
           test -f guides/neonatal-gir-calculator.html
           test -f guides/neonatal-fluid-nutrition-calculator.html
           test -f guides/neonatal-fluid-mixer.html
+          test -f about.html
           echo "Required site files are present."
