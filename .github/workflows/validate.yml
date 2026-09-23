@@ -89,6 +89,21 @@ jobs:
                   raise SystemExit(f"Guide {path} is missing a canonical URL.")
 
           print("HTML markers, manifest.json, sitemap.xml and guide pages validated.")
+          nav_pages = re.findall(r'<a[^>]+href="#([^"]+)"[^>]+data-page="([^"]+)"', html)
+          if not nav_pages:
+              raise SystemExit("No calculator page navigation links found.")
+          nav_ids = [x[1] for x in nav_pages]
+          if any(x[0] != x[1] for x in nav_pages):
+              raise SystemExit("Navigation href/data-page mismatch detected.")
+          page_ids = re.findall(r'<section id="([^"]+)" class="page(?: active)?">', html)
+          if not page_ids:
+              raise SystemExit("No calculator page sections found.")
+          if set(nav_ids) != set(page_ids):
+              raise SystemExit("Navigation links and page sections do not match.")
+          if "function bindNavigation()" not in html or "bindNavigation();" not in html:
+              raise SystemExit("Navigation binding is missing.")
+          print("Navigation links, page sections and navigation binding validated.")
+
           PY
           node --check /tmp/app.js
           node tests/calculation-regression.test.js
