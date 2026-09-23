@@ -24,7 +24,7 @@
 :root{--teal:#1d4ed8;--ink:#172554;--mut:#64748b;--bg:#f4f7fb;--line:#dbe4f0;--ok:#24613b;--bad:#9b2c2c;--warn:#76510b}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
 header{background:rgba(255,255,255,.96);border-bottom:1px solid #dbe7f5;position:sticky;top:0;z-index:10;backdrop-filter:blur(10px)}.bar,main{max-width:1160px;margin:auto}.bar{padding:14px 18px;display:flex;justify-content:space-between;gap:20px;align-items:center}.header-tools{display:flex;align-items:center;gap:10px}.brand{font-weight:850;font-size:18px;color:#172554;letter-spacing:-.01em}.brand small{display:block;color:#64748b;font-weight:500;font-size:12px;margin-top:2px}.nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.nav a{border:0;background:transparent;padding:9px 13px;border-radius:10px;color:#475569;text-decoration:none;font-weight:650}.nav a:hover{background:#eef5ff;color:#1d4ed8}.nav a.active{background:#dbeafe;color:#1d4ed8}
-main{padding:24px 18px}.page{display:none;scroll-margin-top:90px}.page.active,.page:target{display:block}#home.page{display:block}body:has(.page:target) #home.page:not(:target){display:none}.section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}.section>h2{margin-top:0}.ey{font-size:12px;letter-spacing:.12em;font-weight:800;color:var(--teal)}.mut,.help{color:var(--mut)}
+main{padding:24px 18px}.page{display:none;scroll-margin-top:90px}.page.active{display:block}.section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}.section>h2{margin-top:0}.ey{font-size:12px;letter-spacing:.12em;font-weight:800;color:var(--teal)}.mut,.help{color:var(--mut)}
 .grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
 label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:var(--ink)}input[type=number]{appearance:auto}button{font:inherit}.btn{padding:10px 14px;border-radius:8px;border:1px solid #9bb8e8;background:#fff;color:var(--teal);cursor:pointer}.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
 .actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.status{padding:11px 13px;border-radius:8px;background:#eef2f7;color:var(--mut);margin-top:12px}.ok{background:#e7f5ec;color:var(--ok)}.bad{background:#fdecec;color:var(--bad)}.warn{background:#fff5dc;color:var(--warn)}
@@ -308,7 +308,7 @@ function activatePage(page,scroll=true){
  if(scroll)window.scrollTo({top:0,behavior:'smooth'});
  return true;
 }
-// Navigation is bound independently of the calculator runtime so a later calculation error cannot disable page navigation.
+// Navigation is independent of calculator rendering. Only the selected page is displayed.
 document.addEventListener('click',e=>{
  const link=e.target.closest('[data-page]');
  if(!link)return;
