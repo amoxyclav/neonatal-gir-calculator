@@ -31,6 +31,7 @@ const { spawn } = require('child_process');
     const formulaEdit=formulaFluid.locator('.details-toggle');
     if(!(await formulaEdit.textContent()).includes('Edit contents')) throw new Error('Fluid edit control text is incorrect.');
     if(await formulaEdit.locator('.details-chevron').count() !== 1) throw new Error('Editable fluid chevron is missing.');
+    if(await formulaEdit.locator('.details-chevron').evaluate(el=>el.parentElement?.classList.contains('details-toggle') !== true)) throw new Error('Editable fluid chevron is outside the control.');
     await formulaEdit.evaluate(el=>el.click());
     if(await formulaEdit.getAttribute('aria-expanded') !== 'true') throw new Error('Formula milk edit control did not open.');
     const formulaDetails=formulaFluid.locator('.fluid-details');
