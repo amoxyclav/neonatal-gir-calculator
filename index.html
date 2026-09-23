@@ -233,8 +233,8 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <p class="mut">Enter the target concentration, the two stock concentrations available, and the final volume required. The calculator determines how many mL of each stock are needed.</p>
 <div class="grid g4">
 <label>Target concentration %<input id="mt" type="number" min="0" step="0.1" value="10"></label>
-<label>Stock A concentration %<input id="ma" type="number" min="0" step="0.1" value="5"></label>
-<label>Stock B concentration %<input id="mb" type="number" min="0" step="0.1" value="25"></label>
+<label>Stock A preset<select id="mPresetA"></select><input id="ma" type="number" min="0" step="0.1" value="5"></label>
+<label>Stock B preset<select id="mPresetB"></select><input id="mb" type="number" min="0" step="0.1" value="25"></label>
 <label>Final bag volume mL<input id="mv" type="number" min="0" step="0.1" value="100"></label>
 </div>
 <div class="stats" style="margin-top:12px">
@@ -249,9 +249,9 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <p class="mut">Enter the concentration and volume of the bag you already have, then choose the concentration of the stock to add. The calculator determines how much stock must be added to reach the target concentration.</p>
 <div class="grid g4">
 <label>Target concentration %<input id="mt2" type="number" min="0" step="0.1" value="10"></label>
-<label>Existing fluid concentration %<input id="me2" type="number" min="0" step="0.1" value="5"></label>
+<label>Existing fluid preset<select id="mPresetE"></select><input id="me2" type="number" min="0" step="0.1" value="5"></label>
 <label>Existing fluid volume mL<input id="mv2" type="number" min="0" step="0.1" value="100"></label>
-<label>Stock to add concentration %<input id="ms2" type="number" min="0" step="0.1" value="25"></label>
+<label>Stock to add preset<select id="mPresetS"></select><input id="ms2" type="number" min="0" step="0.1" value="25"></label>
 </div>
 <div class="stats" style="margin-top:12px">
 <div class="stat"><span>Stock to add</span><strong id="mxv2">0</strong><small>mL</small></div>
@@ -335,7 +335,7 @@ function renderFluids(){
  document.querySelectorAll('[data-details]').forEach(b=>b.onclick=()=>{const box=$('details-'+b.dataset.details),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
  document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day',displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;recalc(false);updateFluidRowOnly(f);});
  document.querySelectorAll('[data-field]').forEach(x=>x.onfocus=()=>{if(x.dataset.field==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.id);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
- document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else if(x.dataset.field==='carrierIncluded'){f.carrierIncluded=x.checked}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}if(x.dataset.field==='conc'){const e=document.querySelector('[data-field="energy"][data-id="'+f.id+'"]'),p=document.querySelector('[data-field="protein"][data-id="'+f.id+'"]'),c=document.querySelector('[data-field="carb"][data-id="'+f.id+'"]'),na=document.querySelector('[data-field="sodium"][data-id="'+f.id+'"]'),k=document.querySelector('[data-field="potassium"][data-id="'+f.id+'"]'),ca=document.querySelector('[data-field="calcium"][data-id="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}}recalc(false);updateFluidRowOnly(f);});
+ document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else if(x.dataset.field==='carrierIncluded'){f.carrierIncluded=x.checked}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}if(x.dataset.field==='conc'){const e=document.querySelector('[data-field="energy"][data-id="'+f.id+'"]'),p=document.querySelector('[data-field="protein"][data-id="'+f.id+'"]'),c=document.querySelector('[data-field="carb"][data-id="'+f.id+'"]'),na=document.querySelector('[data-field="sodium"][data-id="'+f.id+'"]'),k=document.querySelector('[data-field="potassium"][data-id="'+f.id+'"]'),ca=document.querySelector('[data-field="calcium"][data-id="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}}syncProductFromFluid(f);recalc(false);updateFluidRowOnly(f);});
 }
 function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w),caMg=r.calcium*20.04;const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2);if(c)c.textContent=fmt(r.carb,2);const cmkg=document.querySelector('[data-row-ca-mgkg="'+f.id+'"]'),cm=document.querySelector('[data-row-ca-mg="'+f.id+'"]'),nkg=document.querySelector('[data-row-na-kg="'+f.id+'"]'),nm=document.querySelector('[data-row-na="'+f.id+'"]'),kkg=document.querySelector('[data-row-k-kg="'+f.id+'"]'),km=document.querySelector('[data-row-k="'+f.id+'"]');if(cmkg)cmkg.textContent=fmt(w?caMg/w:0,2);if(cm)cm.textContent=fmt(caMg,2);if(nkg)nkg.textContent=fmt(w?r.sodium/w:0,2);if(nm)nm.textContent=fmt(r.sodium,2);if(kkg)kkg.textContent=fmt(w?r.potassium/w:0,2);if(km)km.textContent=fmt(r.potassium,2)}
 function calcFluid(f,w){const v=f.volume||0,c=f.conc||0;const g=f.custom?(w>0?v*c*10/(w*1440):0):((f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS'||f.name==='Calcium gluconate 10%'||f.name==='3% NaCl'||f.name==='KCl 15%')?0:(w>0?v*c*10/(w*1440):0));const e=v*(f.energy||0)/100,p=v*(f.protein||0)/100,carb=v*(f.carb||0)/100,sodium=v*(f.sodium||0),potassium=v*(f.potassium||0),calcium=v*(f.calcium||0);return{g,e,p,carb,sodium,potassium,calcium}}
@@ -558,6 +558,30 @@ function updateNutrition(renderEditor=true){
  $('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nCarb').textContent=fmt(c,2);$('nEnergyKg').textContent=fmt(pt.w?e/pt.w:0,1);$('nProteinKg').textContent=fmt(pt.w?p/pt.w:0,2);$('nCarbKg').textContent=fmt(pt.w?c/pt.w:0,2);
 }
 function updateNutrition_legacy_disabled(){}
+const MIXER_PRESETS=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk','3% NaCl','KCl 15%'];
+function mixerPresetOptions(){
+ const label=x=>x+' ('+(PRODUCTS[x]?.conc??0)+'%)';
+ return '<option value="">Manual concentration</option>'+MIXER_PRESETS.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('');
+}
+function refreshMixerPresetOptions(){
+ ['mPresetA','mPresetB','mPresetE','mPresetS'].forEach(id=>{
+   const el=$(id);if(!el)return;
+   const current=el.value;
+   el.innerHTML=mixerPresetOptions();
+   if(current&&MIXER_PRESETS.includes(current))el.value=current;
+ });
+}
+function applyMixerPreset(selectId,inputId){
+ const name=$(selectId)?.value;
+ if(name&&PRODUCTS[name]){$(inputId).value=PRODUCTS[name].conc;$(inputId).dispatchEvent(new Event('input'));}
+}
+function syncProductFromFluid(f){
+ if(!f.custom&&PRODUCTS[f.name]&&PRODUCTS[f.name].editable){
+   const p=PRODUCTS[f.name];
+   p.conc=f.conc;p.energy=f.energy;p.protein=f.protein;p.carb=f.carb;p.sodium=f.sodium;p.potassium=f.potassium;p.calcium=f.calcium;
+   refreshMixerPresetOptions();
+ }
+}
 function predefinedFluidOptions(){
  const core=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk'];
  const electrolyte=['Calcium gluconate 10%','3% NaCl','KCl 15%'];
@@ -605,6 +629,11 @@ $('nutPlanBV').oninput=()=>{
  const raw=$('nutPlanBV').value; $('planBV').value=raw===''?'0':raw;$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
 };
 
+refreshMixerPresetOptions();
+['mPresetA','mPresetB','mPresetE','mPresetS'].forEach(id=>$(id).onchange=()=>{
+ const map={mPresetA:'ma',mPresetB:'mb',mPresetE:'me2',mPresetS:'ms2'};
+ applyMixerPreset(id,map[id]);
+});
 ['mt','ma','mb','mv'].forEach(id=>$(id).oninput=()=>{const t=n('mt'),a=n('ma'),b=n('mb'),v=n('mv');if(v<=0){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Enter a final volume.';return}if(a===b){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Stock concentrations must be different.';return}if(t<Math.min(a,b)||t>Math.max(a,b)){$('mav').textContent='0';$('mbv').textContent='0';$('ms').textContent='Target must lie between stocks.';return}const av=v*(b-t)/(b-a);$('mav').textContent=fmt(av,1);$('mbv').textContent=fmt(v-av,1);$('ms').textContent='READY';});
 ['mt2','me2','mv2','ms2'].forEach(id=>$(id).oninput=()=>{const t=n('mt2'),e=n('me2'),v=n('mv2'),s=n('ms2');if(v<=0){$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Enter existing fluid volume.';return}if(t===s){$('mxv2').textContent='0';$('mfinal2').textContent=fmt(v,1);$('mfinalc2').textContent=fmt(t,1);$('ms2out').textContent='Target equals stock concentration; no stock is required if the target is already achieved, otherwise dilution is not represented.';return}if((t-e)*(t-s)<=0){const x=v*(t-e)/(s-t);if(x>=0){const fv=v+x;const fc=(e*v+s*x)/fv;$('mxv2').textContent=fmt(x,1);$('mfinal2').textContent=fmt(fv,1);$('mfinalc2').textContent=fmt(fc,1);$('ms2out').textContent='READY';}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}}else{$('mxv2').textContent='0';$('mfinal2').textContent='0';$('mfinalc2').textContent='0';$('ms2out').textContent='Target cannot be reached by adding this stock.';}});;
 function calculateMixerNewBag(){['mt','ma','mb','mv'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
