@@ -100,6 +100,8 @@ jobs:
               raise SystemExit("No calculator page sections found.")
           if set(nav_ids) != set(page_ids):
               raise SystemExit("Navigation links and page sections do not match.")
+          if ".page:target{display:block}" not in html or "body:has(.page:target)" not in html:
+              raise SystemExit("CSS hash-navigation fallback is missing.")
           if "document.addEventListener('click',e=>" not in html or "activatePage(page,true)" not in html:
               raise SystemExit("Independent navigation event binding is missing.")
           if "window.addEventListener('popstate'" not in html or "window.addEventListener('hashchange'" not in html:
