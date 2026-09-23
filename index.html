@@ -361,7 +361,24 @@ function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w),caMg=r.ca
 const CALCIUM_MG_PER_MEQ=20.04;
 function calcFluid(f,w){const v=f.volume||0,c=f.conc||0;const g=f.custom?(w>0?v*c*10/(w*1440):0):((f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS'||f.name==='Calcium gluconate 10%'||f.name==='3% NaCl'||f.name==='KCl 15%')?0:(w>0?v*c*10/(w*1440):0));const e=v*(f.energy||0)/100,p=v*(f.protein||0)/100,carb=v*(f.carb||0)/100,sodium=v*(f.sodium||0),potassium=v*(f.potassium||0),calcium=v*(f.calcium||0);return{g,e,p,carb,sodium,potassium,calcium,calciumMg:calcium*CALCIUM_MG_PER_MEQ}}
 function currentTotals(){const p=patient();let t=0,g=0,e=0,pr=0,c=0,na=0,k=0,caMg=0;fluids.forEach(f=>{t+=f.volume||0;const r=calcFluid(f,p.w);g+=r.g;e+=r.e;pr+=r.p;c+=r.carb;na+=r.sodium;k+=r.potassium;caMg+=r.calciumMg});return{p,total:t,gir:g,energy:e,protein:pr,carb:c,sodium:na,potassium:k,calcium:caMg,permitted:p.w*p.tfi,remaining:Math.max(p.w*p.tfi-t,0),over:t>p.w*p.tfi+1e-9}}
-function recalc(renderRows=true){if(renderRows)renderFluids();const x=currentTotals();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);$('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);$('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);$('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);$('carbKg').textContent=fmt(x.p.w?x.carb/x.p.w:0,2);$('currentCa').textContent=fmt(x.calcium,2);$('currentCaKg').textContent=fmt(x.p.w?x.calcium/x.p.w:0,2);$('currentNa').textContent=fmt(x.sodium,2);$('currentNaKg').textContent=fmt(x.p.w?x.sodium/x.p.w:0,2);$('currentK').textContent=fmt(x.potassium,2);$('currentKKg').textContent=fmt(x.p.w?x.potassium/x.p.w:0,2);$('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';$('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');$('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI (by '+fmt(x.total-x.permitted,1)+' mL).':'Current fluid total is within permitted TFI.';$('fluidStatus').className='status '+(x.over?'bad':'ok');fluids.forEach(f=>updateFluidRowOnly(f));updateTarget(x);updateNutrition(renderRows)}
+function recalc(renderRows=true){
+ const x=currentTotals();
+ if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);
+ $('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);
+ $('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);
+ $('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);$('carbKg').textContent=fmt(x.p.w?x.carb/x.p.w:0,2);
+ $('currentCa').textContent=fmt(x.calcium,2);$('currentCaKg').textContent=fmt(x.p.w?x.calcium/x.p.w:0,2);
+ $('currentNa').textContent=fmt(x.sodium,2);$('currentNaKg').textContent=fmt(x.p.w?x.sodium/x.p.w:0,2);
+ $('currentK').textContent=fmt(x.potassium,2);$('currentKKg').textContent=fmt(x.p.w?x.potassium/x.p.w:0,2);
+ $('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';
+ $('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');
+ $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI (by '+fmt(x.total-x.permitted,1)+' mL).':'Current fluid total is within permitted TFI.';
+ $('fluidStatus').className='status '+(x.over?'bad':'ok');
+ try{if(renderRows)renderFluids();}catch(err){console.error('Fluid rendering error',err);}
+ try{fluids.forEach(f=>updateFluidRowOnly(f));}catch(err){console.error('Fluid row update error',err);}
+ try{updateTarget(x);}catch(err){console.error('Target plan update error',err);}
+ try{updateNutrition(renderRows);}catch(err){console.error('Nutrition update error',err);}
+}
 
 function autoPlan(x){
  const add=Math.max(x.p.target-x.gir,0);
@@ -494,7 +511,7 @@ function renderNutritionFluids(){
  document.querySelectorAll('[data-nfield]').forEach(x=>x.onfocus=()=>{if(x.dataset.nfield==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.nid);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
  document.querySelectorAll('[data-nfield]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.nid);if(!f)return;
    if(x.dataset.nfield==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}
-   else{f[x.dataset.nfield]=valNum(x.value);if(x.dataset.nfield==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.0465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}}
+   else{f[x.dataset.nfield]=valNum(x.value);if(x.dataset.nfield==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}}
    syncProductFromFluid(f);
    recalc(false);updateNutritionFluidRow(f);
    if(x.dataset.nfield==='conc'){const e=document.querySelector('[data-nfield="energy"][data-nid="'+f.id+'"]'),p=document.querySelector('[data-nfield="protein"][data-nid="'+f.id+'"]'),c=document.querySelector('[data-nfield="carb"][data-nid="'+f.id+'"]'),na=document.querySelector('[data-nfield="sodium"][data-nid="'+f.id+'"]'),k=document.querySelector('[data-nfield="potassium"][data-nid="'+f.id+'"]'),ca=document.querySelector('[data-nfield="calcium"][data-nid="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}
@@ -683,4 +700,20 @@ activatePage(location.hash.replace('#','')||'home',false);
 recalc();
 calculateMixerNewBag();
 calculateMixerExistingBag();
+<script>
+(function(){
+  function el(id){return document.getElementById(id)}
+  function num(id){const v=parseFloat(el(id)?.value);return Number.isFinite(v)?v:0}
+  function syncPatientCore(){
+    const raw=num('w'),unit=el('weightUnit')?.value||'kg';
+    const weight=unit==='g'?raw/1000:unit==='lb'?raw*0.45359237:raw;
+    const permitted=weight*num('tfi');
+    const p=el('patientPermittedTfi');if(p)p.textContent=permitted.toFixed(1);
+    const status=el('patientStatus');if(status){status.textContent=weight>0&&num('tfi')>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';status.className='status '+(weight>0&&num('tfi')>0?'ok':'');}
+    try{if(typeof recalc==='function')recalc(false)}catch(err){console.error('Safe patient recalculation error',err)}
+  }
+  ['w','tfi','tg'].forEach(id=>{const x=el(id);if(x){x.addEventListener('input',syncPatientCore);x.addEventListener('change',syncPatientCore)}});
+  const wu=el('weightUnit');if(wu)wu.addEventListener('change',syncPatientCore);
+  syncPatientCore();
+})();
 </script></body></html>
