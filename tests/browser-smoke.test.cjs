@@ -27,11 +27,13 @@ const { spawn } = require('child_process');
     if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
 
     await page.locator('#addFluid').selectOption('Formula milk');
-    const formulaEdit=page.locator('#fluidList .details-toggle').last();
+    const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
+    const formulaEdit=formulaFluid.locator('.details-toggle');
     if(await formulaEdit.textContent() !== 'Edit contents') throw new Error('Fluid edit control text is incorrect.');
     await formulaEdit.click();
-    if(!(await page.locator('#fluidList .fluid-details').last().isVisible())) throw new Error('Formula milk edit panel did not open.');
-    if(!(await page.locator('#fluidList .fluid-details').last().textContent()).includes('Preset note: For this calculator, glucose is used for GIR')) throw new Error('Formula milk preset note is missing.');
+    const formulaDetails=formulaFluid.locator('.fluid-details');
+    if(!(await formulaDetails.isVisible())) throw new Error('Formula milk edit panel did not open.');
+    if(!(await formulaDetails.textContent()).includes('Preset note: For this calculator, glucose is used for GIR')) throw new Error('Formula milk preset note is missing.');
     await page.locator('#addFluid').selectOption('D5');
     const fluidVolume = page.locator('#fluidList [data-field="volumeDisplay"]').first();
     await fluidVolume.click();
