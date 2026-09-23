@@ -42,8 +42,23 @@ jobs:
               raise SystemExit("No application JavaScript block found.")
           Path("/tmp/app.js").write_text("\n".join(scripts), encoding="utf-8")
 
-          json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          if manifest.get("start_url") != "/neonatal-gir-calculator/":
+              raise SystemExit("manifest start_url is unexpected.")
           ET.parse("sitemap.xml")
+
+          jsonld_blocks = re.findall(r'<script type="application/ld\\+json">(.*?)</script>', html, flags=re.S|re.I)
+          if not jsonld_blocks:
+              raise SystemExit("No JSON-LD structured data found.")
+          for block in jsonld_blocks:
+              try:
+                  json.loads(block)
+              except json.JSONDecodeError as exc:
+                  raise SystemExit("Invalid JSON-LD in index.html: " + str(exc))
+
+          robots = Path("robots.txt").read_text(encoding="utf-8")
+          if "Sitemap: https://amoxyclav.github.io/neonatal-gir-calculator/sitemap.xml" not in robots:
+              raise SystemExit("robots.txt does not reference the expected sitemap.")
 
           guide_paths = [
               "guides/neonatal-gir-calculator.html",
