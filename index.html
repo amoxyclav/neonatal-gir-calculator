@@ -695,6 +695,14 @@ if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  quickGuide.style.display=open?'none':'block';
  quickGuideToggle.textContent=open?'Quick Start Guide':'Hide Quick Start Guide';
 };
+// Resilient delegated fluid-volume handler: survives fluid-row re-renders and keeps current-fluid totals live.
+function syncFluidVolumeFromInput(x){
+ const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;
+ const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed;
+ try{recalc(false)}catch(err){console.error('Fluid volume recalculation error',err)}
+}
+document.addEventListener('input',e=>{const x=e.target.closest?.('[data-field="volumeDisplay"]');if(x)syncFluidVolumeFromInput(x)});
+document.addEventListener('change',e=>{const x=e.target.closest?.('[data-field="volumeDisplay"]');if(x)syncFluidVolumeFromInput(x)});
 function showPage(page,scroll=true){return activatePage(page,scroll)}
 activatePage(location.hash.replace('#','')||'home',false);
 recalc();
