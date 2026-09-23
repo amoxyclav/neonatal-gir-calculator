@@ -110,6 +110,17 @@ jobs:
               raise SystemExit("Browser history navigation handlers are missing.")
           print("Navigation links, page sections and independent navigation binding validated.")
 
+          pages = Path(".github/workflows/pages.yml").read_text(encoding="utf-8")
+          if "workflow_run:" not in pages or 'workflows: ["Validate calculator"]' not in pages:
+              raise SystemExit("GitHub Pages deployment must wait for the Validate calculator workflow.")
+          if "github.event.workflow_run.conclusion == 'success'" not in pages:
+              raise SystemExit("GitHub Pages deployment must require successful validation.")
+          if "github.event.workflow_run.head_sha" not in pages:
+              raise SystemExit("GitHub Pages must deploy the exact validated commit.")
+          if "push:" in pages or "workflow_dispatch:" in pages:
+              raise SystemExit("GitHub Pages workflow must not provide a validation-bypassing push/manual deployment path.")
+          print("GitHub Pages deployment is gated on successful validation.")
+
           PY
           node --check /tmp/app.js
           node tests/calculation-regression.test.js
