@@ -112,6 +112,12 @@ jobs:
           node --check /tmp/app.js
           node tests/calculation-regression.test.js
 
+      - name: Browser smoke test
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+          node tests/browser-smoke.test.cjs
+
       - name: Validate required site files
         run: |
           test -f index.html
