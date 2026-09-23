@@ -46,7 +46,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <nav class="nav"><button class="active" data-page="home">Home</button><button data-page="gir">GIR</button><button data-page="nutrition">Nutrition</button><button data-page="mixer">Mixer</button><button data-page="about">About</button></nav></div></header>
 <main>
 <section id="home" class="page active"><div class="section"><div class="ey">NEONATAL CALCULATION AID</div><h1>Neonatal GIR & Nutrition Calculator</h1><p class="mut">Three-stage continuous calculator: patient inputs → current fluids → interactive TFI-aware target GIR plan.</p><div class="actions" style="margin-bottom:14px"><button class="btn primary" id="shareTool" type="button">Share calculator</button><button class="btn" id="copyToolLink" type="button">Copy link</button></div><div id="shareStatus" class="status" style="display:none"></div><div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div><div class="home-tools"><button class="home-tool" data-page="gir">GIR Calculator</button><button class="home-tool" data-page="nutrition">Energy-Protein Ratio</button><button class="home-tool" data-page="mixer">Fluid Mixer</button></div>
-<div class="mut" style="margin-top:14px;font-size:12px">Version 1.2 • Last updated September 2026</div><div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
+<div class="mut" style="margin-top:14px;font-size:12px">Version 1.3 • Last updated September 2026</div><div style="margin-top:18px"><button id="quickGuideToggle" class="link-button" type="button">Quick Start Guide</button></div>
 <div id="quickGuide" class="section" style="display:none;margin-top:12px">
 <h2>Quick Start Guide</h2>
 <ol class="guide-list">
@@ -77,6 +77,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="stat combined-stat"><span>Energy</span><strong id="currentEnergy">0</strong><small>kcal/day</small><strong id="energyKg">0</strong><small>kcal/kg/day</small></div>
 <div class="stat combined-stat"><span>Protein / amino acids</span><strong id="currentProtein">0</strong><small>g/day</small><strong id="proteinKg">0</strong><small>g/kg/day</small></div>
 <div class="stat combined-stat"><span>Carbohydrate</span><strong id="currentCarb">0</strong><small>g/day</small><strong id="carbKg">0</strong><small>g/kg/day</small></div>
+<div class="stat combined-stat"><span>Electrolytes</span><strong id="currentCa">0</strong><small>Calcium mEq/day • <span id="currentCaKg">0</span> mEq/kg/day</small><strong id="currentNa">0</strong><small>Sodium mEq/day • <span id="currentNaKg">0</span> mEq/kg/day</small><strong id="currentK">0</strong><small>Potassium mEq/day • <span id="currentKKg">0</span> mEq/kg/day</small></div>
 </div><div id="fluidStatus" class="status">No current fluids selected.</div></div>
 
 <div class="section" id="targetSection"><h2>3. Target GIR + TFI-Aware Interactive Automatic Plan</h2>
@@ -128,6 +129,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="stat combined-stat"><span>Energy</span><strong id="nutCurrentEnergy">0</strong><small>kcal/day</small><strong id="nutEnergyKg">0</strong><small>kcal/kg/day</small></div>
 <div class="stat combined-stat"><span>Protein / amino acids</span><strong id="nutCurrentProtein">0</strong><small>g/day</small><strong id="nutProteinKg">0</strong><small>g/kg/day</small></div>
 <div class="stat combined-stat"><span>Carbohydrate</span><strong id="nutCurrentCarb">0</strong><small>g/day</small><strong id="nutCarbKg">0</strong><small>g/kg/day</small></div>
+<div class="stat combined-stat"><span>Electrolytes</span><strong id="nutCurrentCa">0</strong><small>Calcium mEq/day • <span id="nutCurrentCaKg">0</span> mEq/kg/day</small><strong id="nutCurrentNa">0</strong><small>Sodium mEq/day • <span id="nutCurrentNaKg">0</span> mEq/kg/day</small><strong id="nutCurrentK">0</strong><small>Potassium mEq/day • <span id="nutCurrentKKg">0</span> mEq/kg/day</small></div>
 </div>
 </div>
 
@@ -280,16 +282,19 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 
 <script>
 const PRODUCTS={
-NS:{conc:0,energy:0,protein:0,carb:0,gir:true,editable:false},
-'D5':{conc:5,energy:17,protein:0,carb:5,gir:true,editable:false},
-'D10':{conc:10,energy:34,protein:0,carb:10,gir:true,editable:false},
-'D25':{conc:25,energy:85,protein:0,carb:25,gir:true,editable:false},
-'D50':{conc:50,energy:170,protein:0,carb:50,gir:true,editable:false},
-'Isolyte P':{conc:5,energy:17,protein:0,carb:5,gir:true,editable:true},
-'Aminoven':{conc:10,energy:40,protein:10,carb:0,gir:false,editable:true},
-'Intralipid':{conc:20,energy:200,protein:0,carb:0,gir:false,editable:true},
-'Breast milk':{conc:7,energy:72,protein:.9,carb:7,gir:true,editable:true},
-'Formula milk':{conc:7,energy:67,protein:1.8,carb:7,gir:true,editable:true}
+NS:{conc:0,energy:0,protein:0,carb:0,sodium:.154,potassium:0,calcium:0,gir:true,editable:false},
+'D5':{conc:5,energy:17,protein:0,carb:5,sodium:0,potassium:0,calcium:0,gir:true,editable:false},
+'D10':{conc:10,energy:34,protein:0,carb:10,sodium:0,potassium:0,calcium:0,gir:true,editable:false},
+'D25':{conc:25,energy:85,protein:0,carb:25,sodium:0,potassium:0,calcium:0,gir:true,editable:false},
+'D50':{conc:50,energy:170,protein:0,carb:50,sodium:0,potassium:0,calcium:0,gir:true,editable:false},
+'Isolyte P':{conc:5,energy:17,protein:0,carb:5,sodium:.023,potassium:.020,calcium:0,gir:true,editable:true},
+'Aminoven':{conc:10,energy:40,protein:10,carb:0,sodium:0,potassium:0,calcium:0,gir:false,editable:true},
+'Intralipid':{conc:20,energy:200,protein:0,carb:0,sodium:0,potassium:0,calcium:0,gir:false,editable:true},
+'Breast milk':{conc:7,energy:72,protein:.9,carb:7,sodium:0,potassium:0,calcium:0,gir:true,editable:true},
+'Formula milk':{conc:7,energy:67,protein:1.8,carb:7,sodium:0,potassium:0,calcium:0,gir:true,editable:true},
+'Calcium gluconate 10%':{conc:10,energy:0,protein:0,carb:0,sodium:0,potassium:0,calcium:.465,gir:false,editable:true,carrierMode:'D5',carrierRatio:1,carrierIncluded:true},
+'3% NaCl':{conc:3,energy:0,protein:0,carb:0,sodium:.513,potassium:0,calcium:0,gir:false,editable:true},
+'KCl 15%':{conc:15,energy:0,protein:0,carb:0,sodium:0,potassium:2,calcium:0,gir:false,editable:true}
 };
 const PREDEF=Object.keys(PRODUCTS), PLAN=['NS','Isolyte P','D5','D10','D25','D50'];
 let fluids=[];let uid=0;
@@ -298,60 +303,34 @@ const n=(id)=>parseFloat($(id)?.value)||0;
 const fmt=(x,d=2)=>(Number.isFinite(x)?x:0).toFixed(d);
 function patient(){const raw=n('w'),u=$('weightUnit')?.value||'kg';const w=u==='g'?raw/1000:u==='lb'?raw*0.45359237:raw;return{w,tfi:n('tfi'),target:n('tg')}}
 function addFluid(name,custom=false){
- const p=PRODUCTS[name]||{conc:0,energy:0,protein:0,carb:0,gir:true,editable:true};
- fluids.push({id:++uid,name,custom,volume:0,volumeUnit:'mL/day',volumeInitialized:false,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb});
+ const p=PRODUCTS[name]||{conc:0,energy:0,protein:0,carb:0,sodium:0,potassium:0,calcium:0,gir:true,editable:true};
+ fluids.push({id:++uid,name,custom,volume:0,volumeUnit:'mL/day',volumeInitialized:false,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium||0,potassium:p.potassium||0,calcium:p.calcium||0,carrierMode:p.carrierMode||'None',carrierRatio:p.carrierRatio||0,carrierIncluded:p.carrierIncluded||false});
  renderFluids();recalc();if($('nutritionFluidEditor'))renderNutritionFluids();
 }
 function removeFluid(id){fluids=fluids.filter(f=>f.id!==id);renderFluids();recalc();if($('nutritionFluidEditor'))renderNutritionFluids()}
 function valNum(v){return parseFloat(v)||0}
 function productRow(f){
- const standard=PRODUCTS[f.name];
- const editable=!!f.custom||!!standard?.editable;
- const label=f.custom?'Custom fluid':f.name;
- const unit=f.volumeUnit||'mL/day';
- const displayVol=unit==='mL/hr'?(f.volume||0)/24:(f.volume||0);
- const w=patient().w||0;
- const r=calcFluid(f,w);
- return '<div class="fluid"><div class="fluid-head fluid-main-row">'+
- '<div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div>'+
- '<div class="fluid-volume"><input type="number" min="0" step="0.1" class="volume-input" data-field="volumeDisplay" data-id="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol, unit==='mL/hr'?2:1):'')+'">'+
- '<select class="volume-unit" data-unit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div>'+
- '<div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">'+fmt(r.g)+'</b></span><span>Energy <b data-row-energy="'+f.id+'">'+fmt(r.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">'+fmt(r.p,2)+'</b> g/day</span><span>Carb <b data-row-carb="'+f.id+'">'+fmt(r.carb,2)+'</b> g/day</span></div>'+
- '<button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button>'+
- '<button class="remove" data-remove="'+f.id+'">Remove</button></div>'+
- '<div class="fluid-details" id="details-'+f.id+'" hidden><div class="grid g4">'+
- '<label>Glucose %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
- '<label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label>'+
- '<label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label>'+
- '</div></div></div>';
+ const standard=PRODUCTS[f.name],editable=!!f.custom||!!standard?.editable,label=f.custom?'Custom fluid':f.name,unit=f.volumeUnit||'mL/day';
+ const displayVol=unit==='mL/hr'?(f.volume||0)/24:(f.volume||0),w=patient().w||0,r=calcFluid(f,w),cr=calcCarrier(f,w),calciumProduct=f.name==='Calcium gluconate 10%';
+ const carrierOptions='<option value="None" '+((f.carrierMode||'None')==='None'?'selected':'')+'>No carrier / enter separately</option><option value="D5" '+((f.carrierMode||'None')==='D5'?'selected':'')+'>D5</option><option value="D10" '+((f.carrierMode||'None')==='D10'?'selected':'')+'>D10</option><option value="NS" '+((f.carrierMode||'None')==='NS'?'selected':'')+'>0.9% NaCl</option>';
+ return '<div class="fluid"><div class="fluid-head fluid-main-row"><div class="fluid-name"><b>'+label+'</b> '+(f.custom?'<span class="badge">custom</span>':'')+'</div><div class="fluid-volume"><input type="number" min="0" step="0.1" class="volume-input" data-field="volumeDisplay" data-id="'+f.id+'" placeholder="Volume" aria-label="Volume" value="'+((f.volumeInitialized||f.volume>0)?fmt(displayVol,unit==='mL/hr'?2:1):'')+'"><select class="volume-unit" data-unit-id="'+f.id+'"><option value="mL/day" '+(unit==='mL/day'?'selected':'')+'>mL/day</option><option value="mL/hr" '+(unit==='mL/hr'?'selected':'')+'>mL/hr</option></select></div><div class="fluid-live"><span>GIR <b data-row-gir="'+f.id+'">'+fmt(r.g+cr.g)+'</b></span><span>Energy <b data-row-energy="'+f.id+'">'+fmt(r.e+cr.e,1)+'</b> kcal/day</span><span>Protein/AA <b data-row-protein="'+f.id+'">'+fmt(r.p+cr.p,2)+'</b> g/day</span><span>Carb <b data-row-carb="'+f.id+'">'+fmt(r.carb+cr.carb,2)+'</b> g/day</span></div><button class="details-toggle" type="button" data-details="'+f.id+'" aria-expanded="false">⌄</button><button class="remove" data-remove="'+f.id+'">Remove</button></div><div class="fluid-details" id="details-'+f.id+'" hidden><div class="grid g4"><label>Glucose %<input type="number" min="0" step="0.1" data-field="conc" data-id="'+f.id+'" value="'+f.conc+'" '+(editable?'':'readonly')+'></label><label>Energy kcal/100 mL<input type="number" min="0" step="0.1" data-field="energy" data-id="'+f.id+'" value="'+f.energy+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label><label>Protein/AA g/100 mL<input type="number" min="0" step="0.1" data-field="protein" data-id="'+f.id+'" value="'+f.protein+'" '+(editable?'':'readonly')+'></label><label>Carbohydrate g/100 mL<input type="number" min="0" step="0.1" data-field="carb" data-id="'+f.id+'" value="'+f.carb+'" '+(f.custom||f.name==='Breast milk'||f.name==='Formula milk'?'':'readonly')+'></label><label>Sodium mEq/mL<input type="number" min="0" step="0.001" data-field="sodium" data-id="'+f.id+'" value="'+f.sodium+'" '+(editable?'':'readonly')+'></label><label>Potassium mEq/mL<input type="number" min="0" step="0.001" data-field="potassium" data-id="'+f.id+'" value="'+f.potassium+'" '+(editable?'':'readonly')+'></label><label>Calcium mEq/mL<input type="number" min="0" step="0.001" data-field="calcium" data-id="'+f.id+'" value="'+f.calcium+'" '+(editable?'':'readonly')+'></label></div>'+
+ (calciumProduct?'<div class="divider"></div><div class="grid g4"><label>Diluent / carrier<select data-field="carrierMode" data-id="'+f.id+'">'+carrierOptions+'</select></label><label>Carrier volume per 1 mL calcium<input type="number" min="0" step="0.1" data-field="carrierRatio" data-id="'+f.id+'" value="'+(f.carrierRatio||0)+'"></label><label>Count carrier in TFI/GIR<input type="checkbox" data-field="carrierIncluded" data-id="'+f.id+'" '+(f.carrierIncluded?'checked':'')+' style="width:auto;margin-top:10px"></label><div class="note">For a 1:1 dilution, keep carrier ratio at 1. The carrier is included in TFI/GIR/nutrition without requiring a separate D5/D10 fluid entry. If the carrier is already represented elsewhere, turn this off to avoid double-counting.</div></div>':'')+
+ '</div></div>';
 }
 function renderFluids(){
  $('fluidList').innerHTML=fluids.length?fluids.map(productRow).join(''):'<div class="status">No current fluids selected. Unselected fluids are treated as zero.</div>';
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
- document.querySelectorAll('[data-details]').forEach(b=>b.onclick=()=>{const box=$('details-'+b.dataset.details);const open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
- document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day';const displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;const inp=document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]');if(inp)inp.value=fmt(x.value==='mL/hr'?f.volume/24:f.volume,x.value==='mL/hr'?2:1);recalc(false);updateFluidRowOnly(f);});
+ document.querySelectorAll('[data-details]').forEach(b=>b.onclick=()=>{const box=$('details-'+b.dataset.details),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
+ document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day',displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;recalc(false);updateFluidRowOnly(f);});
  document.querySelectorAll('[data-field]').forEach(x=>x.onfocus=()=>{if(x.dataset.field==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.id);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
- document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}}if(x.dataset.field==='conc'){const e=document.querySelector('[data-field="energy"][data-id="'+f.id+'"]'),p=document.querySelector('[data-field="protein"][data-id="'+f.id+'"]'),c=document.querySelector('[data-field="carb"][data-id="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb}}recalc(false);updateFluidRowOnly(f)})
+ document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else if(x.dataset.field==='carrierIncluded'){f.carrierIncluded=x.checked}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.0465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}if(x.dataset.field==='conc'){const e=document.querySelector('[data-field="energy"][data-id="'+f.id+'"]'),p=document.querySelector('[data-field="protein"][data-id="'+f.id+'"]'),c=document.querySelector('[data-field="carb"][data-id="'+f.id+'"]'),na=document.querySelector('[data-field="sodium"][data-id="'+f.id+'"]'),k=document.querySelector('[data-field="potassium"][data-id="'+f.id+'"]'),ca=document.querySelector('[data-field="calcium"][data-id="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}}recalc(false);updateFluidRowOnly(f);});
 }
-function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2);if(c)c.textContent=fmt(r.carb,2)}
-function calcFluid(f,w){
- const v=f.volume||0,c=f.conc||0;
- const g=f.custom?(w>0?v*c*10/(w*1440):0):((f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS')?0:(w>0?v*c*10/(w*1440):0));
- const e=v*(f.energy||0)/100;const p=v*(f.protein||0)/100;const carb=v*(f.carb||0)/100;
- return{g,e,p,carb};
-}
-function currentTotals(){const p=patient();let t=0,g=0,e=0,pr=0,c=0;fluids.forEach(f=>{t+=f.volume||0;const r=calcFluid(f,p.w);g+=r.g;e+=r.e;pr+=r.p;c+=r.carb});return{p,total:t,gir:g,energy:e,protein:pr,carb:c,permitted:p.w*p.tfi,remaining:Math.max(p.w*p.tfi-t,0),over:t>p.w*p.tfi+1e-9}}
-function recalc(renderRows=true){
- if(renderRows)renderFluids();
- const x=currentTotals();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);$('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);$('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);$('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);$('carbKg').textContent=fmt(x.p.w?x.carb/x.p.w:0,2);
- $('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';
- $('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');
- $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI.':'Current fluid total is within permitted TFI.';
- $('fluidStatus').className='status '+(x.over?'bad':'ok');
- fluids.forEach(f=>updateFluidRowOnly(f));
- updateTarget(x);updateNutrition(renderRows);
-}
+function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w),cr=calcCarrier(f,w);const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g+cr.g);if(e)e.textContent=fmt(r.e+cr.e,1);if(p)p.textContent=fmt(r.p+cr.p,2);if(c)c.textContent=fmt(r.carb+cr.carb,2)}
+function calcCarrier(f,w){if(f.name!=='Calcium gluconate 10%'||!f.carrierIncluded||!(f.volume>0)||!(f.carrierRatio>0))return{volume:0,g:0,e:0,p:0,carb:0,sodium:0,potassium:0,calcium:0};const cp=PRODUCTS[f.carrierMode||'None'];if(!cp)return{volume:0,g:0,e:0,p:0,carb:0,sodium:0,potassium:0,calcium:0};const v=f.volume*f.carrierRatio,temp={name:'Calcium carrier — '+f.carrierMode,volume:v,conc:cp.conc||0,energy:cp.energy||0,protein:cp.protein||0,carb:cp.carb||0,sodium:cp.sodium||0,potassium:cp.potassium||0,calcium:cp.calcium||0},r=calcFluid(temp,w);return{volume:v,...r}}
+function calcFluid(f,w){const v=f.volume||0,c=f.conc||0;const g=f.custom?(w>0?v*c*10/(w*1440):0):((f.name==='Aminoven'||f.name==='Intralipid'||f.name==='NS'||f.name==='Calcium gluconate 10%'||f.name==='3% NaCl'||f.name==='KCl 15%')?0:(w>0?v*c*10/(w*1440):0));const e=v*(f.energy||0)/100,p=v*(f.protein||0)/100,carb=v*(f.carb||0)/100,sodium=v*(f.sodium||0),potassium=v*(f.potassium||0),calcium=v*(f.calcium||0);return{g,e,p,carb,sodium,potassium,calcium}}
+function currentTotals(){const p=patient();let t=0,g=0,e=0,pr=0,c=0,na=0,k=0,ca=0;fluids.forEach(f=>{t+=f.volume||0;const r=calcFluid(f,p.w),cr=calcCarrier(f,p.w);t+=cr.volume;g+=r.g+cr.g;e+=r.e+cr.e;pr+=r.p+cr.p;c+=r.carb+cr.carb;na+=r.sodium+cr.sodium;k+=r.potassium+cr.potassium;ca+=r.calcium+cr.calcium});return{p,total:t,gir:g,energy:e,protein:pr,carb:c,sodium:na,potassium:k,calcium:ca,permitted:p.w*p.tfi,remaining:Math.max(p.w*p.tfi-t,0),over:t>p.w*p.tfi+1e-9}}
+function recalc(renderRows=true){if(renderRows)renderFluids();const x=currentTotals();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.permitted,1);$('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);$('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);$('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);$('carbKg').textContent=fmt(x.p.w?x.carb/x.p.w:0,2);$('currentCa').textContent=fmt(x.calcium,2);$('currentCaKg').textContent=fmt(x.p.w?x.calcium/x.p.w:0,2);$('currentNa').textContent=fmt(x.sodium,2);$('currentNaKg').textContent=fmt(x.p.w?x.sodium/x.p.w:0,2);$('currentK').textContent=fmt(x.potassium,2);$('currentKKg').textContent=fmt(x.p.w?x.potassium/x.p.w:0,2);$('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';$('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');$('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI.':'Current fluid total is within permitted TFI.';$('fluidStatus').className='status '+(x.over?'bad':'ok');fluids.forEach(f=>updateFluidRowOnly(f));updateTarget(x);updateNutrition(renderRows)}
+
 function autoPlan(x){
  const add=Math.max(x.p.target-x.gir,0);
  if(add<=0)return{a:'NS',b:'NS',av:0,bv:0};
