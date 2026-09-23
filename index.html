@@ -535,7 +535,13 @@ function updateNutrition(renderEditor=true){
  $('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nCarb').textContent=fmt(c,2);$('nEnergyKg').textContent=fmt(pt.w?e/pt.w:0,1);$('nProteinKg').textContent=fmt(pt.w?p/pt.w:0,2);$('nCarbKg').textContent=fmt(pt.w?c/pt.w:0,2);
 }
 function updateNutrition_legacy_disabled(){}
-$('addFluid').innerHTML='<option value="">+ Add predefined fluid…</option>'+PREDEF.map(x=>'<option>'+x+'</option>').join('');
+function predefinedFluidOptions(){
+ const core=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk'];
+ const electrolyte=['Calcium gluconate 10%','3% NaCl','KCl 15%'];
+ const label=x=>x==='Calcium gluconate 10%'?'Calcium gluconate 10% (0.465 mEq/mL Ca)':x==='3% NaCl'?'3% NaCl (0.513 mEq/mL Na)':x==='KCl 15%'?'KCl 15% (2 mEq/mL K)':x;
+ return '<option value="">+ Add predefined fluid…</option><optgroup label="Standard fluids">'+core.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup><optgroup label="Electrolytes / additives">'+electrolyte.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>';
+}
+$('addFluid').innerHTML=predefinedFluidOptions();
 $('addFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
 $('addCustom').onclick=()=>{const name=prompt('Enter custom fluid name (e.g. 3% NaCl, KCl fluid):','Custom fluid');if(name&&name.trim())addFluid(name.trim(),true)};
 function updatePatientInputs(){const x=patient();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.w*x.tfi,1);recalc();}
@@ -546,7 +552,7 @@ fillPlanOptions();
 $('resetPlan').onclick=()=>{$('planA').dataset.user='';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
 ['hmf','hmfAdvance','mct','hmfEnergy','hmfProtein','hmfCarb','hmfAdvanceEnergy','hmfAdvanceProtein','hmfAdvanceCarb','mctEnergy','mctProtein','mctCarb'].forEach(id=>$(id).oninput=updateNutrition);
 document.querySelectorAll('[data-extra-details]').forEach(b=>b.onclick=()=>{const box=$('extra-details-'+b.dataset.extraDetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
-$('nutritionAddFluid').innerHTML='<option value="">+ Add predefined fluid…</option>'+PREDEF.map(x=>'<option>'+x+'</option>').join('');
+$('nutritionAddFluid').innerHTML=predefinedFluidOptions();
 $('nutritionAddFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
 $('nutritionAddCustom').onclick=()=>{const name=prompt('Enter custom fluid name (e.g. 3% NaCl, KCl fluid):','Custom fluid');if(name&&name.trim())addFluid(name.trim(),true)};
 ['nutW','nutTfiInput','nutTg'].forEach(id=>$(id).addEventListener('input',()=>{
