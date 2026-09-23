@@ -496,7 +496,13 @@ function updateNutrition(renderEditor=true){
  if($('nutCurrentCarb'))$('nutCurrentCarb').textContent=fmt(x.carb,2);
  if($('nutEnergyKg'))$('nutEnergyKg').textContent=fmt(pt.w?x.energy/pt.w:0,1);
  if($('nutProteinKg'))$('nutProteinKg').textContent=fmt(pt.w?x.protein/pt.w:0,2);
- if($('nutCarbKg'))$('nutCarbKg').textContent=fmt(pt.w?x.carb/pt.w:0,2);\n if($('nutCurrentCa'))$('nutCurrentCa').textContent=fmt(x.calcium,2);\n if($('nutCurrentCaKg'))$('nutCurrentCaKg').textContent=fmt(pt.w?x.calcium/pt.w:0,2);\n if($('nutCurrentNa'))$('nutCurrentNa').textContent=fmt(x.sodium,2);\n if($('nutCurrentNaKg'))$('nutCurrentNaKg').textContent=fmt(pt.w?x.sodium/pt.w:0,2);\n if($('nutCurrentK'))$('nutCurrentK').textContent=fmt(x.potassium,2);\n if($('nutCurrentKKg'))$('nutCurrentKKg').textContent=fmt(pt.w?x.potassium/pt.w:0,2);
+ if($('nutCarbKg'))$('nutCarbKg').textContent=fmt(pt.w?x.carb/pt.w:0,2);
+ if($('nutCurrentCa'))$('nutCurrentCa').textContent=fmt(x.calcium,2);
+ if($('nutCurrentCaKg'))$('nutCurrentCaKg').textContent=fmt(pt.w?x.calcium/pt.w:0,2);
+ if($('nutCurrentNa'))$('nutCurrentNa').textContent=fmt(x.sodium,2);
+ if($('nutCurrentNaKg'))$('nutCurrentNaKg').textContent=fmt(pt.w?x.sodium/pt.w:0,2);
+ if($('nutCurrentK'))$('nutCurrentK').textContent=fmt(x.potassium,2);
+ if($('nutCurrentKKg'))$('nutCurrentKKg').textContent=fmt(pt.w?x.potassium/pt.w:0,2);
  syncNutritionPlan();
  const a=$('planA')?.value||'NS',b=$('planB')?.value||'NS',{av,bv}=getPlanVolumes();
  const planAFluid={name:a,volume:av,conc:PRODUCTS[a]?.conc||0,energy:PRODUCTS[a]?.energy||0,protein:PRODUCTS[a]?.protein||0,carb:PRODUCTS[a]?.carb||0};
