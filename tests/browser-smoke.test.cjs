@@ -24,8 +24,9 @@ const { spawn } = require('child_process');
     if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
 
     await page.locator('#addFluid').selectOption('D5');
+    await page.locator('[data-field="volumeDisplay"]').first().fill('10');
     const totalAfterFluid = await page.locator('#currentTotal').textContent();
-    if(totalAfterFluid === '0.0') throw new Error('Adding D5 did not update current fluid total.');
+    if(totalAfterFluid !== '10.0') throw new Error('Entering D5 volume did not update current fluid total; got '+totalAfterFluid);
 
     await page.locator('[data-page="nutrition"]').click();
     if(!(await page.locator('#nutrition').evaluate(el=>el.classList.contains('active')))) throw new Error('Nutrition navigation failed.');
