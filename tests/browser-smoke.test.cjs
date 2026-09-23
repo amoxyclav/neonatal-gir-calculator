@@ -30,10 +30,10 @@ const { spawn } = require('child_process');
     const totalAfterFluid = await page.locator('#currentTotal').textContent();
     if(totalAfterFluid !== '10.0') throw new Error('Entering D5 volume did not update current fluid total; got '+totalAfterFluid);
 
-    await page.locator('[data-page="nutrition"]').click();
+    await page.locator('[data-page="nutrition"]').first().click();
     if(!(await page.locator('#nutrition').evaluate(el=>el.classList.contains('active')))) throw new Error('Nutrition navigation failed.');
 
-    await page.locator('[data-page="mixer"]').click();
+    await page.locator('[data-page="mixer"]').first().click();
     if(!(await page.locator('#mixer').evaluate(el=>el.classList.contains('active')))) throw new Error('Mixer navigation failed.');
 
     await page.locator('[data-page="gir"]').click();
