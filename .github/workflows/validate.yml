@@ -91,6 +91,7 @@ jobs:
           print("HTML markers, manifest.json, sitemap.xml and guide pages validated.")
           PY
           node --check /tmp/app.js
+          node tests/calculation-regression.test.js
 
       - name: Validate required site files
         run: |
@@ -103,4 +104,5 @@ jobs:
           test -f guides/neonatal-fluid-nutrition-calculator.html
           test -f guides/neonatal-fluid-mixer.html
           test -f about.html
+          test -f tests/calculation-regression.test.js
           echo "Required site files are present."
