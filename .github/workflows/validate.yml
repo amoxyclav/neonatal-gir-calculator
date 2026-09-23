@@ -47,7 +47,7 @@ jobs:
               raise SystemExit("manifest start_url is unexpected.")
           ET.parse("sitemap.xml")
 
-          jsonld_blocks = re.findall(r'<script type="application/ld\\+json">(.*?)</script>', html, flags=re.S|re.I)
+          jsonld_blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.S|re.I)
           if not jsonld_blocks:
               raise SystemExit("No JSON-LD structured data found.")
           for block in jsonld_blocks:
