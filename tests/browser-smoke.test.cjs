@@ -30,14 +30,28 @@ const { spawn } = require('child_process');
     const totalAfterFluid = await page.locator('#currentTotal').textContent();
     if(totalAfterFluid !== '10.0') throw new Error('Entering D5 volume did not update current fluid total; got '+totalAfterFluid);
 
-    await page.locator('[data-page="nutrition"]').first().click();
-    if(!(await page.locator('#nutrition').evaluate(el=>el.classList.contains('active')))) throw new Error('Nutrition navigation failed.');
+    async function assertOnlyPageVisible(id){
+      const visible=await page.locator('.page:visible').evaluateAll(els=>els.map(el=>el.id));
+      if(visible.length!==1 || visible[0]!==id) throw new Error('Expected only '+id+' to be visible; got '+visible.join(', '));
+    }
 
-    await page.locator('[data-page="mixer"]').first().click();
-    if(!(await page.locator('#mixer').evaluate(el=>el.classList.contains('active')))) throw new Error('Mixer navigation failed.');
+    await page.locator('[data-page="nutrition"]').first().click();
+    await assertOnlyPageVisible('nutrition');
+
+    await page.locator('[data-page="home"]').first().click();
+    await assertOnlyPageVisible('home');
 
     await page.locator('[data-page="gir"]').first().click();
-    if(!(await page.locator('#gir').evaluate(el=>el.classList.contains('active')))) throw new Error('GIR navigation failed.');
+    await assertOnlyPageVisible('gir');
+
+    await page.locator('[data-page="mixer"]').first().click();
+    await assertOnlyPageVisible('mixer');
+
+    await page.locator('[data-page="about"]').first().click();
+    await assertOnlyPageVisible('about');
+
+    await page.locator('[data-page="home"]').first().click();
+    await assertOnlyPageVisible('home');
 
     if(errors.length) throw new Error('Browser runtime error: '+errors.join(' | '));
     console.log('Browser smoke test passed: patient inputs, TFI calculation, fluid calculation and navigation are working.');
