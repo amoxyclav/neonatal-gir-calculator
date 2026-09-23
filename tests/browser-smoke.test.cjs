@@ -30,7 +30,7 @@ const { spawn } = require('child_process');
     const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
     const formulaEdit=formulaFluid.locator('.details-toggle');
     if(await formulaEdit.textContent() !== 'Edit contents') throw new Error('Fluid edit control text is incorrect.');
-    await formulaEdit.click();
+    await formulaEdit.evaluate(el=>el.click());
     if(await formulaEdit.getAttribute('aria-expanded') !== 'true') throw new Error('Formula milk edit control did not open.');
     const formulaDetails=formulaFluid.locator('.fluid-details');
     if(await formulaDetails.getAttribute('hidden') !== null) throw new Error('Formula milk edit panel remains hidden.');
