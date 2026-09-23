@@ -29,12 +29,19 @@ const { spawn } = require('child_process');
     await page.locator('#addFluid').selectOption('Formula milk');
     const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
     const formulaEdit=formulaFluid.locator('.details-toggle');
-    if(await formulaEdit.textContent() !== 'Edit contents') throw new Error('Fluid edit control text is incorrect.');
+    if(!(await formulaEdit.textContent()).includes('Edit contents')) throw new Error('Fluid edit control text is incorrect.');
+    if(await formulaEdit.locator('.details-chevron').count() !== 1) throw new Error('Editable fluid chevron is missing.');
     await formulaEdit.evaluate(el=>el.click());
     if(await formulaEdit.getAttribute('aria-expanded') !== 'true') throw new Error('Formula milk edit control did not open.');
     const formulaDetails=formulaFluid.locator('.fluid-details');
     if(await formulaDetails.getAttribute('hidden') !== null) throw new Error('Formula milk edit panel remains hidden.');
     if(!(await formulaDetails.textContent()).includes('Preset note: For this calculator, glucose is used for GIR')) throw new Error('Formula milk preset note is missing.');
+
+    const d5Fluid=page.locator('#fluidList .fluid').filter({hasText:'D5'}).first();
+    const d5Control=d5Fluid.locator('.details-toggle');
+    if((await d5Control.textContent()).trim() !== 'Show contents') throw new Error('D5 should use Show contents.');
+    if(await d5Control.locator('.details-chevron').count() !== 0) throw new Error('D5 should not show an edit chevron.');
+
     await page.locator('#addFluid').selectOption('D5');
     const fluidVolume = page.locator('#fluidList [data-field="volumeDisplay"]').first();
     await fluidVolume.click();
