@@ -58,20 +58,21 @@ const { spawn } = require('child_process');
     const d5Fluid=page.locator('#fluidList .fluid').filter({hasText:'D5'}).first();
     const d5Control=d5Fluid.locator('.details-toggle');
     if((await d5Control.textContent()).trim() !== 'Show contents') throw new Error('D5 should use Show contents.');
-    if(await d5Control.locator('.details-chevron').count() !== 0) throw new Error('D5 should not show an edit chevron.');
+    if(await d5Control.locator('.details-chevron').count() !== 1) throw new Error('D5 should show a downward chevron.');
     for (const fluidName of ['D5','D10','D25','D50']) {
       const fluid=page.locator('#fluidList .fluid').filter({hasText:fluidName}).first();
       const control=fluid.locator('.details-toggle');
       if((await control.textContent()).trim() !== 'Show contents') throw new Error(fluidName+' should use Show contents.');
-      if(await control.locator('.details-chevron').count() !== 0) throw new Error(fluidName+' should not show a downward arrow.');
+      if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
     }
     for (const fluidName of ['D5','D10','D25','D50','NS','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk']) {
       const fluid=page.locator('#fluidList .fluid').filter({hasText:fluidName}).first();
-      const volume=fluid.locator('.fluid-volume');
-      const live=fluid.locator('.fluid-live');
-      const vb=await volume.boundingBox();
-      const lb=await live.boundingBox();
-      if(!vb || !lb || vb.right > lb.left + 1) throw new Error(fluidName+' volume and live values overlap.');
+      const row=fluid.locator('.fluid-main-row');
+      const boxes=await row.locator(':scope > *').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
+      for(let i=1;i<boxes.length;i++){
+        if(boxes[i].left < boxes[i-1].right - 1) throw new Error(fluidName+' current-fluid controls overlap.');
+        if(boxes[i].left < boxes[0].left - 1 || boxes[i].right > (boxes[boxes.length-1].right + 1)) throw new Error(fluidName+' current-fluid row extends unexpectedly.');
+      }
     }
     const fluidVolume = page.locator('#fluidList [data-field="volumeDisplay"]').first();
     await fluidVolume.click();
