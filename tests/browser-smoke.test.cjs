@@ -26,7 +26,7 @@ const { spawn } = require('child_process');
     if(homeText.includes('Smaller patients.')) throw new Error('Removed hero slogan is still present.');
     if(homeText.includes('A PRACTICAL TOOL FOR NEONATAL CARE')) throw new Error('Removed homepage eyebrow is still present.');
     if(homeText.includes('Simple. Flexible. NICU-focused.')) throw new Error('Removed homepage tagline is still present.');
-    if(await page.locator('#home h1').count() !== 0) throw new Error('Duplicate Home page calculator title is still present.');
+    if(await page.locator('#home h1').count() !== 1) throw new Error('Premium Home page title should appear exactly once.');
 
     await page.locator('[data-page="gir"]').first().click();
     if(await page.locator('#gir .section').first().locator('h1').count() !== 0) throw new Error('Removed GIR page title is still present.');
