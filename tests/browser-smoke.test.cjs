@@ -167,6 +167,7 @@ const { spawn } = require('child_process');
 
     await page.locator('[data-page="about"]').first().click();
     await assertOnlyPageVisible('about');
+    if((await page.locator('#about').textContent()).includes('A calculation aid for bedside neonatal fluid, glucose and nutrition planning.')) throw new Error('Removed About page opening description is still present.');
 
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
