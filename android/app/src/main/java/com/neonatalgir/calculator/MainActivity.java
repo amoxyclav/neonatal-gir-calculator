@@ -96,8 +96,8 @@ public class MainActivity extends Activity {
                     return;
                 }
 
-                boolean onHome = value.contains(""home":true");
-                boolean onCalculator = value.contains(""calculator":true");
+                boolean onHome = value.contains("\"home\":true");
+                boolean onCalculator = value.contains("\"calculator\":true");
 
                 if (onHome) {
                     // Home is the root of the app. The next back action asks to exit.
