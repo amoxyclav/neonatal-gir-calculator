@@ -13,6 +13,7 @@ const { spawn } = require('child_process');
     await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
     if(await page.locator('.hero-art').count() !== 0) throw new Error('Removed hero artwork is still present.');
     if((await page.locator('#home').textContent()).includes('Smaller patients.')) throw new Error('Removed hero slogan is still present.');
+    if(await page.locator('#home h1').count() !== 0) throw new Error('Duplicate Home page calculator title is still present.');
 
     await page.locator('[data-page="gir"]').first().click();
     if(await page.locator('#gir h1').textContent() !== 'Neonatal GIR & Fluid Planner') throw new Error('GIR page did not load.');
