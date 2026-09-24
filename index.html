@@ -993,8 +993,6 @@ function predefinedFluidOptions(){
  const label=x=>x==='Calcium gluconate 10%'?'Calcium gluconate 10% (0.465 mEq/mL Ca)':x==='3% NaCl'?'3% NaCl (0.513 mEq/mL Na)':x==='KCl 15%'?'KCl 15% (2 mEq/mL K)':x;
  return '<option value="">+ Add predefined fluid…</option><optgroup label="Standard fluids">'+core.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup><optgroup label="Electrolytes / additives">'+electrolyte.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>';
 }
-$('addFluid').innerHTML=predefinedFluidOptions();
-$('addFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
 function setupFluidPicker(selectId){
  const trigger=document.querySelector('[data-fluid-picker="'+selectId+'"]');
  const dialog=$('fluidPickerDialog');
