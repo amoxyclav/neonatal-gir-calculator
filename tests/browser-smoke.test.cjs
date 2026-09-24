@@ -72,6 +72,8 @@ const { spawn } = require('child_process');
 
     await page.locator('[data-page="nutrition"]').first().click();
     await assertOnlyPageVisible('nutrition');
+    if (await page.locator('#nutrition .ey').count()) throw new Error('Nutrition page starting eyebrow text is still present');
+    if (await page.locator('#nutrition h2').filter({hasText:'Nutrition Calculator'}).count()) throw new Error('Nutrition Calculator starting heading is still present');
 
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
