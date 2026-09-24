@@ -146,6 +146,9 @@ const { spawn } = require('child_process');
     const nutritionSectionStyle=await page.locator('#nutrition>.section').first().evaluate(el=>getComputedStyle(el).borderTopLeftRadius);
     if(nutritionSectionStyle!=='22px') throw new Error('Nutrition page premium section styling is missing.');
     await assertOnlyPageVisible('nutrition');
+    const nutritionCurrentHelp=page.locator('#nutrition .section').filter({has:page.getByRole('heading',{name:'2. Current IV / Oral Fluids'})}).locator('p.help');
+    if((await nutritionCurrentHelp.textContent()).trim()!=='Enter the fluids already being administered or planned for.') throw new Error('Nutrition current-fluid helper text is incorrect.');
+    if(await page.locator('#nutrition .section').filter({has:page.getByRole('heading',{name:'2. Current IV / Oral Fluids'})}).locator('p.mut').count()) throw new Error('The old Nutrition current-fluid explanatory paragraph is still present.');
     if(await page.locator('#nutRemainingTfi').textContent() !== '-20.0') throw new Error('Nutrition Remaining TFI card did not preserve the negative balance.');
     if(await page.locator('#nutCurrentCa').textContent() !== '1493.27') throw new Error('Nutrition calcium card did not reflect the shared calcium calculation.');
 
