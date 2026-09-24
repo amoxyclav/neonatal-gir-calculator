@@ -111,6 +111,19 @@ const { spawn } = require('child_process');
     await assertOnlyPageVisible('nutrition');
     if(await page.locator('#nutRemainingTfi').textContent() !== '-20.0') throw new Error('Nutrition Remaining TFI card did not preserve the negative balance.');
     if(await page.locator('#nutCurrentCa').textContent() !== '1493.27') throw new Error('Nutrition calcium card did not reflect the shared calcium calculation.');
+
+    const ratioCard=page.locator('#nEPRatio').locator('xpath=..');
+    if(!(await ratioCard.evaluate(el=>el.classList.contains('ratio-low')))) throw new Error('Energy-protein ratio below 20 should use the red theme.');
+    if(await ratioCard.evaluate(el=>el.classList.contains('ratio-target'))) throw new Error('Energy-protein ratio below 20 should not use the green theme.');
+    const baseEnergy=Number((await page.locator('#nEnergy').textContent()).replace(/,/g,''));
+    const baseProtein=Number((await page.locator('#nProtein').textContent()).replace(/,/g,''));
+    await page.locator('#hmf').fill('1');
+    await page.locator('#hmfProtein').fill('100');
+    await page.locator('#hmfEnergy').fill(String(Math.max(0,25*(baseProtein+100)-baseEnergy)));
+    const ratio=Number(await page.locator('#nEPRatio').textContent());
+    if(ratio<20||ratio>30) throw new Error('Test setup failed to place energy-protein ratio in the 20–30 range; got '+ratio+'.');
+    if(!(await ratioCard.evaluate(el=>el.classList.contains('ratio-target')))) throw new Error('Energy-protein ratio from 20 to 30 should use the green theme.');
+    if(await ratioCard.evaluate(el=>el.classList.contains('ratio-low'))) throw new Error('Energy-protein ratio from 20 to 30 should not use the red theme.');
     if (await page.locator('#nutrition .ey').count()) throw new Error('Nutrition page starting eyebrow text is still present');
     if (await page.locator('#nutrition h2').filter({hasText:'Nutrition Calculator'}).count()) throw new Error('Nutrition Calculator starting heading is still present');
 
