@@ -22,6 +22,8 @@ const { spawn } = require('child_process');
     if(await page.locator('#gir .section').first().locator('h1').count() !== 0) throw new Error('Removed GIR page title is still present.');
     if((await page.locator('#gir').textContent()).includes('GIR CALCULATOR')) throw new Error('Removed GIR page eyebrow is still present.');
     if((await page.locator('#gir').textContent()).includes('Neonatal GIR & Fluid Planner')) throw new Error('Removed GIR page title text is still present.');
+    const currentFluidsHelp=page.locator('#currentSection .help');
+    if((await currentFluidsHelp.textContent()).trim() !== 'Enter the fluids already being administered or planned for.') throw new Error('Current fluids helper text is incorrect.');
     if(await page.locator('#gir .section').first().locator('p.mut').count()) throw new Error('Legacy GIR intro text is still present.');
 
     await page.locator('#w').fill('1.5');
