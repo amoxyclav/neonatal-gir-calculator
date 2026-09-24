@@ -235,6 +235,53 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
  .creator-showcase{margin:16px 14px 18px!important;padding:19px!important;border-radius:18px!important}
 }
 
+
+/* Premium clinical workspace styling for GIR, Nutrition and Mixer */
+#gir,#nutrition,#mixer{--tool-ink:#1b2d60;--tool-muted:#657895;--tool-line:#dce6f6;--tool-blue:#285fc2;--tool-soft:#f6f9ff}
+#gir>.section,#nutrition>.section,#mixer>.section{position:relative;overflow:hidden;padding:clamp(18px,2.4vw,30px);margin:18px 0;border:1px solid var(--tool-line);border-radius:22px;background:linear-gradient(155deg,#fff 0%,#fff 68%,#f9fbff 100%);box-shadow:0 9px 28px rgba(31,62,118,.045)}
+#gir>.section::before,#nutrition>.section::before,#mixer>.section::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8bb8f4 0%,#a9b9f4 52%,#c7b9f5 100%);opacity:.85}
+#gir .section>h2,#nutrition .section>h2,#mixer .section>h2{display:flex;align-items:center;gap:11px;margin:0 0 20px;color:var(--tool-ink);font-size:clamp(19px,2vw,24px);font-weight:850;line-height:1.25;letter-spacing:-.035em}
+#gir .section>h3,#nutrition .section>h3,#mixer .section>h3{color:var(--tool-ink);font-size:18px;font-weight:800;letter-spacing:-.02em}
+#gir label,#nutrition label,#mixer label{color:#31466f;font-size:12px;font-weight:750;letter-spacing:.005em}
+#gir input,#gir select,#nutrition input,#nutrition select,#mixer input,#mixer select{border-color:#d3def0;border-radius:11px;background-color:#fff;transition:border-color .16s,box-shadow .16s}
+#gir input:focus,#gir select:focus,#nutrition input:focus,#nutrition select:focus,#mixer input:focus,#mixer select:focus{outline:none;border-color:#82a9e8;box-shadow:0 0 0 3px rgba(77,126,207,.12)}
+#gir .status,#nutrition .status,#mixer .status{border-radius:12px;padding:12px 15px;font-size:12px;line-height:1.65}
+#gir .plan,#nutrition .plan{border:1px solid #dbe5f6;border-radius:17px;padding:clamp(14px,2vw,22px);background:linear-gradient(145deg,#f5f8ff,#fbfcff);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+#gir .stats,#nutrition .stats,#mixer .stats{gap:12px}
+#gir .stat,#nutrition .stat,#mixer .stat{border:1px solid #dbe6f7;border-radius:17px;padding:15px 17px;background:linear-gradient(145deg,#f0f5ff 0%,#f8faff 100%);box-shadow:0 4px 14px rgba(42,78,135,.035)}
+#gir .stat span,#nutrition .stat span,#mixer .stat span{color:#657b9d;font-size:10px;font-weight:800;letter-spacing:.09em}
+#gir .stat strong,#nutrition .stat strong,#mixer .stat strong{color:#1b3269;font-size:clamp(20px,2vw,25px);font-weight:850;letter-spacing:-.025em}
+#gir .stat small,#nutrition .stat small,#mixer .stat small{color:#7183a0;font-size:11px}
+#gir .fluid,#nutrition .fluid{border:1px solid #dce6f5;border-radius:15px;padding:13px 14px;margin:10px 0;background:#fff;box-shadow:0 3px 12px rgba(34,65,120,.025)}
+#gir .fluid:focus-within,#nutrition .fluid:focus-within{border-color:#a9c3ec;box-shadow:0 0 0 3px rgba(77,126,207,.07)}
+#gir .fluid-details,#nutrition .fluid-details{border-color:#e1e9f5}
+#nutrition .nutrition-extra{border:1px solid #dce6f5;border-radius:15px;padding:14px 16px;margin:11px 0;background:linear-gradient(145deg,#fff,#f9fbff);box-shadow:0 3px 12px rgba(34,65,120,.025)}
+#nutrition .nutrition-extra-details{border-color:#e1e9f5}
+#nutrition .table{border:1px solid #e0e8f5;border-radius:16px;padding:0;background:#fff}
+#nutrition table{font-size:12px}
+#nutrition th{background:#f2f6ff;color:#52698f;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+#nutrition td{color:#425675}
+#nutrition .table .stats{padding:0 14px 14px}
+#nutrition .table .stat:first-child{background:linear-gradient(135deg,#eaf2ff,#f2efff);border-color:#cfdcf8}
+#nutrition .table .stat:first-child strong{color:#234eaa}
+#mixer>.section>.section{margin:18px 0 0;padding:clamp(16px,2.2vw,25px);border:1px solid #e0e8f6;border-radius:19px;background:linear-gradient(145deg,#fbfcff,#f5f8ff);box-shadow:0 5px 18px rgba(31,62,118,.035)}
+#mixer>.section>.section:first-of-type{margin-top:0}
+#mixer .actions{gap:10px}
+#gir .actions,#nutrition .actions,#mixer .actions{margin-top:14px}
+#gir .btn,#nutrition .btn,#mixer .btn,#gir button,#nutrition button,#mixer button{transition:transform .15s,box-shadow .15s,border-color .15s}
+#gir .btn:hover,#nutrition .btn:hover,#mixer .btn:hover{transform:translateY(-1px);box-shadow:0 5px 13px rgba(35,77,145,.09)}
+@media(max-width:760px){
+ #gir>.section,#nutrition>.section,#mixer>.section{padding:17px 13px;margin:12px 0;border-radius:17px}
+ #gir .section>h2,#nutrition .section>h2,#mixer .section>h2{font-size:19px;margin-bottom:16px}
+ #gir .stats,#nutrition .stats,#mixer .stats{gap:8px}
+ #gir .stat,#nutrition .stat,#mixer .stat{padding:12px;border-radius:14px}
+ #gir .stat strong,#nutrition .stat strong,#mixer .stat strong{font-size:20px}
+ #gir .fluid,#nutrition .fluid{padding:11px;border-radius:13px}
+ #nutrition .nutrition-extra{padding:12px;border-radius:13px}
+ #mixer>.section>.section{padding:14px 11px;border-radius:15px}
+ #nutrition .table .stats{padding:0 9px 9px}
+}
+
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
