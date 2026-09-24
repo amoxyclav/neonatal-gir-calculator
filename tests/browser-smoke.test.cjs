@@ -39,6 +39,19 @@ const { spawn } = require('child_process');
     if(homeText.includes('Simple. Flexible. NICU-focused.')) throw new Error('Removed homepage tagline is still present.');
     if(await page.locator('#home h1').count() !== 1) throw new Error('Premium Home page title should appear exactly once.');
 
+    for (const guide of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html']) {
+      await page.goto('http://127.0.0.1:4173/'+guide,{waitUntil:'networkidle'});
+      const guideNav=page.locator('header .nav');
+      if(await guideNav.locator('.nav-home').count()!==1) throw new Error(guide+' should use the Home icon navigation.');
+      if(await guideNav.getByText('GIR',{exact:true}).count()!==1) throw new Error(guide+' should include GIR navigation.');
+      if(await guideNav.getByText('Nutrition',{exact:true}).count()!==1) throw new Error(guide+' should include Nutrition navigation.');
+      if(await guideNav.getByText('Mixer',{exact:true}).count()!==1) throw new Error(guide+' should include Mixer navigation.');
+      if(await guideNav.getByText('Calculator',{exact:true}).count()!==0) throw new Error(guide+' should not show the old Calculator navigation.');
+      if(await guideNav.getByText('About',{exact:true}).count()!==0) throw new Error(guide+' should not show an About navigation item.');
+    }
+    await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
+
+
     await page.locator('[data-page="gir"]').first().click();
     if(await page.locator('#gir>.section').count()!==3) throw new Error('GIR premium section layout is incomplete.');
     if(await page.locator('#gir .stat').count()<8) throw new Error('GIR premium summary cards are missing.');
@@ -79,6 +92,17 @@ const { spawn } = require('child_process');
     if(cardStyle.background !== 'rgba(0, 0, 0, 0)') throw new Error('Premium display cards should use the layered blue surface.');
     if(cardStyle.border !== 'rgb(219, 230, 247)') throw new Error('Premium display cards are missing the refined blue border.');
     if(cardStyle.radius !== '17px') throw new Error('Premium display cards do not have the intended rounded shape.');
+
+    const girPickerTrigger=page.locator('[data-fluid-picker="addFluid"]');
+    if(await girPickerTrigger.count()!==1) throw new Error('GIR predefined-fluid picker trigger is missing.');
+    if(await girPickerTrigger.isVisible()!==true) throw new Error('GIR predefined-fluid picker trigger should be visible.');
+    await girPickerTrigger.click();
+    if(await page.locator('#fluidPickerDialog[open]').count()!==1) throw new Error('Predefined-fluid picker dialog did not open.');
+    if(await page.locator('#fluidPickerDialog .fluid-picker-group').count()<2) throw new Error('Predefined-fluid picker groups are missing.');
+    if(await page.locator('#fluidPickerDialog .fluid-picker-option').count()<13) throw new Error('Predefined-fluid picker options are incomplete.');
+    await page.locator('#fluidPickerDialog .fluid-picker-option').filter({hasText:/^D5 /}).first().click();
+    if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==1) throw new Error('Selecting D5 from the custom picker did not add the fluid.');
+    await page.locator('#fluidList .fluid').filter({hasText:'D5'}).first().locator('.remove').click();
 
     await page.locator('#addFluid').selectOption('Formula milk');
     const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
