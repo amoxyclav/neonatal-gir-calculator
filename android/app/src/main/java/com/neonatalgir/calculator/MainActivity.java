@@ -105,7 +105,8 @@ public class MainActivity extends Activity {
                 } else if (onCalculator) {
                     // Never replay calculator hash history: one back action returns to Home.
                     webView.evaluateJavascript(
-                        "(function(){if(typeof activatePage==='function'){activatePage('home',true);}"
+                        "(function(){history.replaceState({page:'home'},'', '#home');"
+                            + "if(typeof activatePage==='function'){activatePage('home',true);}"
                             + "else{location.hash='#home';}})()",
                         null
                     );
