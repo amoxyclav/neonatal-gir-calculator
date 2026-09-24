@@ -125,11 +125,10 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .home-section-kicker{display:block;margin-bottom:8px;color:#6380b2;font-size:9px;font-weight:850;letter-spacing:.17em}
 .home-guides-section h2{margin:0;color:#1c3264;font-size:23px}
 .home-guides-section>p.mut{margin:0 0 18px;color:#71819c;font-size:13px;line-height:1.65}
-.home-guide-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.home-guides-section>p:last-child{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0}
-.home-guides-section>p:last-child a{display:flex;align-items:center;min-height:72px;padding:15px 17px;border:1px solid #e0e9f7;border-radius:14px;background:#fff;color:#315b9d;font-size:13px;font-weight:750;line-height:1.5;text-decoration:none;box-shadow:0 4px 13px rgba(38,72,125,.035);transition:transform .15s,border-color .15s,background .15s}
-.home-guides-section>p:last-child a:hover{transform:translateY(-2px);border-color:#b8ccef;background:#f7faff;text-decoration:none}
-.home-guides-section>p:last-child a::after{content:"↗";margin-left:auto;padding-left:8px;color:#7897c8;font-size:17px}
+.home-guide-links{display:grid;grid-template-columns:1fr;gap:10px;margin:0}
+.home-guide-links a{display:flex;align-items:center;min-height:66px;padding:15px 17px;border:1px solid #e0e9f7;border-radius:14px;background:#fff;color:#315b9d;font-size:13px;font-weight:750;line-height:1.5;text-decoration:none;box-shadow:0 4px 13px rgba(38,72,125,.035);transition:transform .15s,border-color .15s,background .15s}
+.home-guide-links a:hover{transform:translateY(-2px);border-color:#b8ccef;background:#f7faff;text-decoration:none}
+.home-guide-links a::after{content:"↗";margin-left:auto;padding-left:12px;color:#7897c8;font-size:17px;flex:0 0 auto}
 .home-community-premium{margin-top:22px!important;padding:0!important}
 .home-community-premium .home-feature{gap:18px;padding:22px 24px;border:1px solid #d5e3fa;border-radius:20px;background:radial-gradient(ellipse at 95% 0%,rgba(220,226,255,.8),transparent 46%),linear-gradient(115deg,#f2f7ff,#f1efff);box-shadow:0 10px 28px rgba(43,73,133,.055)}
 .home-community-premium .home-feature-icon{width:60px;height:60px;flex-basis:60px;border:1px solid #c3d8fb;border-radius:17px;background:linear-gradient(145deg,#e3efff,#e8e7ff);font-size:29px}
@@ -172,8 +171,8 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
  .safety-mark{flex-basis:28px;width:28px;height:28px}
  .home-guides-section{padding:20px 17px!important;border-radius:17px!important}
  .home-guides-section h2{font-size:20px}
- .home-guides-section>p:last-child{grid-template-columns:1fr;gap:8px}
- .home-guides-section>p:last-child a{min-height:unset;padding:13px 14px;font-size:12px}
+ .home-guide-links{grid-template-columns:1fr;gap:8px}
+ .home-guide-links a{min-height:unset;padding:13px 14px;font-size:12px}
  .home-community-premium .home-feature{padding:16px;gap:12px;border-radius:17px;flex-wrap:wrap}
  .home-community-premium .home-feature-icon{width:46px;height:46px;flex-basis:46px;font-size:23px}
  .home-community-premium .home-feature-copy{flex:1 1 calc(100% - 70px)}
@@ -229,7 +228,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <li><strong>Fluid Mixer:</strong> Use <em>Making a New Bag</em> when preparing a target concentration from two stock concentrations. Use <em>Adjusting an Existing Bag</em> when you already have a fluid and need to add a stock solution to reach a target concentration.</li>
 <li>Preset compositions can be expanded and edited where permitted. Blank quantity fields are treated as zero. Always verify the actual product label, concentration, compatibility, preparation method, line access and local NICU protocol before administration.</li>
 </ol>
-</div><div class="section home-guides-section" style="margin-top:18px"><div class="home-section-heading"><span class="home-section-kicker">REFERENCE LIBRARY</span><h2>Neonatal calculation guides</h2></div><p class="mut">Short reference pages explaining the calculation methods and how the tool handles GIR, nutrition and fluid mixing.</p><p><a href="guides/neonatal-gir-calculator.html">Neonatal GIR calculator: formula and examples</a><br><a href="guides/neonatal-fluid-nutrition-calculator.html">Neonatal fluid and nutrition calculator guide</a><br><a href="guides/neonatal-fluid-mixer.html">Neonatal fluid mixer guide</a></p></div><div class="home-community home-community-premium"><div class="home-feature"><div class="home-feature-icon">💡</div><div class="home-feature-copy"><h3>Suggest a Feature</h3><p>Request a calculator, guide, chart, or any feature.</p></div><a class="btn" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues/new" target="_blank" rel="noopener">Suggest</a></div><template id="saved-home-support-section"><div class="home-support"><h3>☕ Like the Neonatal GIR & Nutrition Calculator? Support the developer.</h3><p>This project is independently developed and maintained. If it has been useful in your clinical work or teaching, you can support its continued development and maintenance.</p><button class="btn" type="button" id="supportDeveloper">♥ Support the developer</button><div class="home-support-note">Support link will be added here.</div></div></template></div><div class="actions home-share-actions" style="margin-top:18px"><div class="home-share-copy"><strong>Share this clinical toolkit</strong><small>Keep these neonatal calculation tools within reach.</small></div><button class="btn primary" id="shareTool" type="button">↗ Share calculator</button><button class="btn" id="copyToolLink" type="button">▢ Copy link</button></div></div></section>
+</div><div class="section home-guides-section" style="margin-top:18px"><div class="home-section-heading"><span class="home-section-kicker">REFERENCE LIBRARY</span><h2>Neonatal calculation guides</h2></div><p class="mut">Short reference pages explaining the calculation methods and how the tool handles GIR, nutrition and fluid mixing.</p><div class="home-guide-links"><a href="guides/neonatal-gir-calculator.html">Neonatal GIR calculator: formula and examples</a><a href="guides/neonatal-fluid-nutrition-calculator.html">Neonatal fluid and nutrition calculator guide</a><a href="guides/neonatal-fluid-mixer.html">Neonatal fluid mixer guide</a></div></div><div class="home-community home-community-premium"><div class="home-feature"><div class="home-feature-icon">💡</div><div class="home-feature-copy"><h3>Suggest a Feature</h3><p>Request a calculator, guide, chart, or any feature.</p></div><a class="btn" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues/new" target="_blank" rel="noopener">Suggest</a></div><template id="saved-home-support-section"><div class="home-support"><h3>☕ Like the Neonatal GIR & Nutrition Calculator? Support the developer.</h3><p>This project is independently developed and maintained. If it has been useful in your clinical work or teaching, you can support its continued development and maintenance.</p><button class="btn" type="button" id="supportDeveloper">♥ Support the developer</button><div class="home-support-note">Support link will be added here.</div></div></template></div><div class="actions home-share-actions" style="margin-top:18px"><div class="home-share-copy"><strong>Share this clinical toolkit</strong><small>Keep these neonatal calculation tools within reach.</small></div><button class="btn primary" id="shareTool" type="button">↗ Share calculator</button><button class="btn" id="copyToolLink" type="button">▢ Copy link</button></div></div></section>
 
 <section id="gir" class="page">
 
@@ -892,9 +891,20 @@ if(shareTool)shareTool.onclick=async()=>{
 };
 const supportDeveloper=$('supportDeveloper');
 if(supportDeveloper)supportDeveloper.onclick=()=>{showShareStatus('Support link will be added soon.','warn')};
+async function copyCalculatorLink(){
+ const url=location.href;
+ try{
+  if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);return true}
+ }catch(e){}
+ const field=document.createElement('textarea');
+ field.value=url;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';field.style.pointerEvents='none';field.style.left='-9999px';
+ document.body.appendChild(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);
+ let copied=false;try{copied=document.execCommand('copy')}catch(e){copied=false}
+ field.remove();return copied;
+}
 if(copyToolLink)copyToolLink.onclick=async()=>{
- try{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}
- catch(e){showShareStatus('Copy is unavailable in this browser. You can copy the address from the browser bar.','warn')}
+ const copied=await copyCalculatorLink();
+ showShareStatus(copied?'Calculator link copied to clipboard.':'Copy is unavailable in this browser. You can copy the address from the browser bar.',copied?'ok':'warn');
 };
 if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  const open=quickGuide.style.display!=='none';
