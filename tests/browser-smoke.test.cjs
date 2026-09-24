@@ -106,7 +106,7 @@ const { spawn } = require('child_process');
     if(await girPickerTrigger.count()!==1) throw new Error('GIR predefined-fluid picker trigger is missing.');
     if(await girPickerTrigger.isVisible()!==true) throw new Error('GIR predefined-fluid picker trigger should be visible.');
     await girPickerTrigger.click();
-    if(await page.locator('#fluidPickerDialog[open]').count()!==1) throw new Error('Predefined-fluid picker dialog did not open.');
+    if(await page.locator('#fluidPickerDialog').isVisible()!==true) { const pickerState=await page.locator('#fluidPickerDialog').evaluate(el=>({hidden:el.hidden,attr:el.getAttribute('hidden'),display:getComputedStyle(el).display,width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})); throw new Error('Predefined-fluid picker dialog did not open: '+JSON.stringify(pickerState)+' runtime='+errors.join(' | ')); }
     if(await page.locator('#fluidPickerDialog .fluid-picker-group').count()<2) throw new Error('Predefined-fluid picker groups are missing.');
     if(await page.locator('#fluidPickerDialog .fluid-picker-option').count()<13) throw new Error('Predefined-fluid picker options are incomplete.');
     await page.locator('#fluidPickerDialog .fluid-picker-option').filter({hasText:/^D5/}).first().click();
