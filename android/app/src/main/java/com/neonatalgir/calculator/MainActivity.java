@@ -22,8 +22,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setStatusBarColor(Color.rgb(244, 247, 251));
-        getWindow().setNavigationBarColor(Color.rgb(244, 247, 251));
+        getWindow().setStatusBarColor(Color.WHITE);
+        getWindow().setNavigationBarColor(Color.WHITE);
         getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         );
@@ -32,6 +32,9 @@ public class MainActivity extends Activity {
         webView.setBackgroundColor(Color.rgb(244, 247, 251));
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setFocusable(true);
+        webView.setFocusableInTouchMode(true);
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -41,19 +44,21 @@ public class MainActivity extends Activity {
         settings.setSupportZoom(false);
         settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
+        settings.setTextZoom(100);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                // All bundled file:// pages remain inside the app.
-                return request.getUrl().toString().startsWith("http://")
-                    || request.getUrl().toString().startsWith("https://");
+                String url = request.getUrl().toString();
+                // Keep the bundled calculator and guide pages inside the app.
+                return url.startsWith("http://") || url.startsWith("https://");
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (resetHistoryAfterHomeLoad && url != null && url.startsWith("file:///android_asset/site/index.html")) {
+                if (resetHistoryAfterHomeLoad && url != null
+                        && url.startsWith("file:///android_asset/site/index.html")) {
                     resetHistoryAfterHomeLoad = false;
                     webView.clearHistory();
                 }
@@ -62,6 +67,7 @@ public class MainActivity extends Activity {
 
         webView.setWebChromeClient(new WebChromeClient());
         setContentView(webView);
+        webView.requestFocus(View.FOCUS_DOWN);
         webView.loadUrl(HOME_URL);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -85,25 +91,28 @@ public class MainActivity extends Activity {
                 + "return JSON.stringify({home:path.endsWith('/index.html')&&hash==='home',calculator:path.endsWith('/index.html'),hash:hash});"
                 + "})()",
             value -> {
-                if ("null".equals(value)) {
+                if (value == null || "null".equals(value)) {
                     showExitConfirmation();
                     return;
                 }
 
-                boolean onHome = value.contains("\"home\":true");
-                boolean onCalculator = value.contains("\"calculator\":true");
+                boolean onHome = value.contains(""home":true");
+                boolean onCalculator = value.contains(""calculator":true");
 
                 if (onHome) {
+                    // Home is the root of the app. The next back action asks to exit.
                     showExitConfirmation();
                 } else if (onCalculator) {
-                    // A calculator page goes directly back to Home; do not replay the hash history.
+                    // Never replay calculator hash history: one back action returns to Home.
                     webView.evaluateJavascript(
                         "(function(){if(typeof activatePage==='function'){activatePage('home',true);}"
                             + "else{location.hash='#home';}})()",
                         null
                     );
+                    webView.clearHistory();
                 } else {
-                    // Guide pages are separate local documents. Return to Home and clear the old document history.
+                    // Guide pages are separate bundled documents. One back action returns Home,
+                    // then the next back action asks whether to exit.
                     resetHistoryAfterHomeLoad = true;
                     webView.loadUrl(HOME_URL);
                 }
@@ -113,7 +122,6 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        // Compatibility path for Android versions below 13.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             handleBackNavigation();
         } else {
