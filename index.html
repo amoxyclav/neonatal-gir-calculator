@@ -313,6 +313,8 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
  #nutrition .nutrition-extra{padding:7px 8px}
  #nutrition .nutrition-extra-head{min-height:34px;gap:7px}
 }
+/* Premium cross-browser fluid chooser */
+.fluid-picker-trigger{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 15px;border:1px solid #b9cdf3;border-radius:12px;background:linear-gradient(135deg,#fff,#f3f7ff);color:#2454b7;font:inherit;font-size:14px;font-weight:750;box-shadow:0 4px 13px rgba(40,78,150,.06);cursor:pointer}.fluid-picker-trigger:after{content:"⌄";font-size:17px;color:#6484bd}.fluid-native-select{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important}.fluid-picker-dialog{width:min(560px,calc(100vw - 28px));max-width:560px;max-height:min(78dvh,720px);padding:0;border:1px solid #d9e5f7;border-radius:24px;background:#f8faff;color:#172554;box-shadow:0 28px 90px rgba(15,35,80,.28);overflow:hidden}.fluid-picker-dialog::backdrop{background:rgba(15,27,53,.52);backdrop-filter:blur(5px)}.fluid-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px;border-bottom:1px solid #e1e9f7;background:linear-gradient(120deg,#fff,#f1f5ff)}.fluid-picker-title{margin:0;font-size:19px;font-weight:850;letter-spacing:-.025em}.fluid-picker-subtitle{margin:5px 0 0;color:#71819b;font-size:12px}.fluid-picker-close{display:grid;place-items:center;width:38px;height:38px;border:1px solid #dce6f6;border-radius:12px;background:#fff;color:#4e6288;font-size:22px;cursor:pointer}.fluid-picker-list{padding:14px 16px 18px;overflow:auto;overscroll-behavior:contain;max-height:calc(min(78dvh,720px) - 90px)}.fluid-picker-group{margin:0 0 16px}.fluid-picker-group h3{margin:0 0 8px;padding:0 5px;color:#7787a4;font-size:10px;font-weight:850;letter-spacing:.15em;text-transform:uppercase}.fluid-picker-option{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:49px;margin:5px 0;padding:12px 15px;border:1px solid #e1e9f6;border-radius:13px;background:#fff;color:#243b6a;text-align:left;font:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}.fluid-picker-option:hover,.fluid-picker-option:focus-visible{border-color:#a9c3f2;background:#edf4ff;outline:none}.fluid-picker-option:active{transform:scale(.99)}.fluid-picker-option span:last-child{color:#7890bd;font-size:18px}@media(max-width:600px){.fluid-picker-dialog{position:fixed;inset:auto 0 0;margin:0;width:100%;max-width:none;max-height:82dvh;border-radius:24px 24px 0 0;border-bottom:0}.fluid-picker-head{padding:18px 18px 15px}.fluid-picker-list{max-height:calc(82dvh - 80px);padding:12px 14px calc(18px + env(safe-area-inset-bottom))}.fluid-picker-option{min-height:52px}.fluid-picker-trigger{width:100%;justify-content:space-between}}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -993,6 +995,35 @@ function predefinedFluidOptions(){
 }
 $('addFluid').innerHTML=predefinedFluidOptions();
 $('addFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
+function setupFluidPicker(selectId){
+ const select=$(selectId);if(!select)return;
+ select.classList.add('fluid-native-select');select.setAttribute('aria-hidden','true');select.tabIndex=-1;
+ const trigger=document.createElement('button');trigger.type='button';trigger.className='fluid-picker-trigger';trigger.textContent='＋ Add predefined fluid';trigger.setAttribute('aria-haspopup','dialog');
+ select.parentElement.insertBefore(trigger,select.nextSibling);
+ let dialog=document.getElementById('fluidPickerDialog');
+ if(!dialog){
+  dialog=document.createElement('dialog');dialog.id='fluidPickerDialog';dialog.className='fluid-picker-dialog';
+  dialog.innerHTML='<div class="fluid-picker-head"><div><h2 class="fluid-picker-title">Add a predefined fluid</h2><p class="fluid-picker-subtitle">Choose a fluid or electrolyte to add to the current list.</p></div><button type="button" class="fluid-picker-close" aria-label="Close fluid picker">×</button></div><div class="fluid-picker-list"></div>';
+  document.body.appendChild(dialog);
+  dialog.querySelector('.fluid-picker-close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ }
+ trigger.addEventListener('click',()=>{
+  const list=dialog.querySelector('.fluid-picker-list');list.replaceChildren();
+  [...select.querySelectorAll('optgroup')].forEach(group=>{
+   const section=document.createElement('section');section.className='fluid-picker-group';
+   const heading=document.createElement('h3');heading.textContent=group.label;section.appendChild(heading);
+   [...group.querySelectorAll('option')].forEach(option=>{
+    const item=document.createElement('button');item.type='button';item.className='fluid-picker-option';
+    const name=document.createElement('span');name.textContent=option.textContent;
+    const arrow=document.createElement('span');arrow.textContent='›';arrow.setAttribute('aria-hidden','true');
+    item.append(name,arrow);item.addEventListener('click',()=>{select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));dialog.close()});section.appendChild(item);
+   });list.appendChild(section);
+  });
+  if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+ });
+}
+setupFluidPicker('addFluid');
 $('addCustom').onclick=()=>{const name=prompt('Enter custom fluid name (e.g. 3% NaCl, KCl fluid):','Custom fluid');if(name&&name.trim())addFluid(name.trim(),true)};
 function updatePatientInputs(){const x=patient();if($('patientPermittedTfi'))$('patientPermittedTfi').textContent=fmt(x.w*x.tfi,1);recalc();}
 ['w','tfi','tg'].forEach(id=>{const el=$(id);el.addEventListener('input',updatePatientInputs);el.addEventListener('change',updatePatientInputs);});
@@ -1004,6 +1035,7 @@ $('resetPlan').onclick=()=>{$('planA').dataset.user='';clearPlanExact();$('planA
 document.querySelectorAll('[data-extra-details]').forEach(b=>b.onclick=()=>{const box=$('extra-details-'+b.dataset.extraDetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
 $('nutritionAddFluid').innerHTML=predefinedFluidOptions();
 $('nutritionAddFluid').onchange=e=>{const name=e.target.value;if(name){e.target.value='';e.target.selectedIndex=0;addFluid(name)}};
+setupFluidPicker('nutritionAddFluid');
 $('nutritionAddCustom').onclick=()=>{const name=prompt('Enter custom fluid name (e.g. 3% NaCl, KCl fluid):','Custom fluid');if(name&&name.trim())addFluid(name.trim(),true)};
 ['nutW','nutTfiInput','nutTg'].forEach(id=>$(id).addEventListener('input',()=>{
  const u=$('nutWeightUnit').value,raw=n(id),kg=id==='nutW'?(u==='g'?raw/1000:u==='lb'?raw*0.45359237:raw):null;
