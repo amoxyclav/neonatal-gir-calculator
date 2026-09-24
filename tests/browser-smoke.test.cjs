@@ -121,7 +121,7 @@ const { spawn } = require('child_process');
 
     const layoutFluids=['D5','D10','D25','D50','NS','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk'];
     for (const fluidName of layoutFluids) {
-      await page.locator('#addFluid').selectOption(fluidName);
+      await chooseFluid(fluidName);
     }
     const exactFluid=(name)=>page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+name+'$')})}).first();
 
