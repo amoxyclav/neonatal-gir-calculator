@@ -208,7 +208,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .about-info-card>p{margin:0;color:#687a97;font-size:13px;line-height:1.75}
 .about-card-foot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:20px;color:#66809f;font-size:11px;font-weight:750}
 .about-status-dot{width:7px;height:7px;border-radius:50%;background:#58a77d;box-shadow:0 0 0 4px #e7f5ed}
-.about-references-card{grid-row:span 2}
+.about-references-card{grid-row:auto}
 .about-reference-links{display:grid;width:100%;gap:8px;margin-top:18px}
 .about-reference-links a{display:flex;align-items:center;gap:12px;min-height:52px;padding:12px 14px;border:1px solid #e0e9f7;border-radius:12px;background:#fff;color:#315b9d;font-size:12px;font-weight:750;line-height:1.45;text-decoration:none;transition:background .15s,border-color .15s,transform .15s}
 .about-reference-links a:hover{transform:translateY(-1px);border-color:#b8ccef;background:#f6f9ff;text-decoration:none}
@@ -346,7 +346,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
   <div class="home-value-item"><span class="value-icon value-purple">◎</span><div><b>Clinically focused</b><small>Built around neonatal workflows</small></div></div>
   <div class="home-value-item"><span class="value-icon value-blue">◇</span><div><b>Flexible</b><small>Editable inputs and compositions</small></div></div>
   <div class="home-value-item"><span class="value-icon value-orange">＋</span><div><b>Growing toolkit</b><small>More useful tools can be added</small></div></div>
-</div><div class="note home-safety-note"><span class="safety-mark">i</span><span><strong>Clinical safety note</strong><br>Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</span></div>
+</div><div class="note home-safety-note"><span class="safety-mark">i</span><span><strong>Clinical safety note</strong><br>Calculation aid only—not a prescribing system or a validated medical device. Verify product identity, concentration, compatibility, line access and preparation; follow local NICU protocols and independently check every result before patient care.</span></div>
 <div class="mut home-version">Version 1.4 <span>•</span> Last updated September 2026</div><div class="home-quickstart-wrap"><button id="quickGuideToggle" class="link-button home-quickstart-button" type="button"><span class="quickstart-icon">↗</span> Quick Start Guide <span class="quickstart-hint">Step-by-step</span></button></div>
 <div id="quickGuide" class="section home-quick-guide" style="display:none;margin-top:12px">
 <h2>Quick Start Guide</h2>
@@ -597,6 +597,14 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
       <h2>Feedback that moves the toolkit forward</h2>
       <p>Found a calculation issue, product-data concern or usability problem? Share it through the project issue tracker so it can be reviewed and addressed.</p>
       <a class="about-feedback-link" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues" target="_blank" rel="noopener noreferrer">Report an issue or send feedback <span aria-hidden="true">↗</span></a>
+    </article>
+    <article class="about-info-card about-scope-card">
+      <div class="about-card-icon" aria-hidden="true">✦</div>
+      <div class="about-card-kicker">PURPOSE &amp; CLINICAL SCOPE</div>
+      <h2>Designed to support—not replace—clinical judgment</h2>
+      <p>The calculator brings together neonatal glucose infusion rate, total fluid intake, nutrition contribution and fluid-concentration mixing tools. It is designed to make commonly repeated calculations easier to perform and review while keeping the calculation process visible to the clinician.</p>
+      <p style="margin-top:12px">It does not replace clinical assessment, institutional protocols, pharmacy verification, product labels or professional judgment. Product compositions and institutional practices can vary; confirm the exact product and local guidance before use.</p>
+      <div class="about-card-foot"><span class="about-status-dot"></span> Educational and clinical calculation aid</div>
     </article>
   </div>
   <div class="creator-showcase" id="creator">
