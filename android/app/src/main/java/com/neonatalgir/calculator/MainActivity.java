@@ -6,7 +6,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
 import android.webkit.WebChromeClient;
-import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.graphics.Color;
 
@@ -30,12 +29,13 @@ public class MainActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
-                return !(url.startsWith("https://amoxyclav.github.io/neonatal-gir-calculator/"));
+                // Keep local calculator pages inside the app; open external links in the browser.
+                return url.startsWith("http://") || url.startsWith("https://");
             }
         });
         webView.setWebChromeClient(new WebChromeClient());
         setContentView(webView);
-        webView.loadUrl("https://amoxyclav.github.io/neonatal-gir-calculator/");
+        webView.loadUrl("file:///android_asset/site/index.html");
     }
 
     @Override
