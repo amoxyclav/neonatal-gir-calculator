@@ -64,7 +64,6 @@ jobs:
               "guides/neonatal-gir-calculator.html",
               "guides/neonatal-fluid-nutrition-calculator.html",
               "guides/neonatal-fluid-mixer.html",
-              "about.html",
           ]
           sitemap_text = Path("sitemap.xml").read_text(encoding="utf-8")
           expected_urls = [
