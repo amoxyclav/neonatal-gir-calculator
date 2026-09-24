@@ -345,7 +345,6 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="weight-control"><label>Weight</label><div class="weight-input-row"><input id="w" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Weight"><select id="weightUnit" aria-label="Weight unit"><option value="kg" selected>kg</option><option value="g">g</option><option value="lb">lb</option></select></div></div>
 <div class="tfi-control"><label>TFI (mL/kg/day)<input id="tfi" type="number" min="0" step="1" inputmode="numeric" placeholder="TFI"></label><div class="tfi-permitted">Permitted TFI: <strong id="patientPermittedTfi">0.0</strong> mL/day</div></div>
 <label>Target GIR (mg/kg/min)<input id="tg" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Target GIR"></label>
-</div><div id="patientStatus" class="status">Enter weight, TFI and target GIR.</div></div>
 
 <div class="section" id="currentSection"><h2>2. Current IV / Oral Fluids</h2><p class="help">Enter the fluids already being administered or planned for.</p>
 <div id="fluidList"></div>
@@ -705,8 +704,6 @@ function recalc(renderRows=true){
  $('currentCa').textContent=fmt(x.calcium,2);$('currentCaKg').textContent=fmt(x.p.w?x.calcium/x.p.w:0,2);
  $('currentNa').textContent=fmt(x.sodium,2);$('currentNaKg').textContent=fmt(x.p.w?x.sodium/x.p.w:0,2);
  $('currentK').textContent=fmt(x.potassium,2);$('currentKKg').textContent=fmt(x.p.w?x.potassium/x.p.w:0,2);
- $('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';
- $('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');
  $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI (by '+fmt(x.total-x.permitted,1)+' mL).':'Current fluid total is within permitted TFI.';
  $('fluidStatus').className='status '+(x.over?'bad':'ok');
  try{if(renderRows)renderFluids();}catch(err){console.error('Fluid rendering error',err);}
@@ -1051,7 +1048,6 @@ calculateMixerExistingBag();
     const weight=unit==='g'?raw/1000:unit==='lb'?raw*0.45359237:raw;
     const permitted=weight*num('tfi');
     const p=el('patientPermittedTfi');if(p)p.textContent=permitted.toFixed(1);
-    const status=el('patientStatus');if(status){status.textContent=weight>0&&num('tfi')>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';status.className='status '+(weight>0&&num('tfi')>0?'ok':'');}
     try{if(typeof recalc==='function')recalc(false)}catch(err){console.error('Safe patient recalculation error',err)}
   }
   ['w','tfi','tg'].forEach(id=>{const x=el(id);if(x){x.addEventListener('input',syncPatientCore);x.addEventListener('change',syncPatientCore)}});
