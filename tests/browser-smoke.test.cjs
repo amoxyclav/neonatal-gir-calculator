@@ -129,6 +129,7 @@ const { spawn } = require('child_process');
     if(ratio<20||ratio>30) throw new Error('Test setup failed to place energy-protein ratio in the 20–30 range; got '+ratio+'.');
     if(!(await ratioCard.evaluate(el=>el.classList.contains('ratio-target')))) throw new Error('Energy-protein ratio from 20 to 30 should use the green theme.');
     if(await ratioCard.evaluate(el=>el.classList.contains('ratio-low'))) throw new Error('Energy-protein ratio from 20 to 30 should not use the red theme.');
+    if(await hmfToggle.getAttribute('aria-expanded')==='true') await hmfToggle.click();
     if (await page.locator('#nutrition .ey').count()) throw new Error('Nutrition page starting eyebrow text is still present');
     if (await page.locator('#nutrition h2').filter({hasText:'Nutrition Calculator'}).count()) throw new Error('Nutrition Calculator starting heading is still present');
 
