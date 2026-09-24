@@ -55,12 +55,12 @@ const { spawn } = require('child_process');
     if(!(await formulaDetails.textContent()).includes('Preset note: For this calculator, glucose is used for GIR')) throw new Error('Formula milk preset note is missing.');
 
     await page.locator('#addFluid').selectOption('D5');
-    const d5Fluid=page.locator('#fluidList .fluid').filter({hasText:'D5'}).first();
+    const d5Fluid=page.locator('#fluidList .fluid').filter({hasText:/^D5(?:\s|$)/}).first();
     const d5Control=d5Fluid.locator('.details-toggle');
     if((await d5Control.textContent()).trim() !== 'Show contents') throw new Error('D5 should use Show contents.');
     if(await d5Control.locator('.details-chevron').count() !== 1) throw new Error('D5 should show a downward chevron.');
     for (const fluidName of ['D5','D10','D25','D50']) {
-      const fluid=page.locator('#fluidList .fluid').filter({hasText:fluidName}).first();
+      const fluid=page.locator('#fluidList .fluid').filter({hasText:new RegExp('^'+fluidName.replace(/[.*+?^${}()|[\\]\\]/g,'\\\\const fluid=page.locator('#fluidList .fluid').filter({hasText:fluidName}).first();')+'(?:\\s|$)')}).first();
       const control=fluid.locator('.details-toggle');
       if((await control.textContent()).trim() !== 'Show contents') throw new Error(fluidName+' should use Show contents.');
       if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
