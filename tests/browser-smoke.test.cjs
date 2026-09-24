@@ -26,6 +26,9 @@ const { spawn } = require('child_process');
     if((await currentFluidsHelp.textContent()).trim() !== 'Enter the fluids already being administered or planned for.') throw new Error('Current fluids helper text is incorrect.');
     if(await page.locator('#gir .section').first().locator('p.mut').count()) throw new Error('Legacy GIR intro text is still present.');
 
+    for (const [selector,placeholder] of [['#w','Weight'],['#tfi','TFI'],['#tg','Target GIR']]) {
+      if(await page.locator(selector).getAttribute('placeholder')!==placeholder) throw new Error(selector+' should display the '+placeholder+' placeholder on the GIR page.');
+    }
     await page.locator('#w').fill('1.5');
     await page.locator('#tfi').fill('100');
     await page.locator('#tg').fill('6');
