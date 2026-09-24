@@ -65,8 +65,7 @@ const { spawn } = require('child_process');
     const permitted = await page.locator('#patientPermittedTfi').textContent();
     if(permitted !== '150.0') throw new Error('Permitted TFI did not calculate to 150.0 mL/day; got '+permitted);
 
-    const status = await page.locator('#patientStatus').textContent();
-    if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
+    if(await page.locator('#patientStatus').count()!==0) throw new Error('Patient helper status text should be removed from the GIR page.');
 
     const displayCard=page.locator('#gir .stat').first();
     const cardStyle=await displayCard.evaluate(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,border:s.borderTopColor,radius:s.borderTopLeftRadius};});
