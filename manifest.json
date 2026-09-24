@@ -1,10 +1,17 @@
 {
-  "name":"Neonatal GIR & Nutrition Calculator",
-  "short_name":"Neonatal GIR",
-  "start_url":"/neonatal-gir-calculator/",
-  "display":"standalone",
-  "background_color":"#f4f7fb",
-  "theme_color":"#1d4ed8",
-  "description":"A calculation aid for neonatal glucose, fluid and nutrition planning.",
-  "icons":[{"src":"/neonatal-gir-calculator/favicon.svg","sizes":"any","type":"image/svg+xml"}]
+  "name": "Neonatal GIR & Nutrition Calculator",
+  "short_name": "Neonatal GIR",
+  "start_url": "/neonatal-gir-calculator/",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#1d4ed8",
+  "description": "A calculation aid for neonatal glucose, fluid and nutrition planning.",
+  "icons": [
+    {
+      "src": "/neonatal-gir-calculator/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
