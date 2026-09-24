@@ -135,6 +135,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .home-community-premium .home-feature-copy h3{margin-bottom:6px;color:#285aab;font-size:19px;font-weight:800}
 .home-community-premium .home-feature-copy p{color:#657995;font-size:13px;line-height:1.5}
 .home-community-premium .home-feature .btn{display:inline-flex;align-items:center;justify-content:center;min-width:110px;padding:11px 18px;border:1px solid #286ac2;border-radius:12px;background:linear-gradient(135deg,#2b76ce,#3159bf);color:#fff;font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 6px 15px rgba(42,98,190,.17)}
+.home-share-actions #copyToolLink{display:none!important}
 .home-share-actions{display:flex;align-items:center;gap:10px;margin:20px 0 0!important;padding:20px 22px;border:1px solid #e0e8f5;border-radius:18px;background:linear-gradient(115deg,#fff,#f8faff)}
 .home-share-copy{display:flex;flex:1;flex-direction:column;gap:5px;margin-right:12px}
 .home-share-copy strong{color:#243b6b;font-size:14px}
@@ -149,7 +150,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
  .hero-copy h1{font-size:clamp(27px,7.4vw,35px);line-height:1.06;margin:13px 0 10px;letter-spacing:-.04em}
  .hero-copy .hero-lead{font-size:14px;line-height:1.45;margin-bottom:5px}
  .hero-copy .hero-sub{font-size:12px;margin-top:5px}
- .home-hero-art{min-height:0;height:115px;margin-top:4px}
+ .home-hero-art{display:none}
  .hero-glass-card{width:210px;padding:12px 16px;border-radius:17px}
  .hero-card-top{font-size:7px}
  .hero-visual-symbol{width:36px;height:36px;margin:8px 0 7px;border-radius:12px;font-size:23px}
@@ -207,7 +208,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .about-info-card>p{margin:0;color:#687a97;font-size:13px;line-height:1.75}
 .about-card-foot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:20px;color:#66809f;font-size:11px;font-weight:750}
 .about-status-dot{width:7px;height:7px;border-radius:50%;background:#58a77d;box-shadow:0 0 0 4px #e7f5ed}
-.about-references-card{grid-row:span 2}
+.about-references-card{grid-row:auto}
 .about-reference-links{display:grid;width:100%;gap:8px;margin-top:18px}
 .about-reference-links a{display:flex;align-items:center;gap:12px;min-height:52px;padding:12px 14px;border:1px solid #e0e9f7;border-radius:12px;background:#fff;color:#315b9d;font-size:12px;font-weight:750;line-height:1.45;text-decoration:none;transition:background .15s,border-color .15s,transform .15s}
 .about-reference-links a:hover{transform:translateY(-1px);border-color:#b8ccef;background:#f6f9ff;text-decoration:none}
@@ -282,6 +283,36 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
  #nutrition .table .stats{padding:0 9px 9px}
 }
 
+
+/* Accessible, premium home-icon navigation and mobile-safe nutrition summary */
+.nav .nav-home{display:inline-flex;align-items:center;justify-content:center;width:42px;height:40px;padding:0;border:1px solid #dbe6f7;border-radius:12px;background:linear-gradient(145deg,#fff,#f3f7ff);color:#315da8;box-shadow:0 2px 7px rgba(39,72,130,.04)}
+.nav .nav-home svg{width:20px;height:20px;display:block}
+.nav .nav-home.active{background:linear-gradient(145deg,#e8f1ff,#dbe8ff);border-color:#bfd3f4;color:#2458b0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#nutrition .section.table{min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
+#nutrition .section.table table{width:max-content;min-width:100%;table-layout:auto}
+#nutrition .section.table th,#nutrition .section.table td{padding:11px 14px}
+@media(max-width:760px){#nutrition .section.table table{min-width:720px}#nutrition .section.table th,#nutrition .section.table td{padding:10px 12px}}
+
+/* Compact current-fluid and additional nutrition source rows (~40% shorter) */
+#gir .fluid,#nutrition .fluid{padding:8px 9px;margin:6px 0}
+#gir .fluid-main-row,#nutrition .fluid-main-row{min-height:34px;gap:7px}
+#gir .fluid input,#gir .fluid select,#nutrition .fluid input,#nutrition .fluid select{padding:7px 9px}
+#gir .fluid .details-toggle,#nutrition .fluid .details-toggle{height:30px;padding:0 8px}
+#gir .fluid-details,#nutrition .fluid-details{padding:8px 2px 1px;margin-top:7px}
+#nutrition .nutrition-extra{padding:8px 9px;margin:7px 0}
+#nutrition .nutrition-extra-head{min-height:34px;gap:8px}
+#nutrition .nutrition-extra-main{gap:8px}
+#nutrition .nutrition-extra-amount{gap:6px}
+#nutrition .nutrition-extra-amount input{padding:7px 9px}
+#nutrition .nutrition-extra-live{gap:10px}
+#nutrition .nutrition-extra-details{padding:8px 2px 1px;margin-top:7px}
+#nutrition .nutrition-extra .details-toggle{height:30px;padding:0 8px}
+@media(max-width:760px){
+ #gir .fluid,#nutrition .fluid{padding:7px 8px}
+ #nutrition .nutrition-extra{padding:7px 8px}
+ #nutrition .nutrition-extra-head{min-height:34px;gap:7px}
+}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -290,7 +321,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 ]}</script></head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
-<nav class="nav"><a class="active" href="#home" data-page="home">Home</a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a><a href="#about" data-page="about">About</a></nav></div></header>
+<nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a></nav></div></header>
 <main>
 <section id="home" class="page active"><div class="home-hero home-hero-premium">
   <div class="hero-copy">
@@ -315,7 +346,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
   <div class="home-value-item"><span class="value-icon value-purple">◎</span><div><b>Clinically focused</b><small>Built around neonatal workflows</small></div></div>
   <div class="home-value-item"><span class="value-icon value-blue">◇</span><div><b>Flexible</b><small>Editable inputs and compositions</small></div></div>
   <div class="home-value-item"><span class="value-icon value-orange">＋</span><div><b>Growing toolkit</b><small>More useful tools can be added</small></div></div>
-</div><div class="note home-safety-note"><span class="safety-mark">i</span><span><strong>Clinical safety note</strong><br>Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</span></div>
+</div><div class="note home-safety-note"><span class="safety-mark">i</span><span><strong>Clinical safety note</strong><br>Calculation aid only—not a prescribing system or a validated medical device. Verify product identity, concentration, compatibility, line access and preparation; follow local NICU protocols and independently check every result before patient care.</span></div>
 <div class="mut home-version">Version 1.4 <span>•</span> Last updated September 2026</div><div class="home-quickstart-wrap"><button id="quickGuideToggle" class="link-button home-quickstart-button" type="button"><span class="quickstart-icon">↗</span> Quick Start Guide <span class="quickstart-hint">Step-by-step</span></button></div>
 <div id="quickGuide" class="section home-quick-guide" style="display:none;margin-top:12px">
 <h2>Quick Start Guide</h2>
@@ -325,7 +356,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <li><strong>Fluid Mixer:</strong> Use <em>Making a New Bag</em> when preparing a target concentration from two stock concentrations. Use <em>Adjusting an Existing Bag</em> when you already have a fluid and need to add a stock solution to reach a target concentration.</li>
 <li>Preset compositions can be expanded and edited where permitted. Blank quantity fields are treated as zero. Always verify the actual product label, concentration, compatibility, preparation method, line access and local NICU protocol before administration.</li>
 </ol>
-</div><div class="section home-guides-section" style="margin-top:18px"><div class="home-section-heading"><span class="home-section-kicker">REFERENCE LIBRARY</span><h2>Neonatal calculation guides</h2></div><p class="mut">Short reference pages explaining the calculation methods and how the tool handles GIR, nutrition and fluid mixing.</p><div class="home-guide-links"><a href="guides/neonatal-gir-calculator.html">Neonatal GIR calculator: formula and examples</a><a href="guides/neonatal-fluid-nutrition-calculator.html">Neonatal fluid and nutrition calculator guide</a><a href="guides/neonatal-fluid-mixer.html">Neonatal fluid mixer guide</a></div></div><div class="home-community home-community-premium"><div class="home-feature"><div class="home-feature-icon">💡</div><div class="home-feature-copy"><h3>Suggest a Feature</h3><p>Request a calculator, guide, chart, or any feature.</p></div><a class="btn" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues/new" target="_blank" rel="noopener">Suggest</a></div><template id="saved-home-support-section"><div class="home-support"><h3>☕ Like the Neonatal GIR & Nutrition Calculator? Support the developer.</h3><p>This project is independently developed and maintained. If it has been useful in your clinical work or teaching, you can support its continued development and maintenance.</p><button class="btn" type="button" id="supportDeveloper">♥ Support the developer</button><div class="home-support-note">Support link will be added here.</div></div></template></div><div class="actions home-share-actions" style="margin-top:18px"><div class="home-share-copy"><strong>Share this clinical toolkit</strong><small>Keep these neonatal calculation tools within reach.</small></div><button class="btn primary" id="shareTool" type="button">↗ Share calculator</button><button class="btn" id="copyToolLink" type="button">▢ Copy link</button></div></div></section>
+</div><div class="home-community home-community-premium"><div class="home-feature"><div class="home-feature-icon">💡</div><div class="home-feature-copy"><h3>Suggest a Feature</h3><p>Request a calculator, guide, chart, or any feature.</p></div><a class="btn" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues/new" target="_blank" rel="noopener">Suggest</a></div><template id="saved-home-support-section"><div class="home-support"><h3>☕ Like the Neonatal GIR & Nutrition Calculator? Support the developer.</h3><p>This project is independently developed and maintained. If it has been useful in your clinical work or teaching, you can support its continued development and maintenance.</p><button class="btn" type="button" id="supportDeveloper">♥ Support the developer</button><div class="home-support-note">Support link will be added here.</div></div></template></div><div class="actions home-share-actions" style="margin-top:18px"><div class="home-share-copy"><strong>Share this clinical toolkit</strong><small>Keep these neonatal calculation tools within reach.</small></div><button class="btn primary" id="shareTool" type="button">↗ Share calculator</button></div></div></section>
 
 <section id="gir" class="page">
 
@@ -334,7 +365,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 <div class="weight-control"><label>Weight</label><div class="weight-input-row"><input id="w" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Weight"><select id="weightUnit" aria-label="Weight unit"><option value="kg" selected>kg</option><option value="g">g</option><option value="lb">lb</option></select></div></div>
 <div class="tfi-control"><label>TFI (mL/kg/day)<input id="tfi" type="number" min="0" step="1" inputmode="numeric" placeholder="TFI"></label><div class="tfi-permitted">Permitted TFI: <strong id="patientPermittedTfi">0.0</strong> mL/day</div></div>
 <label>Target GIR (mg/kg/min)<input id="tg" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Target GIR"></label>
-</div><div id="patientStatus" class="status">Enter weight, TFI and target GIR.</div></div>
+</div></div>
 
 <div class="section" id="currentSection"><h2>2. Current IV / Oral Fluids</h2><p class="help">Enter the fluids already being administered or planned for.</p>
 <div id="fluidList"></div>
@@ -567,6 +598,14 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
       <p>Found a calculation issue, product-data concern or usability problem? Share it through the project issue tracker so it can be reviewed and addressed.</p>
       <a class="about-feedback-link" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues" target="_blank" rel="noopener noreferrer">Report an issue or send feedback <span aria-hidden="true">↗</span></a>
     </article>
+    <article class="about-info-card about-scope-card">
+      <div class="about-card-icon" aria-hidden="true">✦</div>
+      <div class="about-card-kicker">PURPOSE &amp; CLINICAL SCOPE</div>
+      <h2>Designed to support—not replace—clinical judgment</h2>
+      <p>The calculator brings together neonatal glucose infusion rate, total fluid intake, nutrition contribution and fluid-concentration mixing tools. It is designed to make commonly repeated calculations easier to perform and review while keeping the calculation process visible to the clinician.</p>
+      <p style="margin-top:12px">It does not replace clinical assessment, institutional protocols, pharmacy verification, product labels or professional judgment. Product compositions and institutional practices can vary; confirm the exact product and local guidance before use.</p>
+      <div class="about-card-foot"><span class="about-status-dot"></span> Educational and clinical calculation aid</div>
+    </article>
   </div>
   <div class="creator-showcase" id="creator">
     <div class="creator-kicker"><span class="creator-mark" aria-hidden="true">✦</span> THE PERSON BEHIND THE PROJECT</div>
@@ -593,7 +632,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
   </div>
 </div>
 </section>
-</main><footer style="text-align:center;padding:24px;color:#64748b;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="guides/neonatal-gir-calculator.html">GIR Guide</a> • <a href="guides/neonatal-fluid-nutrition-calculator.html">Nutrition Guide</a> • <a href="about.html">About</a> • © 2026</footer>
+</main><footer style="text-align:center;padding:24px;color:#64748b;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="guides/neonatal-gir-calculator.html">GIR Guide</a> • <a href="guides/neonatal-fluid-nutrition-calculator.html">Nutrition Guide</a> • <a href="#about" data-page="about">About</a> • © 2026</footer>
 
 <script>
 const PRODUCTS={
@@ -694,8 +733,6 @@ function recalc(renderRows=true){
  $('currentCa').textContent=fmt(x.calcium,2);$('currentCaKg').textContent=fmt(x.p.w?x.calcium/x.p.w:0,2);
  $('currentNa').textContent=fmt(x.sodium,2);$('currentNaKg').textContent=fmt(x.p.w?x.sodium/x.p.w:0,2);
  $('currentK').textContent=fmt(x.potassium,2);$('currentKKg').textContent=fmt(x.p.w?x.potassium/x.p.w:0,2);
- $('patientStatus').textContent=x.p.w>0&&x.p.tfi>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';
- $('patientStatus').className='status '+(x.p.w>0&&x.p.tfi>0?'ok':'');
  $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI (by '+fmt(x.total-x.permitted,1)+' mL).':'Current fluid total is within permitted TFI.';
  $('fluidStatus').className='status '+(x.over?'bad':'ok');
  try{if(renderRows)renderFluids();}catch(err){console.error('Fluid rendering error',err);}
@@ -742,7 +779,7 @@ function getPlanVolumes(){
 function clearPlanExact(){
  delete $('planA').dataset.exactAv;delete $('planA').dataset.exactBv;$('planA').dataset.exactValid='';
 }
-function planConc(name){return PRODUCTS[name]?.conc||0}
+function planConc(name){return PRODUCTS[name]?.gir?PRODUCTS[name].conc:0}
 function solveSelectedPlan(changed){
  const x=currentTotals(),a=$('planA').value,b=$('planB').value,ca=planConc(a),cb=planConc(b),R=x.remaining,need=Math.max(x.p.target-x.gir,0);
  if(!x.p.w||R<0)return;
@@ -776,7 +813,7 @@ function autoSolveSelectedPlan(){
  const x=currentTotals(),a=$('planA').value,b=$('planB').value,R=x.remaining,W=x.p.w,T=x.p.target-x.gir;
  $('planA').dataset.user='1';
  if(!(W>0)||T<=0||!(R>0)){setPlan(a,b,0,0);recalc(false);return}
- const ca=PRODUCTS[a]?.conc||0,cb=PRODUCTS[b]?.conc||0;
+ const ca=planConc(a),cb=planConc(b);
  const req=T*W*144/R;
  let av=0,bv=0;
  if(Math.abs(ca-cb)<1e-9){
@@ -792,7 +829,7 @@ function updateTarget(x){
  const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;
  $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
  if(!$('planA').dataset.user){const a=autoPlan(x);setPlan(a.a,a.b,a.av,a.bv)}
- const a=$('planA').value,b=$('planB').value,{av,bv}=getPlanVolumes();const ach=x.gir+(av*(PLAN.includes(a)?PRODUCTS[a].conc:0)+bv*(PLAN.includes(b)?PRODUCTS[b].conc:0))*10/(x.p.w*1440||1);const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
+ const a=$('planA').value,b=$('planB').value,{av,bv}=getPlanVolumes();const ach=x.gir+calcFluid({name:a,volume:av,conc:planConc(a),custom:false},x.p.w).g+calcFluid({name:b,volume:bv,conc:planConc(b),custom:false},x.p.w).g;const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
  $('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
  let flags=[];const solveError=$('planA').dataset.solveError||'';if(solveError)flags.push(solveError);if(x.over)flags.push('Current fluids exceed permitted TFI.');if(x.gir>x.p.target+0.001)flags.push('Current GIR already exceeds target.');if(a===b&&pv>0)flags.push('Same fluid selected twice.');if(pv>Math.max(x.remaining,0)+0.001)flags.push('Plan exceeds remaining TFI.');if(req>50&&add>0)flags.push('Target not achievable within the configured central limit.');if(diff>0.01)flags.push('Preferred plan is below target.');else if(diff<-0.01)flags.push('Preferred plan is above target.');else if(pv>0&&unused<0.01)flags.push('Target achieved with TFI balanced.');else if(pv>0)flags.push('Target achieved but unused TFI remains.');
  if(add<=0)flags.push('No additional GIR is required.');
@@ -1005,29 +1042,14 @@ refreshMixerPresetOptions();
 function calculateMixerNewBag(){['mt','ma','mb','mv'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 function calculateMixerExistingBag(){['mt2','me2','mv2','ms2'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 const quickGuideToggle=$('quickGuideToggle'),quickGuide=$('quickGuide');
-const shareTool=$('shareTool'),copyToolLink=$('copyToolLink'),shareStatus=$('shareStatus');
+const shareTool=$('shareTool'),shareStatus=$('shareStatus');
 function showShareStatus(msg,kind='ok'){if(!shareStatus)return;shareStatus.textContent=msg;shareStatus.className='status '+kind;shareStatus.style.display='block';setTimeout(()=>shareStatus.style.display='none',3500)}
 if(shareTool)shareTool.onclick=async()=>{
  const data={title:'Neonatal GIR & Nutrition Calculator',text:'Neonatal GIR, fluid and nutrition calculation aid',url:location.href};
- try{if(navigator.share){await navigator.share(data);showShareStatus('Share sheet opened.')}else{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}}catch(e){if(e?.name!=='AbortError')showShareStatus('Could not open sharing. Use Copy link instead.','warn')}
+ try{if(navigator.share){await navigator.share(data);showShareStatus('Share sheet opened.')}else{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}}catch(e){if(e?.name!=='AbortError')showShareStatus('Could not open sharing. You can copy the address from the browser bar.','warn')}
 };
 const supportDeveloper=$('supportDeveloper');
 if(supportDeveloper)supportDeveloper.onclick=()=>{showShareStatus('Support link will be added soon.','warn')};
-async function copyCalculatorLink(){
- const url=location.href;
- try{
-  if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);return true}
- }catch(e){}
- const field=document.createElement('textarea');
- field.value=url;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';field.style.pointerEvents='none';field.style.left='-9999px';
- document.body.appendChild(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);
- let copied=false;try{copied=document.execCommand('copy')}catch(e){copied=false}
- field.remove();return copied;
-}
-if(copyToolLink)copyToolLink.onclick=async()=>{
- const copied=await copyCalculatorLink();
- showShareStatus(copied?'Calculator link copied to clipboard.':'Copy is unavailable in this browser. You can copy the address from the browser bar.',copied?'ok':'warn');
-};
 if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  const open=quickGuide.style.display!=='none';
  quickGuide.style.display=open?'none':'block';
@@ -1055,7 +1077,6 @@ calculateMixerExistingBag();
     const weight=unit==='g'?raw/1000:unit==='lb'?raw*0.45359237:raw;
     const permitted=weight*num('tfi');
     const p=el('patientPermittedTfi');if(p)p.textContent=permitted.toFixed(1);
-    const status=el('patientStatus');if(status){status.textContent=weight>0&&num('tfi')>0?'Patient inputs ready.':'Enter weight and TFI; target GIR may be 0 if intentionally selected.';status.className='status '+(weight>0&&num('tfi')>0?'ok':'');}
     try{if(typeof recalc==='function')recalc(false)}catch(err){console.error('Safe patient recalculation error',err)}
   }
   ['w','tfi','tg'].forEach(id=>{const x=el(id);if(x){x.addEventListener('input',syncPatientCore);x.addEventListener('change',syncPatientCore)}});

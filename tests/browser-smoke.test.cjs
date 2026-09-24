@@ -17,21 +17,16 @@ const { spawn } = require('child_process');
     if((await page.locator('#home .hero-copy h1').innerText()).replace(/\s+/g,' ').trim()!=='Neonatal GIR & Nutrition Calculator') throw new Error('Homepage hero title is incorrect.');
     if(await page.locator('#home .home-tool').count()!==3) throw new Error('Homepage should show all three primary tools.');
     if(await page.locator('#home .home-value-strip .home-value-item').count()!==4) throw new Error('Homepage benefits strip should contain four focus areas.');
-    if(await page.locator('#home .home-guides-section').count()!==1) throw new Error('Styled calculation guides section is missing.');
-    if(await page.locator('#home .home-guides-section .home-guide-links > a').count()!==3) throw new Error('Homepage should show all three calculation guide links.');
-    const guideLayout=await page.locator('#home .home-guide-links').evaluate(el=>({columns:getComputedStyle(el).gridTemplateColumns.split(' ').length,links:[...el.querySelectorAll(':scope > a')].map(a=>({top:a.getBoundingClientRect().top,bottom:a.getBoundingClientRect().bottom}))}));
-    if(guideLayout.columns!==1) throw new Error('Calculation guide cards should be arranged in one ordered column.');
-    for(let i=1;i<guideLayout.links.length;i++) if(guideLayout.links[i].top<guideLayout.links[i-1].bottom) throw new Error('Calculation guide cards overlap or are out of order.');
-    await page.locator('#copyToolLink').click();
-    await page.waitForFunction(()=>document.getElementById('shareStatus')?.textContent.includes('copied to clipboard')||document.getElementById('shareStatus')?.textContent.includes('Copy is unavailable'));
-    if(!(await page.locator('#shareStatus').textContent()).includes('copied to clipboard')) throw new Error('Copy link action failed to copy the calculator URL.');
+    if(await page.locator('#home .home-guides-section').count()!==0) throw new Error('Reference library should be removed from the homepage and kept in About.');
+    if(await page.locator('#copyToolLink').count()!==0) throw new Error('Copy link button should be removed from the homepage.');
+    if(await page.locator('#home #shareTool').count()!==1) throw new Error('Share calculator button should remain available.');
     if(await page.locator('#home .home-community-premium .home-feature').count()!==1) throw new Error('Premium feature suggestion card is missing.');
     if(await page.locator('#home .home-share-actions').count()!==1) throw new Error('Styled share actions are missing.');
     if(await page.locator('#home .home-safety-note').count()!==1) throw new Error('Styled clinical safety note is missing.');
     await page.setViewportSize({width:390,height:844});
-    const mobileHero=await page.locator('#home .home-hero-premium').evaluate(el=>({height:el.getBoundingClientRect().height,art:getComputedStyle(el.querySelector('.home-hero-art')).height}));
-    if(mobileHero.height>390) throw new Error('Mobile homepage hero is too tall: '+mobileHero.height+'px.');
-    if(mobileHero.art!=='115px') throw new Error('Mobile hero artwork should be compact; got '+mobileHero.art+'.');
+    const mobileHero=await page.locator('#home .home-hero-premium').evaluate(el=>({height:el.getBoundingClientRect().height,artDisplay:getComputedStyle(el.querySelector('.home-hero-art')).display}));
+    if(mobileHero.height>300) throw new Error('Mobile homepage hero is too tall after hiding artwork: '+mobileHero.height+'px.');
+    if(mobileHero.artDisplay!=='none') throw new Error('Mobile hero artwork should be hidden; got display '+mobileHero.artDisplay+'.');
     await page.setViewportSize({width:1280,height:720});
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support section should remain hidden.');
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support the developer section should be hidden from the homepage.');
@@ -66,8 +61,18 @@ const { spawn } = require('child_process');
     const permitted = await page.locator('#patientPermittedTfi').textContent();
     if(permitted !== '150.0') throw new Error('Permitted TFI did not calculate to 150.0 mL/day; got '+permitted);
 
-    const status = await page.locator('#patientStatus').textContent();
-    if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
+    // Regression: NS is saline (0% glucose), not 0.9% dextrose.
+    // At 1.5 kg / TFI 100 / target GIR 6, NS + D10 should reach 6.00 on both pages.
+    await page.locator('#planA').selectOption('NS');
+    const girPlanValue=await page.locator('#achievedGir').textContent();
+    const nutritionPlanValue=await page.locator('#nutPlanGir').textContent();
+    if(girPlanValue!=='6.00') throw new Error('GIR interactive plan should calculate 6.00 for NS + D10; got '+girPlanValue);
+    if(nutritionPlanValue!=='6.00') throw new Error('Nutrition interactive plan GIR should match GIR page at 6.00 for NS + D10; got '+nutritionPlanValue);
+    if(await page.locator('#planAV').inputValue()!=='20.4') throw new Error('NS plan volume should be 20.4 mL/day when NS contributes no glucose.');
+    if(await page.locator('#planBV').inputValue()!=='129.6') throw new Error('D10 plan volume should be 129.6 mL/day when NS contributes no glucose.');
+    await page.locator('#resetPlan').click();
+
+    if(await page.locator('#patientStatus').count()!==0) throw new Error('Patient helper status text should be removed from the GIR page.');
 
     const displayCard=page.locator('#gir .stat').first();
     const cardStyle=await displayCard.evaluate(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,border:s.borderTopColor,radius:s.borderTopLeftRadius};});
@@ -103,6 +108,8 @@ const { spawn } = require('child_process');
       if(!(await control.textContent()).includes('Show contents')) throw new Error(fluidName+' should use Show contents.');
       if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
     }
+    const compactFluidRow=await d5Fluid.locator('.fluid-main-row').evaluate(el=>getComputedStyle(el).minHeight);
+    if(compactFluidRow!=='34px') throw new Error('Current-fluid rows should use compact 34px minimum height; got '+compactFluidRow+'.');
     for (const fluidName of layoutFluids) {
       const fluid=exactFluid(fluidName);
       const row=fluid.locator('.fluid-main-row');
@@ -179,6 +186,8 @@ const { spawn } = require('child_process');
       {id:'mct',card:'#mctSource'}
     ]) {
       const card=page.locator(source.card);
+      const compactSourceHeight=await card.locator('.nutrition-extra-head').evaluate(el=>getComputedStyle(el).minHeight);
+      if(compactSourceHeight!=='34px') throw new Error(source.id+' nutrition source row should use compact 34px minimum height; got '+compactSourceHeight+'.');
       const control=card.locator('[data-extra-details="'+source.id+'"]');
       if(!(await control.textContent()).includes('Edit contents')) throw new Error(source.id+' additional nutrition source is missing the Edit contents label.');
       if(await control.locator('.details-chevron').count()!==1) throw new Error(source.id+' additional nutrition source is missing its downward chevron.');
@@ -194,6 +203,15 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
 
+    const guidePage=await browser.newPage();
+    for(const guidePath of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html']){
+      await guidePage.goto('http://127.0.0.1:4173/'+guidePath,{waitUntil:'networkidle'});
+      if(await guidePage.locator('header .nav a').filter({hasText:/^About$/}).count()!==0) throw new Error('Guide page should not show a duplicate About navigation link: '+guidePath);
+    }
+    await guidePage.goto('http://127.0.0.1:4173/about.html',{waitUntil:'networkidle'});
+    await guidePage.waitForURL('**/#about',{timeout:5000});
+    await guidePage.close();
+
     await page.locator('[data-page="gir"]').first().click();
     await assertOnlyPageVisible('gir');
 
@@ -207,7 +225,8 @@ const { spawn } = require('child_process');
     await assertOnlyPageVisible('about');
     if((await page.locator('#about').textContent()).includes('A calculation aid for bedside neonatal fluid, glucose and nutrition planning.')) throw new Error('Removed About page opening description is still present.');
     if(await page.locator('#about .about-hero').count()!==1) throw new Error('Premium About hero is missing.');
-    if(await page.locator('#about .about-info-card').count()!==3) throw new Error('About page should contain three styled information cards.');
+    if(await page.locator('#about .about-info-card').count()!==4) throw new Error('Unified About page should contain four styled information cards.');
+    if(!(await page.locator('#about .about-scope-card').textContent()).includes('not replace')) throw new Error('Unified About clinical scope and safety details are missing.');
     if(await page.locator('#about .about-reference-links a').count()!==3) throw new Error('About page calculation reference links are incomplete.');
     if(await page.locator('#about .about-feedback-link').count()!==1) throw new Error('About page feedback action is missing.');
     const aboutGrid=await page.locator('#about .about-info-grid').evaluate(el=>({columns:getComputedStyle(el).gridTemplateColumns.split(' ').length,rects:[...el.querySelectorAll('.about-info-card')].map(x=>{const r=x.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom}})}));
