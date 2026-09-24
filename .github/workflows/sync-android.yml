@@ -13,6 +13,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   sync:
@@ -58,3 +59,9 @@ jobs:
           fi
           git commit -m "Sync validated website to Android app"
           git push origin HEAD:android-apk-build
+
+      - name: Trigger Android APK build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/workflows/android-apk.yml/dispatches" -f ref=android-apk-build
