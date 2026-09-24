@@ -36,6 +36,12 @@ const { spawn } = require('child_process');
     const status = await page.locator('#patientStatus').textContent();
     if(!status.includes('Patient inputs ready')) throw new Error('Patient status did not update after patient inputs.');
 
+    const displayCard=page.locator('#gir .stat').first();
+    const cardStyle=await displayCard.evaluate(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,border:s.borderTopColor,radius:s.borderTopLeftRadius};});
+    if(cardStyle.background !== 'rgb(238, 244, 255)') throw new Error('Display cards are not using the blue theme background.');
+    if(cardStyle.border !== 'rgb(216, 228, 245)') throw new Error('Display cards are not using the blue theme border.');
+    if(cardStyle.radius !== '28px') throw new Error('Display cards do not have the intended rounded shape.');
+
     await page.locator('#addFluid').selectOption('Formula milk');
     const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
     const formulaEdit=formulaFluid.locator('.details-toggle');
