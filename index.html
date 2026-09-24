@@ -293,6 +293,26 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 #nutrition .section.table table{width:max-content;min-width:100%;table-layout:auto}
 #nutrition .section.table th,#nutrition .section.table td{padding:11px 14px}
 @media(max-width:760px){#nutrition .section.table table{min-width:720px}#nutrition .section.table th,#nutrition .section.table td{padding:10px 12px}}
+
+/* Compact current-fluid and additional nutrition source rows (~40% shorter) */
+#gir .fluid,#nutrition .fluid{padding:8px 9px;margin:6px 0}
+#gir .fluid-main-row,#nutrition .fluid-main-row{min-height:34px;gap:7px}
+#gir .fluid input,#gir .fluid select,#nutrition .fluid input,#nutrition .fluid select{padding:7px 9px}
+#gir .fluid .details-toggle,#nutrition .fluid .details-toggle{height:30px;padding:0 8px}
+#gir .fluid-details,#nutrition .fluid-details{padding:8px 2px 1px;margin-top:7px}
+#nutrition .nutrition-extra{padding:8px 9px;margin:7px 0}
+#nutrition .nutrition-extra-head{min-height:34px;gap:8px}
+#nutrition .nutrition-extra-main{gap:8px}
+#nutrition .nutrition-extra-amount{gap:6px}
+#nutrition .nutrition-extra-amount input{padding:7px 9px}
+#nutrition .nutrition-extra-live{gap:10px}
+#nutrition .nutrition-extra-details{padding:8px 2px 1px;margin-top:7px}
+#nutrition .nutrition-extra .details-toggle{height:30px;padding:0 8px}
+@media(max-width:760px){
+ #gir .fluid,#nutrition .fluid{padding:7px 8px}
+ #nutrition .nutrition-extra{padding:7px 8px}
+ #nutrition .nutrition-extra-head{min-height:34px;gap:7px}
+}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
