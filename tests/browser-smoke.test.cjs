@@ -12,7 +12,10 @@ const { spawn } = require('child_process');
     page.on('pageerror', e => errors.push(String(e)));
     await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
     if(await page.locator('.hero-art').count() !== 0) throw new Error('Removed hero artwork is still present.');
-    if((await page.locator('#home').textContent()).includes('Smaller patients.')) throw new Error('Removed hero slogan is still present.');
+    const homeText=await page.locator('#home').textContent();
+    if(homeText.includes('Smaller patients.')) throw new Error('Removed hero slogan is still present.');
+    if(homeText.includes('A PRACTICAL TOOL FOR NEONATAL CARE')) throw new Error('Removed homepage eyebrow is still present.');
+    if(homeText.includes('Simple. Flexible. NICU-focused.')) throw new Error('Removed homepage tagline is still present.');
     if(await page.locator('#home h1').count() !== 0) throw new Error('Duplicate Home page calculator title is still present.');
 
     await page.locator('[data-page="gir"]').first().click();
