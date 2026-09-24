@@ -13,6 +13,8 @@ const { spawn } = require('child_process');
     await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
     if(await page.locator('.hero-art').count() !== 0) throw new Error('Removed hero artwork is still present.');
     const homeText=await page.locator('#home').textContent();
+    if(!homeText.includes('Calculate fluids, GIR and Energy-Protein Ratio for neonates with ease.')) throw new Error('Updated homepage description is missing.');
+    if(homeText.includes('Calculate fluids, GIR, nutrition and electrolytes for neonates with ease.')) throw new Error('Old homepage description is still present.');
     if(homeText.includes('Smaller patients.')) throw new Error('Removed hero slogan is still present.');
     if(homeText.includes('A PRACTICAL TOOL FOR NEONATAL CARE')) throw new Error('Removed homepage eyebrow is still present.');
     if(homeText.includes('Simple. Flexible. NICU-focused.')) throw new Error('Removed homepage tagline is still present.');
