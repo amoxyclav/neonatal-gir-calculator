@@ -100,7 +100,7 @@ const { spawn } = require('child_process');
     if(await page.locator('#fluidPickerDialog[open]').count()!==1) throw new Error('Predefined-fluid picker dialog did not open.');
     if(await page.locator('#fluidPickerDialog .fluid-picker-group').count()<2) throw new Error('Predefined-fluid picker groups are missing.');
     if(await page.locator('#fluidPickerDialog .fluid-picker-option').count()<13) throw new Error('Predefined-fluid picker options are incomplete.');
-    await page.locator('#fluidPickerDialog .fluid-picker-option').filter({hasText:/^D5$/}).first().click();
+    await page.locator('#fluidPickerDialog .fluid-picker-option').filter({hasText:/^D5/}).first().click();
     if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==1) throw new Error('Selecting D5 from the custom picker did not add the fluid.');
     await page.locator('#fluidList .fluid').filter({hasText:'D5'}).first().locator('.remove').click();
 
