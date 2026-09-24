@@ -1008,7 +1008,7 @@ function setupFluidPicker(selectId){
    const heading=document.createElement('h3');heading.textContent=group.label;section.appendChild(heading);
    [...group.querySelectorAll('option')].forEach(option=>{
     const item=document.createElement('button');item.type='button';item.className='fluid-picker-option';
-    const name=document.createElement('span');name.textContent=option.value==='D5'?'D5 — 5% dextrose':option.value==='D10'?'D10 — 10% dextrose':option.value==='D25'?'D25 — 25% dextrose':option.value==='D50'?'D50 — 50% dextrose':option.value==='NS'?'NS — Normal saline':option.textContent;
+    const name=document.createElement('span');name.textContent=option.textContent;
     const arrow=document.createElement('span');arrow.textContent='›';arrow.setAttribute('aria-hidden','true');
     item.append(name,arrow);
     item.addEventListener('click',()=>{
