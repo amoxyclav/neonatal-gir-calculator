@@ -14,7 +14,7 @@ const { spawn } = require('child_process');
     if(await page.locator('.hero-art').count() !== 0) throw new Error('Removed hero artwork is still present.');
     const homeText=await page.locator('#home').textContent();
     if(await page.locator('#home .home-hero-premium').count()!==1) throw new Error('Premium homepage hero is missing.');
-    if((await page.locator('#home .hero-copy h1').textContent()).replace(/\s+/g,' ').trim()!=='Neonatal GIR & Nutrition Calculator') throw new Error('Homepage hero title is incorrect.');
+    if((await page.locator('#home .hero-copy h1').innerText()).replace(/\s+/g,' ').trim()!=='Neonatal GIR & Nutrition Calculator') throw new Error('Homepage hero title is incorrect.');
     if(await page.locator('#home .home-tool').count()!==3) throw new Error('Homepage should show all three primary tools.');
     if(await page.locator('#home .home-value-strip .home-value-item').count()!==4) throw new Error('Homepage benefits strip should contain four focus areas.');
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support section should remain hidden.');
