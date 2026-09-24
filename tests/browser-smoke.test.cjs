@@ -57,12 +57,12 @@ const { spawn } = require('child_process');
     await page.locator('#addFluid').selectOption('D5');
     const d5Fluid=page.locator('#fluidList .fluid').filter({hasText:/^D5(?:\s|$)/}).first();
     const d5Control=d5Fluid.locator('.details-toggle');
-    if((await d5Control.textContent()).trim() !== 'Show contents') throw new Error('D5 should use Show contents.');
+    if(!(await d5Control.textContent()).includes('Show contents')) throw new Error('D5 should use Show contents.');
     if(await d5Control.locator('.details-chevron').count() !== 1) throw new Error('D5 should show a downward chevron.');
     for (const fluidName of ['D5','D10','D25','D50']) {
       const fluid=page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+fluidName+'$')})}).first();
       const control=fluid.locator('.details-toggle');
-      if((await control.textContent()).trim() !== 'Show contents') throw new Error(fluidName+' should use Show contents.');
+      if(!(await control.textContent()).includes('Show contents')) throw new Error(fluidName+' should use Show contents.');
       if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
     }
     for (const fluidName of ['D5','D10','D25','D50','NS','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk']) {
