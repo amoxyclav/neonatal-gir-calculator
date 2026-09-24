@@ -19,7 +19,9 @@ const { spawn } = require('child_process');
     if(await page.locator('#home h1').count() !== 0) throw new Error('Duplicate Home page calculator title is still present.');
 
     await page.locator('[data-page="gir"]').first().click();
-    if(await page.locator('#gir h1').textContent() !== 'Neonatal GIR & Fluid Planner') throw new Error('GIR page did not load.');
+    if(await page.locator('#gir .section').first().locator('h1').count() !== 0) throw new Error('Removed GIR page title is still present.');
+    if((await page.locator('#gir').textContent()).includes('GIR CALCULATOR')) throw new Error('Removed GIR page eyebrow is still present.');
+    if((await page.locator('#gir').textContent()).includes('Neonatal GIR & Fluid Planner')) throw new Error('Removed GIR page title text is still present.');
     if(await page.locator('#gir .section').first().locator('p.mut').count()) throw new Error('Legacy GIR intro text is still present.');
 
     await page.locator('#w').fill('1.5');
