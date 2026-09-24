@@ -115,6 +115,7 @@ const { spawn } = require('child_process');
     const ratioCard=page.locator('#nEPRatio').locator('xpath=..');
     const baseEnergy=Number((await page.locator('#nEnergy').textContent()).replace(/,/g,''));
     const baseProtein=Number((await page.locator('#nProtein').textContent()).replace(/,/g,''));
+    await page.locator('#hmfSource [data-extra-details="hmf"]').click();
     await page.locator('#hmf').fill('1');
     await page.locator('#hmfProtein').fill('10000');
     await page.locator('#hmfEnergy').fill('0');
