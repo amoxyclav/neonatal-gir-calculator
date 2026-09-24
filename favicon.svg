@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#1d4ed8"/>
-  <path d="M17 18h30v8H38v20h-12V26H17z" fill="#fff"/>
-  <circle cx="47" cy="45" r="5" fill="#fff"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Neonatal GIR blue droplet app icon"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eaf3ff"/><stop offset="1" stop-color="#d9e4ff"/></linearGradient><linearGradient id="drop" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#4b8cf4"/><stop offset="1" stop-color="#244fc0"/></linearGradient></defs><rect width="128" height="128" rx="30" fill="url(#bg)"/><path d="M64 15C53 34 31 57 31 79a33 33 0 0 0 66 0C97 57 75 34 64 15Z" fill="url(#drop)" stroke="#1f4eaa" stroke-width="2.5"/><path d="M47 78c0-10 7-21 14-30" fill="none" stroke="#cfe4ff" stroke-width="7" stroke-linecap="round" opacity=".82"/><path d="M47 92c6 8 17 12 28 7" fill="none" stroke="#b8d4ff" stroke-width="4" stroke-linecap="round" opacity=".9"/></svg>
