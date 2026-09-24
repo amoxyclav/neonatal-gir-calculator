@@ -216,6 +216,7 @@ const { spawn } = require('child_process');
       if(responsive.split(' ').length!==1) throw new Error(guidePath+' contents layout does not stack on mobile.');
       await page.setViewportSize({width:1280,height:720});
     }
+    await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
 
     await page.locator('[data-page="gir"]').first().click();
     await assertOnlyPageVisible('gir');
