@@ -85,6 +85,23 @@ const { spawn } = require('child_process');
     const totalAfterFluid = await page.locator('#currentTotal').textContent();
     if(totalAfterFluid !== '10.0') throw new Error('Entering D5 volume did not update current fluid total; got '+totalAfterFluid);
 
+    await page.locator('#addFluid').selectOption('Calcium gluconate 10%');
+    const calciumFluid=page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:/^Calcium gluconate 10%$/})}).first();
+    await calciumFluid.locator('.details-toggle').click();
+    const calciumSalt=calciumFluid.locator('[data-field="conc"]');
+    const elementalCalcium=calciumFluid.locator('[data-field="calcium"]');
+    if(await calciumSalt.inputValue() !== '100') throw new Error('10% calcium gluconate salt concentration should default to 100 mg/mL.');
+    if(await elementalCalcium.inputValue() !== '0.465') throw new Error('10% calcium gluconate elemental calcium should default to 0.465 mEq/mL.');
+    if(!(await calciumFluid.locator('.fluid-details').textContent()).includes('approximately 9.3 mg/mL elemental calcium')) throw new Error('Calcium gluconate composition clarification is missing.');
+    const calciumVolume=calciumFluid.locator('[data-field="volumeDisplay"]');
+    await calciumVolume.fill('15');
+    const caMg15=await calciumFluid.locator('[data-row-ca-mg]').textContent();
+    const caKg15=await calciumFluid.locator('[data-row-ca-mgkg]').textContent();
+    if(caMg15 !== '139.50' || caKg15 !== '93.00') throw new Error('Calcium elemental-mg calculations are inconsistent with 9.3 mg/mL: '+caMg15+' mg/day, '+caKg15+' mg/kg/day.');
+    await calciumVolume.fill('160');
+    if(await page.locator('#remaining').textContent() !== '-20.0') throw new Error('Remaining TFI should show -20.0 mL/day when current fluid exceeds permitted TFI.');
+    if(await page.locator('#currentCa').textContent() !== '1488.00') throw new Error('Calcium total card did not update from the calcium gluconate preset.');
+
     async function assertOnlyPageVisible(id){
       const visible=await page.locator('.page:visible').evaluateAll(els=>els.map(el=>el.id));
       if(visible.length!==1 || visible[0]!==id) throw new Error('Expected only '+id+' to be visible; got '+visible.join(', '));
@@ -92,6 +109,8 @@ const { spawn } = require('child_process');
 
     await page.locator('[data-page="nutrition"]').first().click();
     await assertOnlyPageVisible('nutrition');
+    if(await page.locator('#nutRemainingTfi').textContent() !== '-20.0') throw new Error('Nutrition Remaining TFI card did not preserve the negative balance.');
+    if(await page.locator('#nutCurrentCa').textContent() !== '1488.00') throw new Error('Nutrition calcium card did not reflect the shared calcium calculation.');
     if (await page.locator('#nutrition .ey').count()) throw new Error('Nutrition page starting eyebrow text is still present');
     if (await page.locator('#nutrition h2').filter({hasText:'Nutrition Calculator'}).count()) throw new Error('Nutrition Calculator starting heading is still present');
 
