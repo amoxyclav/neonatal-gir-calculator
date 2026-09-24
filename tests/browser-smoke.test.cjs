@@ -101,6 +101,8 @@ const { spawn } = require('child_process');
       if(!(await control.textContent()).includes('Show contents')) throw new Error(fluidName+' should use Show contents.');
       if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
     }
+    const compactFluidRow=await d5Fluid.locator('.fluid-main-row').evaluate(el=>getComputedStyle(el).minHeight);
+    if(compactFluidRow!=='34px') throw new Error('Current-fluid rows should use compact 34px minimum height; got '+compactFluidRow+'.');
     for (const fluidName of layoutFluids) {
       const fluid=exactFluid(fluidName);
       const row=fluid.locator('.fluid-main-row');
@@ -177,6 +179,8 @@ const { spawn } = require('child_process');
       {id:'mct',card:'#mctSource'}
     ]) {
       const card=page.locator(source.card);
+      const compactSourceHeight=await card.locator('.nutrition-extra-head').evaluate(el=>getComputedStyle(el).minHeight);
+      if(compactSourceHeight!=='34px') throw new Error(source.id+' nutrition source row should use compact 34px minimum height; got '+compactSourceHeight+'.');
       const control=card.locator('[data-extra-details="'+source.id+'"]');
       if(!(await control.textContent()).includes('Edit contents')) throw new Error(source.id+' additional nutrition source is missing the Edit contents label.');
       if(await control.locator('.details-chevron').count()!==1) throw new Error(source.id+' additional nutrition source is missing its downward chevron.');
