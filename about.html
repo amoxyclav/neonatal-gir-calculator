@@ -3,81 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="index,follow">
-<meta name="description" content="About the Neonatal GIR & Nutrition Calculator, its clinical calculation-aid purpose, author and safety approach.">
-<link rel="canonical" href="https://amoxyclav.github.io/neonatal-gir-calculator/about.html">
-<link rel="icon" href="https://amoxyclav.github.io/neonatal-gir-calculator/favicon.svg" type="image/svg+xml">
-<title>About the Neonatal GIR & Nutrition Calculator</title>
-<style>:root{color-scheme:light;--ink:#172554;--muted:#607391;--blue:#2459cf;--blue2:#3979df;--line:#d9e5f7;--surface:#fff;--pale:#f4f7ff;--lav:#f3f1ff;--shadow:0 18px 48px rgba(29,57,108,.07)}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:92px}
-body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 85% 0%,rgba(210,224,255,.42),transparent 36%),#f3f6fb;color:var(--ink);line-height:1.7;font-size:16px}
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(213,225,245,.9);box-shadow:0 4px 18px rgba(31,57,100,.035)}
-.bar{max-width:1240px;margin:auto;padding:14px clamp(18px,4vw,42px);display:flex;justify-content:space-between;gap:22px;align-items:center;flex-wrap:wrap}
-.brand{font-size:16px;font-weight:850;letter-spacing:-.035em;color:#172554;line-height:1.25}
-.brand small{display:block;color:#7183a1;font-size:11px;font-weight:650;letter-spacing:.045em;margin-top:5px}
-.nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.nav a{color:#526582;text-decoration:none;font-size:13px;font-weight:750;padding:9px 12px;border:1px solid transparent;border-radius:11px;transition:background .18s,border-color .18s,color .18s}
-.nav a:hover,.nav a:focus-visible{color:#1e50bc;background:#edf3ff;border-color:#dce8ff;outline:none}
-.wrap{width:min(1100px,100%);margin:0 auto;padding:clamp(28px,5vw,64px) clamp(18px,4vw,38px) 70px}
-.wrap>.ey{display:inline-flex;align-items:center;gap:9px;margin:0 0 16px;padding:7px 12px;border:1px solid #d6e4ff;border-radius:999px;background:linear-gradient(120deg,#edf4ff,#f3f1ff);color:#3765b3;font-size:10px;font-weight:900;letter-spacing:.17em;text-transform:uppercase}
-.wrap>.ey:before{content:"";width:7px;height:7px;border-radius:50%;background:#5685e2;box-shadow:0 0 0 4px #dce8ff}
-h1{max-width:980px;margin:0 0 18px;font-size:clamp(30px,4.2vw,50px);line-height:1.12;letter-spacing:-.055em;font-weight:880;color:#182957;text-wrap:balance}
-.wrap>p{max-width:850px;margin:0 0 30px;color:var(--muted);font-size:clamp(16px,1.6vw,19px);line-height:1.75}
-.card{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(250,252,255,.97));border:1px solid var(--line);border-radius:22px;padding:clamp(22px,3.4vw,34px);margin:18px 0;box-shadow:0 8px 26px rgba(31,61,117,.035);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
-.card:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,#83a9f4,#b9b4f6);opacity:.85;z-index:-1}
-.card h2{margin:0 0 15px;font-size:clamp(20px,2.2vw,27px);line-height:1.25;letter-spacing:-.035em;color:#1c356a}
-.card h3{font-size:18px;line-height:1.35;color:#25467f}
-.card p{margin:12px 0;color:#506483}
-.card p:last-child{margin-bottom:0}
-.card ol,.card ul{padding-left:23px;color:#506483}
-.card li{padding-left:5px;margin:9px 0}
-.card li::marker{color:#4777cf;font-weight:800}
-.formula{margin:20px 0;padding:20px 22px;border:1px solid #d8e5fb;border-radius:16px;background:linear-gradient(120deg,#edf4ff 0%,#f5f4ff 100%);color:#203c78;font-size:clamp(16px,1.8vw,20px);font-weight:700;line-height:1.65;overflow-wrap:anywhere;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
-.note{margin:14px 0;padding:19px 21px;border:1px solid #f0dca9;border-radius:16px;background:linear-gradient(130deg,#fff9e9,#fffdf6);color:#77521a;line-height:1.7}
-code{background:#edf2fb;color:#244b96;padding:3px 7px;border-radius:7px;font-size:.92em}
-a{color:#2459c9;text-underline-offset:3px}
-.card a:not(.btn){font-weight:700}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;max-width:100%;padding:13px 19px;border:1px solid #2459cf;border-radius:13px;color:#fff;text-decoration:none;font-weight:800;background:linear-gradient(120deg,#2866d8,#3c55c7);box-shadow:0 10px 24px rgba(42,88,195,.18);transition:transform .18s,box-shadow .18s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(42,88,195,.23)}
-.card:has(.btn){background:linear-gradient(120deg,#edf4ff,#f3f0ff);border-color:#d2e0ff}
-footer{max-width:1100px;margin:auto;padding:22px 22px 34px;border-top:1px solid #dfe7f4;text-align:center;color:#8391a8;font-size:12px;letter-spacing:.015em}
-@media(min-width:820px){.wrap>.card:not(:has(.btn)){padding:30px 34px}.wrap>.card h2{display:flex;align-items:center;gap:12px}.wrap>.card h2:before{content:"";display:inline-block;flex:0 0 5px;height:25px;border-radius:99px;background:linear-gradient(180deg,#4d83e4,#8b88e8)}}
-@media(max-width:720px){.bar{padding:12px 16px;gap:12px}.brand{font-size:14px}.nav{width:100%;gap:5px}.nav a{font-size:12px;padding:8px 10px}.wrap{padding-top:30px;padding-bottom:44px}.wrap>.ey{margin-bottom:13px}h1{font-size:clamp(29px,8vw,39px)}.wrap>p{font-size:16px;margin-bottom:22px}.card{padding:21px 18px;border-radius:18px;margin:14px 0}.formula{padding:16px;font-size:16px;border-radius:13px}.note{padding:16px;border-radius:13px}.btn{width:100%;text-align:center}footer{padding:20px 18px 28px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+<meta http-equiv="refresh" content="0;url=./#about">
+<link rel="canonical" href="https://amoxyclav.github.io/neonatal-gir-calculator/#about">
+<title>About · Neonatal GIR &amp; Nutrition Calculator</title>
+<style>
+:root{color-scheme:light;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1b2f62;background:#f3f6fb}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}
+main{width:min(620px,100%);padding:clamp(25px,6vw,46px);border:1px solid #dce6f6;border-radius:24px;background:linear-gradient(145deg,#fff,#f7f9ff);box-shadow:0 18px 50px rgba(35,65,120,.08)}
+.kicker{font-size:11px;font-weight:800;letter-spacing:.16em;color:#6781b0}h1{margin:14px 0;color:#1a2d5e;font-size:clamp(25px,5vw,36px);line-height:1.15}p{color:#627391;line-height:1.75}a{display:inline-flex;margin-top:12px;padding:13px 18px;border-radius:12px;background:#2f5fca;color:#fff;font-weight:750;text-decoration:none}
 </style>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"AboutPage","name":"About the Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/about.html","description":"About the Neonatal GIR & Nutrition Calculator and its clinical calculation-aid purpose.","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@type":"Person","name":"Dr. Damam Sreeharsha"}}
-</script>
+<script>window.location.replace('./#about');</script>
 </head>
-<body>
-<header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Clinical calculation education</small></div>
-<nav class="nav">
-<a href="https://amoxyclav.github.io/neonatal-gir-calculator/">Calculator</a>
-<a href="https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-gir-calculator.html">GIR Guide</a>
-<a href="https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-fluid-nutrition-calculator.html">Nutrition Guide</a>
-<a href="https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-fluid-mixer.html">Fluid Mixer</a>
-</nav></div></header>
-<main class="wrap">
-<div class="ey">ABOUT</div>
-<h1>About the Neonatal GIR & Nutrition Calculator</h1>
-<div class="card"><h2>Purpose</h2>
-<p>The Neonatal GIR & Nutrition Calculator is a browser-based calculation aid for neonatal glucose infusion rate, total fluid intake, nutrition contribution and fluid concentration mixing.</p>
-<p>The project is designed to make commonly repeated calculations easier to perform and review while keeping the calculation process visible to the clinician.</p></div>
-<div class="card"><h2>Author</h2>
-<p>Created by Dr. Damam Sreeharsha, MBBS, MD Pediatrics.</p>
-<p>The calculator is developed as an educational and clinical calculation aid. Product compositions and institutional practices can vary, so users should verify the exact product and local protocol before clinical use.</p></div>
-<div class="card"><h2>Safety and scope</h2>
-<div class="note">This website is not a prescribing system and is not presented as a validated medical device. It does not replace clinical assessment, institutional protocols, pharmacy verification, product labels or professional judgment. Calculated values should be independently checked before patient care.</div></div>
-<div class="card"><h2>Privacy</h2>
-<p>The calculator is designed to perform calculations locally in the browser. It does not intentionally collect or store patient information.</p></div>
-<div class="card"><h2>Calculation guides</h2>
-<ul>
-<li><a href="https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-gir-calculator.html">Neonatal GIR formula and calculation guide</a></li>
-<li><a href="https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-fluid-nutrition-calculator.html">Neonatal fluid and nutrition guide</a></li>
-<li><a href="https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-fluid-mixer.html">Neonatal fluid mixer guide</a></li>
-</ul></div>
-<div class="card"><a class="btn" href="https://amoxyclav.github.io/neonatal-gir-calculator/">Open the Neonatal GIR & Nutrition Calculator</a></div>
-</main>
-<footer>Neonatal GIR & Nutrition Calculator • Calculation aid only • © 2026</footer>
-</body></html>
+<body><main><div class="kicker">ABOUT THE PLATFORM</div><h1>About the Neonatal GIR &amp; Nutrition Calculator</h1><p>The About information has been consolidated into the main calculator. You are being redirected.</p><a href="./#about">Continue to About</a></main></body>
+</html>
