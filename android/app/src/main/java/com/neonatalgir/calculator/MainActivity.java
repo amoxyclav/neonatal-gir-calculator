@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
         return Math.round(value * getResources().getDisplayMetrics().density);
     }
 
-    private class AppNavigationBridge {
+    public class AppNavigationBridge {
         @JavascriptInterface
         public void onPageChanged(String page) {
             setSelectedPage(page);
