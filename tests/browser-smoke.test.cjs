@@ -65,6 +65,17 @@ const { spawn } = require('child_process');
     const permitted = await page.locator('#patientPermittedTfi').textContent();
     if(permitted !== '150.0') throw new Error('Permitted TFI did not calculate to 150.0 mL/day; got '+permitted);
 
+    // Regression: NS is saline (0% glucose), not 0.9% dextrose.
+    // At 1.5 kg / TFI 100 / target GIR 6, NS + D10 should reach 6.00 on both pages.
+    await page.locator('#planA').selectOption('NS');
+    const girPlanValue=await page.locator('#achievedGir').textContent();
+    const nutritionPlanValue=await page.locator('#nutPlanGir').textContent();
+    if(girPlanValue!=='6.00') throw new Error('GIR interactive plan should calculate 6.00 for NS + D10; got '+girPlanValue);
+    if(nutritionPlanValue!=='6.00') throw new Error('Nutrition interactive plan GIR should match GIR page at 6.00 for NS + D10; got '+nutritionPlanValue);
+    if(await page.locator('#planAV').inputValue()!=='20.4') throw new Error('NS plan volume should be 20.4 mL/day when NS contributes no glucose.');
+    if(await page.locator('#planBV').inputValue()!=='129.6') throw new Error('D10 plan volume should be 129.6 mL/day when NS contributes no glucose.');
+    await page.locator('#resetPlan').click();
+
     if(await page.locator('#patientStatus').count()!==0) throw new Error('Patient helper status text should be removed from the GIR page.');
 
     const displayCard=page.locator('#gir .stat').first();
