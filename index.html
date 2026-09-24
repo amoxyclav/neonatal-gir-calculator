@@ -185,6 +185,56 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
  .home-quick-guide{padding:18px}
 }
 
+
+/* Premium About page */
+.about-shell{padding:0!important;overflow:hidden;border:1px solid #dce6f6!important;border-radius:26px!important;background:linear-gradient(180deg,#f7faff 0%,#fff 42%,#fff 100%)!important;box-shadow:0 14px 38px rgba(35,65,120,.055)}
+.about-hero{position:relative;overflow:hidden;padding:clamp(26px,4vw,48px);background:radial-gradient(ellipse at 95% 0%,rgba(201,216,255,.68),transparent 42%),linear-gradient(120deg,#eef5ff 0%,#f6f7ff 55%,#f3f0ff 100%);border-bottom:1px solid #e0e9f8}
+.about-kicker{display:flex;align-items:center;gap:9px;color:#5c78ae;font-size:10px;font-weight:850;letter-spacing:.17em}
+.about-kicker-mark{display:grid;place-items:center;width:27px;height:27px;border:1px solid #d0def8;border-radius:9px;background:rgba(255,255,255,.75);font-size:16px}
+.about-hero h1{max-width:760px;margin:17px 0 12px;color:#1a2d5e;font-size:clamp(29px,4.3vw,46px);font-weight:850;line-height:1.1;letter-spacing:-.045em}
+.about-hero>p{max-width:820px;margin:0;color:#5f7191;font-size:15px;line-height:1.8}
+.about-hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.about-hero-tags span{padding:7px 11px;border:1px solid #d7e3f7;border-radius:999px;background:rgba(255,255,255,.7);color:#47628f;font-size:11px;font-weight:750}
+.about-safety{display:flex;align-items:flex-start;gap:13px;margin:22px clamp(18px,3.2vw,38px) 0;padding:15px 17px;border:1px solid #f0dfb5;border-radius:15px;background:linear-gradient(110deg,#fffaf0,#fff8e9);color:#805b20}
+.about-safety-icon{display:grid;place-items:center;flex:0 0 28px;width:28px;height:28px;border:1px solid #efd89b;border-radius:50%;background:#fff1c9;color:#9b6b16;font-weight:850}
+.about-safety p{margin:0;font-size:12px;line-height:1.65}
+.about-safety strong{color:#79500f;font-size:12px}
+.about-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:22px clamp(18px,3.2vw,38px) 0}
+.about-info-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:24px;border:1px solid #e0e8f5;border-radius:20px;background:linear-gradient(145deg,#fff,#f9fbff);box-shadow:0 7px 23px rgba(34,65,120,.035)}
+.about-card-icon{display:grid;place-items:center;width:43px;height:43px;margin-bottom:18px;border:1px solid #d8e5fa;border-radius:13px;background:linear-gradient(145deg,#edf4ff,#e9eaff);color:#426cb1;font-size:22px;font-weight:800}
+.about-card-kicker{color:#7990b8;font-size:9px;font-weight:850;letter-spacing:.16em}
+.about-info-card h2{margin:8px 0 10px;color:#1d3264;font-size:21px;line-height:1.25;letter-spacing:-.025em}
+.about-info-card>p{margin:0;color:#687a97;font-size:13px;line-height:1.75}
+.about-card-foot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:20px;color:#66809f;font-size:11px;font-weight:750}
+.about-status-dot{width:7px;height:7px;border-radius:50%;background:#58a77d;box-shadow:0 0 0 4px #e7f5ed}
+.about-references-card{grid-row:span 2}
+.about-reference-links{display:grid;width:100%;gap:8px;margin-top:18px}
+.about-reference-links a{display:flex;align-items:center;gap:12px;min-height:52px;padding:12px 14px;border:1px solid #e0e9f7;border-radius:12px;background:#fff;color:#315b9d;font-size:12px;font-weight:750;line-height:1.45;text-decoration:none;transition:background .15s,border-color .15s,transform .15s}
+.about-reference-links a:hover{transform:translateY(-1px);border-color:#b8ccef;background:#f6f9ff;text-decoration:none}
+.about-reference-links a b{margin-left:auto;color:#7796c8;font-size:17px}
+.about-feedback-card{background:radial-gradient(ellipse at 100% 0%,rgba(222,226,255,.55),transparent 48%),linear-gradient(145deg,#f8faff,#f5f3ff);border-color:#dce2fb}
+.about-feedback-link{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:auto;padding:13px 15px;border:1px solid #d3def7;border-radius:12px;background:#fff;color:#315db0;font-size:12px;font-weight:800;text-decoration:none}
+.about-feedback-link:hover{background:#edf4ff;text-decoration:none}
+.creator-showcase{margin:25px clamp(18px,3.2vw,38px) 32px!important}
+@media(max-width:700px){
+ .about-shell{border-radius:19px!important}
+ .about-hero{padding:23px 19px}
+ .about-hero h1{font-size:29px;margin-top:14px}
+ .about-hero>p{font-size:13px;line-height:1.7}
+ .about-hero-tags{gap:6px;margin-top:16px}
+ .about-hero-tags span{font-size:10px;padding:6px 9px}
+ .about-safety{margin:15px 14px 0;padding:12px;gap:9px}
+ .about-safety p{font-size:11px}
+ .about-info-grid{grid-template-columns:1fr;gap:11px;margin:15px 14px 0}
+ .about-info-card{padding:19px;border-radius:16px}
+ .about-card-icon{width:38px;height:38px;margin-bottom:14px}
+ .about-info-card h2{font-size:19px}
+ .about-info-card>p{font-size:12px}
+ .about-references-card{grid-row:auto}
+ .about-reference-links a{min-height:48px;padding:11px 12px;font-size:11px}
+ .creator-showcase{margin:16px 14px 18px!important;padding:19px!important;border-radius:18px!important}
+}
+
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -436,39 +486,64 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 </section>
 
 <section id="about" class="page">
-<div class="section">
-<div class="ey">ABOUT</div>
-<h1>Neonatal GIR & Nutrition Calculator</h1>
-
-<div class="note">Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</div>
-<h2>Privacy</h2>
-<p class="mut">No account or patient information is required to use the calculator. Patient inputs are processed in the browser and are not intentionally collected or stored by this calculator.</p>
-<h2>Calculation references</h2><p class="mut">The calculation guides provide references for the GIR formula and selected product composition information. Product labels and local protocols remain the final source for clinical verification.</p><p><a href="guides/neonatal-gir-calculator.html">GIR calculation reference</a><br><a href="guides/neonatal-fluid-nutrition-calculator.html">Nutrition calculation reference</a><br><a href="guides/neonatal-fluid-mixer.html">Fluid mixing calculation reference</a></p><h2>Feedback</h2>
-<p class="mut">If you find a calculation issue, product-data issue or usability problem, please report it through the project's GitHub issue tracker so it can be reviewed and corrected.</p>
-<p><a href="https://github.com/amoxyclav/neonatal-gir-calculator/issues" target="_blank" rel="noopener noreferrer">Report an issue or send feedback</a></p>
-<div class="creator-showcase" id="creator">
-  <div class="creator-kicker"><span class="creator-mark" aria-hidden="true">✦</span> THE PERSON BEHIND THE PROJECT</div>
-  <div class="creator-content">
-    <div class="creator-copy">
-      <h2>Built by a pediatrician. Shaped by everyday clinical needs.</h2>
-      <p class="creator-name">Dr. Damam Sreeharsha <span>MBBS · MD Pediatrics</span></p>
-      <p class="creator-lead">Clinical insight meets thoughtful technology.</p>
-      <p class="creator-description">This project brings together a clinician’s perspective, a builder’s mindset, and a passion for practical digital tools. The vision is to create a growing, connected workspace where pediatricians can access useful calculators, clinical references, workflow aids, and smart utilities in one place—making everyday tasks simpler and more accessible.</p>
-      <div class="creator-capabilities" aria-label="Project focus areas">
-        <span>Clinical problem-solving</span>
-        <span>Purpose-built calculators</span>
-        <span>Digital workflow tools</span>
-        <span>Continuous improvement</span>
+<div class="section about-shell">
+  <div class="about-hero">
+    <div class="about-kicker"><span class="about-kicker-mark">✦</span> ABOUT THE PLATFORM</div>
+    <h1>Neonatal GIR &amp; Nutrition Calculator</h1>
+    <p>A clinician-led digital workspace for neonatal fluid, glucose and nutrition calculations—built to bring practical tools and references together in one accessible place.</p>
+    <div class="about-hero-tags"><span>Clinician-led</span><span>Browser-based</span><span>Built for everyday use</span></div>
+  </div>
+  <div class="about-safety"><span class="about-safety-icon" aria-hidden="true">i</span><p><strong>Clinical safety note</strong><br>Calculation aid only. Verify product identity, concentration, compatibility, line access, preparation and local NICU protocols before administration.</p></div>
+  <div class="about-info-grid">
+    <article class="about-info-card about-privacy-card">
+      <div class="about-card-icon" aria-hidden="true">◈</div>
+      <div class="about-card-kicker">DATA &amp; PRIVACY</div>
+      <h2>Privacy by design</h2>
+      <p>No account or patient information is required to use the calculator. Patient inputs are processed in the browser and are not intentionally collected or stored by this calculator.</p>
+      <div class="about-card-foot"><span class="about-status-dot"></span> No sign-in required</div>
+    </article>
+    <article class="about-info-card about-references-card">
+      <div class="about-card-icon" aria-hidden="true">▤</div>
+      <div class="about-card-kicker">CLINICAL DOCUMENTATION</div>
+      <h2>Calculation references</h2>
+      <p>Explore the methods behind the GIR, nutrition and fluid-mixing calculations. Product labels and local protocols remain the final source for clinical verification.</p>
+      <div class="about-reference-links">
+        <a href="guides/neonatal-gir-calculator.html"><span>GIR calculation reference</span><b aria-hidden="true">↗</b></a>
+        <a href="guides/neonatal-fluid-nutrition-calculator.html"><span>Nutrition calculation reference</span><b aria-hidden="true">↗</b></a>
+        <a href="guides/neonatal-fluid-mixer.html"><span>Fluid mixing calculation reference</span><b aria-hidden="true">↗</b></a>
+      </div>
+    </article>
+    <article class="about-info-card about-feedback-card">
+      <div class="about-card-icon" aria-hidden="true">↗</div>
+      <div class="about-card-kicker">COMMUNITY &amp; ITERATION</div>
+      <h2>Feedback that moves the toolkit forward</h2>
+      <p>Found a calculation issue, product-data concern or usability problem? Share it through the project issue tracker so it can be reviewed and addressed.</p>
+      <a class="about-feedback-link" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues" target="_blank" rel="noopener noreferrer">Report an issue or send feedback <span aria-hidden="true">↗</span></a>
+    </article>
+  </div>
+  <div class="creator-showcase" id="creator">
+    <div class="creator-kicker"><span class="creator-mark" aria-hidden="true">✦</span> THE PERSON BEHIND THE PROJECT</div>
+    <div class="creator-content">
+      <div class="creator-copy">
+        <h2>Built by a pediatrician. Shaped by everyday clinical needs.</h2>
+        <p class="creator-name">Dr. Damam Sreeharsha <span>MBBS · MD Pediatrics</span></p>
+        <p class="creator-lead">Clinical insight meets thoughtful technology.</p>
+        <p class="creator-description">This project brings together a clinician’s perspective, a builder’s mindset, and a passion for practical digital tools. The vision is to create a growing, connected workspace where pediatricians can access useful calculators, clinical references, workflow aids, and smart utilities in one place—making everyday tasks simpler and more accessible.</p>
+        <div class="creator-capabilities" aria-label="Project focus areas">
+          <span>Clinical problem-solving</span>
+          <span>Purpose-built calculators</span>
+          <span>Digital workflow tools</span>
+          <span>Continuous improvement</span>
+        </div>
+      </div>
+      <div class="creator-side" aria-hidden="true">
+        <div class="creator-orbit creator-orbit-one"></div>
+        <div class="creator-orbit creator-orbit-two"></div>
+        <div class="creator-monogram">DS</div>
+        <div class="creator-side-label">CLINICIAN-LED<br>·<br>TECH-ENABLED</div>
       </div>
     </div>
-    <div class="creator-side" aria-hidden="true">
-      <div class="creator-orbit creator-orbit-one"></div>
-      <div class="creator-orbit creator-orbit-two"></div>
-      <div class="creator-monogram">DS</div>
-      <div class="creator-side-label">CLINICIAN-LED<br>·<br>TECH-ENABLED</div>
-    </div>
   </div>
-</div>
 </div>
 </section>
 </main><footer style="text-align:center;padding:24px;color:#64748b;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="guides/neonatal-gir-calculator.html">GIR Guide</a> • <a href="guides/neonatal-fluid-nutrition-calculator.html">Nutrition Guide</a> • <a href="about.html">About</a> • © 2026</footer>
