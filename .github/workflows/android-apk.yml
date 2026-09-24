@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [main, android-apk-build]
+    branches: [android-apk-build]
     paths:
       - 'android/**'
       - '.github/workflows/android-apk.yml'
@@ -22,19 +22,24 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
       - name: Install Android platform
         run: |
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+      - name: Bundle calculator for offline use
+        run: |
+          mkdir -p android/app/src/main/assets/site/guides
+          cp index.html about.html favicon.svg manifest.json android/app/src/main/assets/site/
+          cp guides/neonatal-gir-calculator.html guides/neonatal-fluid-nutrition-calculator.html guides/neonatal-fluid-mixer.html android/app/src/main/assets/site/guides/
       - name: Build debug APK
         working-directory: android
         run: gradle assembleDebug
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:
-          name: neonatal-gir-calculator-debug-apk
+          name: neonatal-gir-calculator-offline-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
