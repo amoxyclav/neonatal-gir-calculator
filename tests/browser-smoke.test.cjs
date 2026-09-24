@@ -199,6 +199,24 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
 
+    for(const guidePath of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html','about.html']){
+      await page.goto('http://127.0.0.1:4173/'+guidePath,{waitUntil:'networkidle'});
+      if(await page.locator('main.premium-layout').count()!==1) throw new Error(guidePath+' is missing the premium two-column layout.');
+      const toc=page.locator('.page-toc');
+      if(await toc.count()!==1) throw new Error(guidePath+' is missing its in-page contents sidebar.');
+      const tocLinks=await toc.locator('a').count();
+      const sectionHeadings=await page.locator('main .premium-content > .card h2').count();
+      if(tocLinks!==sectionHeadings) throw new Error(guidePath+' contents links do not match the page sections.');
+      if(tocLinks>0){
+        const href=await toc.locator('a').first().getAttribute('href');
+        if(!href||!await page.locator(href).count()) throw new Error(guidePath+' has a broken contents anchor.');
+      }
+      await page.setViewportSize({width:390,height:844});
+      const responsive=await page.locator('main.premium-layout').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
+      if(responsive.split(' ').length!==1) throw new Error(guidePath+' contents layout does not stack on mobile.');
+      await page.setViewportSize({width:1280,height:720});
+    }
+
     await page.locator('[data-page="gir"]').first().click();
     await assertOnlyPageVisible('gir');
 
