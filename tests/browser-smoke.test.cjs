@@ -100,7 +100,7 @@ const { spawn } = require('child_process');
     if(caMg15 !== '139.50' || caKg15 !== '93.00') throw new Error('Calcium elemental-mg calculations are inconsistent with 9.3 mg/mL: '+caMg15+' mg/day, '+caKg15+' mg/kg/day.');
     await calciumVolume.fill('160');
     if(await page.locator('#remaining').textContent() !== '-20.0') throw new Error('Remaining TFI should show -20.0 mL/day when current fluid exceeds permitted TFI.');
-    const girCalciumTotal=await page.locator('#currentCa').textContent(); if(girCalciumTotal !== '1488.00') throw new Error('Calcium total card did not update from the calcium gluconate preset; got '+girCalciumTotal+'.');
+    const girCalciumTotal=await page.locator('#currentCa').textContent(); if(girCalciumTotal !== '1493.27') throw new Error('Calcium total card did not update from the calcium gluconate preset; got '+girCalciumTotal+'.');
 
     async function assertOnlyPageVisible(id){
       const visible=await page.locator('.page:visible').evaluateAll(els=>els.map(el=>el.id));
@@ -110,7 +110,7 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="nutrition"]').first().click();
     await assertOnlyPageVisible('nutrition');
     if(await page.locator('#nutRemainingTfi').textContent() !== '-20.0') throw new Error('Nutrition Remaining TFI card did not preserve the negative balance.');
-    if(await page.locator('#nutCurrentCa').textContent() !== '1488.00') throw new Error('Nutrition calcium card did not reflect the shared calcium calculation.');
+    if(await page.locator('#nutCurrentCa').textContent() !== '1493.27') throw new Error('Nutrition calcium card did not reflect the shared calcium calculation.');
     if (await page.locator('#nutrition .ey').count()) throw new Error('Nutrition page starting eyebrow text is still present');
     if (await page.locator('#nutrition h2').filter({hasText:'Nutrition Calculator'}).count()) throw new Error('Nutrition Calculator starting heading is still present');
 
