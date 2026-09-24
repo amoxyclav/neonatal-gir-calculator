@@ -114,6 +114,24 @@ const { spawn } = require('child_process');
     if (await page.locator('#nutrition .ey').count()) throw new Error('Nutrition page starting eyebrow text is still present');
     if (await page.locator('#nutrition h2').filter({hasText:'Nutrition Calculator'}).count()) throw new Error('Nutrition Calculator starting heading is still present');
 
+    for (const source of [
+      {id:'hmf',card:'#hmfSource'},
+      {id:'hmfAdvance',card:'#hmfAdvanceSource'},
+      {id:'mct',card:'#mctSource'}
+    ]) {
+      const card=page.locator(source.card);
+      const control=card.locator('[data-extra-details="'+source.id+'"]');
+      if(!(await control.textContent()).includes('Edit contents')) throw new Error(source.id+' additional nutrition source is missing the Edit contents label.');
+      if(await control.locator('.details-chevron').count()!==1) throw new Error(source.id+' additional nutrition source is missing its downward chevron.');
+      if(await control.evaluate(el=>getComputedStyle(el).minWidth)!=='118px') throw new Error(source.id+' edit control does not match the current-fluid control sizing.');
+      await control.click();
+      if(await control.getAttribute('aria-expanded')!=='true') throw new Error(source.id+' additional nutrition source did not expand.');
+      if(await card.locator('.nutrition-extra-details').getAttribute('hidden')!==null) throw new Error(source.id+' composition panel remains hidden after opening.');
+      await control.click();
+      if(await control.getAttribute('aria-expanded')!=='false') throw new Error(source.id+' additional nutrition source did not collapse.');
+      if(await card.locator('.nutrition-extra-details').getAttribute('hidden')===null) throw new Error(source.id+' composition panel remains visible after closing.');
+    }
+
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
 
