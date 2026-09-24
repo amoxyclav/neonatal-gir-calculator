@@ -135,6 +135,7 @@ label{font-size:13px;font-weight:700}input,select{display:block;width:100%;margi
 .home-community-premium .home-feature-copy h3{margin-bottom:6px;color:#285aab;font-size:19px;font-weight:800}
 .home-community-premium .home-feature-copy p{color:#657995;font-size:13px;line-height:1.5}
 .home-community-premium .home-feature .btn{display:inline-flex;align-items:center;justify-content:center;min-width:110px;padding:11px 18px;border:1px solid #286ac2;border-radius:12px;background:linear-gradient(135deg,#2b76ce,#3159bf);color:#fff;font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 6px 15px rgba(42,98,190,.17)}
+.home-share-actions #copyToolLink{display:none!important}
 .home-share-actions{display:flex;align-items:center;gap:10px;margin:20px 0 0!important;padding:20px 22px;border:1px solid #e0e8f5;border-radius:18px;background:linear-gradient(115deg,#fff,#f8faff)}
 .home-share-copy{display:flex;flex:1;flex-direction:column;gap:5px;margin-right:12px}
 .home-share-copy strong{color:#243b6b;font-size:14px}
@@ -1015,29 +1016,14 @@ refreshMixerPresetOptions();
 function calculateMixerNewBag(){['mt','ma','mb','mv'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 function calculateMixerExistingBag(){['mt2','me2','mv2','ms2'].forEach(id=>$(id).dispatchEvent(new Event('input')))}
 const quickGuideToggle=$('quickGuideToggle'),quickGuide=$('quickGuide');
-const shareTool=$('shareTool'),copyToolLink=$('copyToolLink'),shareStatus=$('shareStatus');
+const shareTool=$('shareTool'),shareStatus=$('shareStatus');
 function showShareStatus(msg,kind='ok'){if(!shareStatus)return;shareStatus.textContent=msg;shareStatus.className='status '+kind;shareStatus.style.display='block';setTimeout(()=>shareStatus.style.display='none',3500)}
 if(shareTool)shareTool.onclick=async()=>{
  const data={title:'Neonatal GIR & Nutrition Calculator',text:'Neonatal GIR, fluid and nutrition calculation aid',url:location.href};
- try{if(navigator.share){await navigator.share(data);showShareStatus('Share sheet opened.')}else{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}}catch(e){if(e?.name!=='AbortError')showShareStatus('Could not open sharing. Use Copy link instead.','warn')}
+ try{if(navigator.share){await navigator.share(data);showShareStatus('Share sheet opened.')}else{await navigator.clipboard.writeText(location.href);showShareStatus('Calculator link copied to clipboard.')}}catch(e){if(e?.name!=='AbortError')showShareStatus('Could not open sharing. You can copy the address from the browser bar.','warn')}
 };
 const supportDeveloper=$('supportDeveloper');
 if(supportDeveloper)supportDeveloper.onclick=()=>{showShareStatus('Support link will be added soon.','warn')};
-async function copyCalculatorLink(){
- const url=location.href;
- try{
-  if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);return true}
- }catch(e){}
- const field=document.createElement('textarea');
- field.value=url;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';field.style.pointerEvents='none';field.style.left='-9999px';
- document.body.appendChild(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);
- let copied=false;try{copied=document.execCommand('copy')}catch(e){copied=false}
- field.remove();return copied;
-}
-if(copyToolLink)copyToolLink.onclick=async()=>{
- const copied=await copyCalculatorLink();
- showShareStatus(copied?'Calculator link copied to clipboard.':'Copy is unavailable in this browser. You can copy the address from the browser bar.',copied?'ok':'warn');
-};
 if(quickGuideToggle&&quickGuide)quickGuideToggle.onclick=()=>{
  const open=quickGuide.style.display!=='none';
  quickGuide.style.display=open?'none':'block';
