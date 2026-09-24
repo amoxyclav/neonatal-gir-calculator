@@ -60,13 +60,13 @@ const { spawn } = require('child_process');
     if((await d5Control.textContent()).trim() !== 'Show contents') throw new Error('D5 should use Show contents.');
     if(await d5Control.locator('.details-chevron').count() !== 1) throw new Error('D5 should show a downward chevron.');
     for (const fluidName of ['D5','D10','D25','D50']) {
-      const fluid=page.locator('#fluidList .fluid').filter({hasText:new RegExp('^'+fluidName.replace(/[.*+?^${}()|[\\]\\]/g,'\\\\const fluid=page.locator('#fluidList .fluid').filter({hasText:fluidName}).first();')+'(?:\\s|$)')}).first();
+      const fluid=page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+fluidName+'$')})}).first();
       const control=fluid.locator('.details-toggle');
       if((await control.textContent()).trim() !== 'Show contents') throw new Error(fluidName+' should use Show contents.');
       if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
     }
     for (const fluidName of ['D5','D10','D25','D50','NS','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk']) {
-      const fluid=page.locator('#fluidList .fluid').filter({hasText:fluidName}).first();
+      const fluid=page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+fluidName+'$')})}).first();
       const row=fluid.locator('.fluid-main-row');
       const boxes=await row.locator(':scope > *').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
       for(let i=1;i<boxes.length;i++){
