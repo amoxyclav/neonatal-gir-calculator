@@ -45,6 +45,10 @@ const { spawn } = require('child_process');
     if(await page.locator('#home h1').count() !== 1) throw new Error('Premium Home page title should appear exactly once.');
 
     await page.locator('[data-page="gir"]').first().click();
+    if(await page.locator('#gir>.section').count()!==3) throw new Error('GIR premium section layout is incomplete.');
+    if(await page.locator('#gir .stat').count()<8) throw new Error('GIR premium summary cards are missing.');
+    const girSectionStyle=await page.locator('#gir>.section').first().evaluate(el=>{const x=getComputedStyle(el);return{radius:x.borderTopLeftRadius,border:x.borderTopColor};});
+    if(girSectionStyle.radius!=='22px'||girSectionStyle.border!=='rgb(220, 230, 246)') throw new Error('GIR page premium section styling is missing.');
     if(await page.locator('#gir .section').first().locator('h1').count() !== 0) throw new Error('Removed GIR page title is still present.');
     if((await page.locator('#gir').textContent()).includes('GIR CALCULATOR')) throw new Error('Removed GIR page eyebrow is still present.');
     if((await page.locator('#gir').textContent()).includes('Neonatal GIR & Fluid Planner')) throw new Error('Removed GIR page title text is still present.');
@@ -67,9 +71,9 @@ const { spawn } = require('child_process');
 
     const displayCard=page.locator('#gir .stat').first();
     const cardStyle=await displayCard.evaluate(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,border:s.borderTopColor,radius:s.borderTopLeftRadius};});
-    if(cardStyle.background !== 'rgb(238, 244, 255)') throw new Error('Display cards are not using the blue theme background.');
-    if(cardStyle.border !== 'rgb(216, 228, 245)') throw new Error('Display cards are not using the blue theme border.');
-    if(cardStyle.radius !== '28px') throw new Error('Display cards do not have the intended rounded shape.');
+    if(cardStyle.background !== 'rgba(0, 0, 0, 0)') throw new Error('Premium display cards should use the layered blue surface.');
+    if(cardStyle.border !== 'rgb(219, 230, 247)') throw new Error('Premium display cards are missing the refined blue border.');
+    if(cardStyle.radius !== '17px') throw new Error('Premium display cards do not have the intended rounded shape.');
 
     await page.locator('#addFluid').selectOption('Formula milk');
     const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
@@ -137,6 +141,10 @@ const { spawn } = require('child_process');
     }
 
     await page.locator('[data-page="nutrition"]').first().click();
+    if(await page.locator('#nutrition>.section').count()<5) throw new Error('Nutrition premium section layout is incomplete.');
+    if(await page.locator('#nutrition .nutrition-extra').count()!==3) throw new Error('Nutrition source cards are missing.');
+    const nutritionSectionStyle=await page.locator('#nutrition>.section').first().evaluate(el=>getComputedStyle(el).borderTopLeftRadius);
+    if(nutritionSectionStyle!=='22px') throw new Error('Nutrition page premium section styling is missing.');
     await assertOnlyPageVisible('nutrition');
     if(await page.locator('#nutRemainingTfi').textContent() !== '-20.0') throw new Error('Nutrition Remaining TFI card did not preserve the negative balance.');
     if(await page.locator('#nutCurrentCa').textContent() !== '1493.27') throw new Error('Nutrition calcium card did not reflect the shared calcium calculation.');
@@ -188,6 +196,9 @@ const { spawn } = require('child_process');
 
     await page.locator('[data-page="mixer"]').first().click();
     await assertOnlyPageVisible('mixer');
+    if(await page.locator('#mixer>.section>.section').count()!==2) throw new Error('Mixer premium calculator panels are incomplete.');
+    const mixerStyle=await page.locator('#mixer>.section>.section').first().evaluate(el=>({radius:getComputedStyle(el).borderTopLeftRadius,bg:getComputedStyle(el).backgroundImage}));
+    if(mixerStyle.radius!=='19px'||!mixerStyle.bg.includes('linear-gradient')) throw new Error('Mixer page premium panel styling is missing.');
 
     await page.locator('[data-page="about"]').first().click();
     await assertOnlyPageVisible('about');
