@@ -207,6 +207,15 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
 
+    const guidePage=await browser.newPage();
+    for(const guidePath of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html']){
+      await guidePage.goto('http://127.0.0.1:4173/'+guidePath,{waitUntil:'networkidle'});
+      if(await guidePage.locator('header .nav a').filter({hasText:/^About$/}).count()!==0) throw new Error('Guide page should not show a duplicate About navigation link: '+guidePath);
+    }
+    await guidePage.goto('http://127.0.0.1:4173/about.html',{waitUntil:'networkidle'});
+    await guidePage.waitForURL('**/#about',{timeout:5000});
+    await guidePage.close();
+
     await page.locator('[data-page="gir"]').first().click();
     await assertOnlyPageVisible('gir');
 
@@ -220,7 +229,8 @@ const { spawn } = require('child_process');
     await assertOnlyPageVisible('about');
     if((await page.locator('#about').textContent()).includes('A calculation aid for bedside neonatal fluid, glucose and nutrition planning.')) throw new Error('Removed About page opening description is still present.');
     if(await page.locator('#about .about-hero').count()!==1) throw new Error('Premium About hero is missing.');
-    if(await page.locator('#about .about-info-card').count()!==3) throw new Error('About page should contain three styled information cards.');
+    if(await page.locator('#about .about-info-card').count()!==4) throw new Error('Unified About page should contain four styled information cards.');
+    if(!(await page.locator('#about .about-scope-card').textContent()).includes('not replace')) throw new Error('Unified About clinical scope and safety details are missing.');
     if(await page.locator('#about .about-reference-links a').count()!==3) throw new Error('About page calculation reference links are incomplete.');
     if(await page.locator('#about .about-feedback-link').count()!==1) throw new Error('About page feedback action is missing.');
     const aboutGrid=await page.locator('#about .about-info-grid').evaluate(el=>({columns:getComputedStyle(el).gridTemplateColumns.split(' ').length,rects:[...el.querySelectorAll('.about-info-card')].map(x=>{const r=x.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom}})}));
