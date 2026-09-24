@@ -168,6 +168,12 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="about"]').first().click();
     await assertOnlyPageVisible('about');
     if((await page.locator('#about').textContent()).includes('A calculation aid for bedside neonatal fluid, glucose and nutrition planning.')) throw new Error('Removed About page opening description is still present.');
+    const creator=page.locator('#creator');
+    if(await creator.count()!==1) throw new Error('About page creator showcase is missing.');
+    if(await creator.locator('h2').textContent()!=='Built by a pediatrician. Shaped by everyday clinical needs.') throw new Error('Creator showcase heading is missing or incorrect.');
+    if(!(await creator.textContent()).includes('one place')) throw new Error('Creator showcase vision statement is missing.');
+    if(await page.locator('#about .section > *').last().getAttribute('id')!=='creator') throw new Error('Creator showcase should be the final section on the About page.');
+    if(await creator.locator('.creator-capabilities span').count()!==4) throw new Error('Creator showcase capability tags are incomplete.');
 
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
