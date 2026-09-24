@@ -44,7 +44,7 @@ jobs:
           mkdir -p /tmp/android/android/app/src/main/res/values
           cp android/app/src/main/AndroidManifest.xml /tmp/android/android/app/src/main/AndroidManifest.xml
           cp android/app/src/main/java/com/neonatalgir/calculator/MainActivity.java /tmp/android/android/app/src/main/java/com/neonatalgir/calculator/MainActivity.java
-          cp android/app/src/main/res/drawable/launcher_foreground.xml android/app/src/main/res/drawable/nav_*.xml /tmp/android/android/app/src/main/res/drawable/launcher_foreground.xml
+          cp android/app/src/main/res/drawable/launcher_foreground.xml /tmp/android/android/app/src/main/res/drawable/launcher_foreground.xml
           cp android/app/src/main/res/drawable/nav_*.xml /tmp/android/android/app/src/main/res/drawable/
           cp android/app/src/main/res/mipmap-anydpi/ic_launcher.xml /tmp/android/android/app/src/main/res/mipmap-anydpi/ic_launcher.xml
           cp android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml /tmp/android/android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml
