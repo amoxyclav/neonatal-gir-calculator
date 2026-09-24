@@ -54,19 +54,24 @@ const { spawn } = require('child_process');
     if(await formulaDetails.getAttribute('hidden') !== null) throw new Error('Formula milk edit panel remains hidden.');
     if(!(await formulaDetails.textContent()).includes('Preset note: For this calculator, glucose is used for GIR')) throw new Error('Formula milk preset note is missing.');
 
-    await page.locator('#addFluid').selectOption('D5');
-    const d5Fluid=page.locator('#fluidList .fluid').filter({hasText:/^D5(?:\s|$)/}).first();
+    const layoutFluids=['D5','D10','D25','D50','NS','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk'];
+    for (const fluidName of layoutFluids) {
+      await page.locator('#addFluid').selectOption(fluidName);
+    }
+    const exactFluid=(name)=>page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+name+'$')})}).first();
+
+    const d5Fluid=exactFluid('D5');
     const d5Control=d5Fluid.locator('.details-toggle');
     if(!(await d5Control.textContent()).includes('Show contents')) throw new Error('D5 should use Show contents.');
     if(await d5Control.locator('.details-chevron').count() !== 1) throw new Error('D5 should show a downward chevron.');
     for (const fluidName of ['D5','D10','D25','D50']) {
-      const fluid=page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+fluidName+'$')})}).first();
+      const fluid=exactFluid(fluidName);
       const control=fluid.locator('.details-toggle');
       if(!(await control.textContent()).includes('Show contents')) throw new Error(fluidName+' should use Show contents.');
       if(await control.locator('.details-chevron').count() !== 1) throw new Error(fluidName+' should show a downward arrow.');
     }
-    for (const fluidName of ['D5','D10','D25','D50','NS','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk']) {
-      const fluid=page.locator('#fluidList .fluid').filter({has:page.locator('.fluid-name b').filter({hasText:new RegExp('^'+fluidName+'$')})}).first();
+    for (const fluidName of layoutFluids) {
+      const fluid=exactFluid(fluidName);
       const row=fluid.locator('.fluid-main-row');
       const boxes=await row.locator(':scope > *').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
       for(let i=1;i<boxes.length;i++){
