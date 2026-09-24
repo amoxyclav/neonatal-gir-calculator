@@ -11,6 +11,9 @@ const { spawn } = require('child_process');
     const errors = [];
     page.on('pageerror', e => errors.push(String(e)));
     await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
+    const desktopShell=await page.evaluate(()=>({headerPosition:getComputedStyle(document.querySelector('header')).position,headerWidth:getComputedStyle(document.querySelector('header')).width,mainOffset:getComputedStyle(document.querySelector('main')).marginLeft,referenceLinks:document.querySelectorAll('.nav .nav-reference').length}));
+    if(desktopShell.headerPosition!=='fixed'||desktopShell.headerWidth!=='276px'||desktopShell.mainOffset!=='276px') throw new Error('Premium desktop sidebar layout is not applied: '+JSON.stringify(desktopShell));
+    if(desktopShell.referenceLinks!==3) throw new Error('Sidebar should include all three reference guide links.');
     if(await page.locator('.hero-art').count() !== 0) throw new Error('Removed hero artwork is still present.');
     const homeText=await page.locator('#home').textContent();
     if(await page.locator('#home .home-hero-premium').count()!==1) throw new Error('Premium homepage hero is missing.');
@@ -29,6 +32,8 @@ const { spawn } = require('child_process');
     if(await page.locator('#home .home-share-actions').count()!==1) throw new Error('Styled share actions are missing.');
     if(await page.locator('#home .home-safety-note').count()!==1) throw new Error('Styled clinical safety note is missing.');
     await page.setViewportSize({width:390,height:844});
+    const mobileShell=await page.evaluate(()=>({headerPosition:getComputedStyle(document.querySelector('header')).position,mainOffset:getComputedStyle(document.querySelector('main')).marginLeft,navScroll:getComputedStyle(document.querySelector('.nav')).overflowX}));
+    if(mobileShell.headerPosition!=='sticky'||mobileShell.mainOffset!=='0px'||mobileShell.navScroll!=='auto') throw new Error('Premium mobile navigation layout is not responsive: '+JSON.stringify(mobileShell));
     const mobileHero=await page.locator('#home .home-hero-premium').evaluate(el=>({height:el.getBoundingClientRect().height,art:getComputedStyle(el.querySelector('.home-hero-art')).height}));
     if(mobileHero.height>390) throw new Error('Mobile homepage hero is too tall: '+mobileHero.height+'px.');
     if(mobileHero.art!=='115px') throw new Error('Mobile hero artwork should be compact; got '+mobileHero.art+'.');
@@ -193,6 +198,25 @@ const { spawn } = require('child_process');
 
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
+
+    for(const guidePath of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html','about.html']){
+      await page.goto('http://127.0.0.1:4173/'+guidePath,{waitUntil:'networkidle'});
+      if(await page.locator('main.premium-layout').count()!==1) throw new Error(guidePath+' is missing the premium two-column layout.');
+      const toc=page.locator('.page-toc');
+      if(await toc.count()!==1) throw new Error(guidePath+' is missing its in-page contents sidebar.');
+      const tocLinks=await toc.locator('a').count();
+      const sectionHeadings=await page.locator('main .premium-content > .card h2').count();
+      if(tocLinks!==sectionHeadings) throw new Error(guidePath+' contents links do not match the page sections.');
+      if(tocLinks>0){
+        const href=await toc.locator('a').first().getAttribute('href');
+        if(!href||!await page.locator(href).count()) throw new Error(guidePath+' has a broken contents anchor.');
+      }
+      await page.setViewportSize({width:390,height:844});
+      const responsive=await page.locator('main.premium-layout').evaluate(el=>getComputedStyle(el).gridTemplateColumns);
+      if(responsive.split(' ').length!==1) throw new Error(guidePath+' contents layout does not stack on mobile.');
+      await page.setViewportSize({width:1280,height:720});
+    }
+    await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle'});
 
     await page.locator('[data-page="gir"]').first().click();
     await assertOnlyPageVisible('gir');
