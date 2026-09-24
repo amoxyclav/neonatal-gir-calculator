@@ -192,6 +192,17 @@ const { spawn } = require('child_process');
     await page.locator('[data-page="about"]').first().click();
     await assertOnlyPageVisible('about');
     if((await page.locator('#about').textContent()).includes('A calculation aid for bedside neonatal fluid, glucose and nutrition planning.')) throw new Error('Removed About page opening description is still present.');
+    if(await page.locator('#about .about-hero').count()!==1) throw new Error('Premium About hero is missing.');
+    if(await page.locator('#about .about-info-card').count()!==3) throw new Error('About page should contain three styled information cards.');
+    if(await page.locator('#about .about-reference-links a').count()!==3) throw new Error('About page calculation reference links are incomplete.');
+    if(await page.locator('#about .about-feedback-link').count()!==1) throw new Error('About page feedback action is missing.');
+    const aboutGrid=await page.locator('#about .about-info-grid').evaluate(el=>({columns:getComputedStyle(el).gridTemplateColumns.split(' ').length,rects:[...el.querySelectorAll('.about-info-card')].map(x=>{const r=x.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom}})}));
+    if(aboutGrid.columns!==2) throw new Error('About information cards should use a balanced desktop grid.');
+    for(let i=0;i<aboutGrid.rects.length;i++)for(let j=i+1;j<aboutGrid.rects.length;j++){const a=aboutGrid.rects[i],b=aboutGrid.rects[j];if(a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1)throw new Error('About information cards overlap.');}
+    await page.setViewportSize({width:390,height:844});
+    const mobileAboutColumns=await page.locator('#about .about-info-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+    if(mobileAboutColumns!==1) throw new Error('About information cards should stack on mobile.');
+    await page.setViewportSize({width:1280,height:720});
     const creator=page.locator('#creator');
     if(await creator.count()!==1) throw new Error('About page creator showcase is missing.');
     if(await creator.locator('h2').textContent()!=='Built by a pediatrician. Shaped by everyday clinical needs.') throw new Error('Creator showcase heading is missing or incorrect.');
