@@ -126,9 +126,19 @@ jobs:
 
       - name: Browser smoke test
         run: |
+          set -o pipefail
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
-          node tests/browser-smoke.test.cjs
+          node tests/browser-smoke.test.cjs 2>&1 | tee /tmp/browser-smoke.log
+
+      - name: Upload browser smoke log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-smoke-log
+          path: /tmp/browser-smoke.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Validate required site files
         run: |
