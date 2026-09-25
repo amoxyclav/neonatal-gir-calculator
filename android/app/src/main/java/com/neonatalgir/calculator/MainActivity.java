@@ -43,7 +43,8 @@ public class MainActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        GradientDrawable appBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.rgb(247, 250, 255), Color.rgb(239, 244, 253), Color.rgb(244, 242, 255)});\n        root.setBackground(appBackground);
+        GradientDrawable appBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.rgb(247, 250, 255), Color.rgb(239, 244, 253), Color.rgb(244, 242, 255)});
+        root.setBackground(appBackground);
 
         webView = new WebView(this);
         webView.setBackgroundColor(Color.rgb(242, 246, 253));
@@ -170,7 +171,12 @@ public class MainActivity extends Activity {
             View child = bottomNavigation.getChildAt(i);
             boolean active = selectedPage.equals(String.valueOf(child.getTag()));
             GradientDrawable bg = new GradientDrawable();
-            if (active) {\n                bg.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);\n                bg.setColors(new int[]{Color.rgb(219, 234, 254), Color.rgb(232, 229, 255)});\n            } else {\n                bg.setColor(Color.TRANSPARENT);\n            }
+            if (active) {
+                bg.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+                bg.setColors(new int[]{Color.rgb(219, 234, 254), Color.rgb(232, 229, 255)});
+            } else {
+                bg.setColor(Color.TRANSPARENT);
+            }
             bg.setCornerRadius(dp(15));
             child.setBackground(bg);
             if (child instanceof LinearLayout) {
