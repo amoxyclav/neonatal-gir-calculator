@@ -275,6 +275,14 @@ const { spawn } = require('child_process');
     const mixerStyle=await page.locator('#mixer>.section>.section').first().evaluate(el=>({radius:getComputedStyle(el).borderTopLeftRadius,bg:getComputedStyle(el).backgroundImage}));
     if(mixerStyle.radius!=='19px'||!mixerStyle.bg.includes('linear-gradient')) throw new Error('Mixer page premium panel styling is missing.');
 
+    await page.locator('[data-page="settings"]').first().click();
+    await assertOnlyPageVisible('settings');
+    if(await page.locator('#settings .settings-hero').count()!==1) throw new Error('Settings and Presets hero is missing.');
+    if((await page.locator('#settings .settings-hero h1').innerText()).trim()!=='Settings & Presets') throw new Error('Settings and Presets heading is incorrect.');
+    if(await page.locator('#settings .settings-panel').count()!==2) throw new Error('Settings preference and preset panels are incomplete.');
+    if(await page.locator('#settings #settingsProductList').count()!==1) throw new Error('Editable preset list container is missing.');
+    if(await page.locator('#settings #settingsEdit').count()!==1||await page.locator('#settings #settingsReset').count()!==1) throw new Error('Preset edit and reset controls are missing.');
+
     await page.locator('[data-page="about"]').first().click();
     await assertOnlyPageVisible('about');
     if((await page.locator('#about').textContent()).includes('A calculation aid for bedside neonatal fluid, glucose and nutrition planning.')) throw new Error('Removed About page opening description is still present.');
