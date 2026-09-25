@@ -134,7 +134,7 @@ const { spawn } = require('child_process');
     await page.locator('#fluidPickerDialog #applyPredefinedFluids').click();
     const hourlyD5=page.locator('#fluidList .fluid').filter({hasText:'D5'}).first();
     if(await page.locator('#currentTotal').textContent()!=='36.0') throw new Error('A D5 volume of 1.5 mL/hr should contribute 36.0 mL/day.');
-    if(await hourlyD5.locator('.volume-unit').inputValue()!=='mL/hr'||await hourlyD5.locator('.volume-input').inputValue()!=='1.5') throw new Error('The selected mL/hr unit should be retained in the fluid row.');
+    if(await hourlyD5.locator('.volume-unit').inputValue()!=='mL/hr'||await hourlyD5.locator('.volume-input').inputValue()!=='1.50') throw new Error('The selected mL/hr unit should be retained in the fluid row.');
     await hourlyD5.locator('.remove').click();
 
     await girPickerTrigger.click();
