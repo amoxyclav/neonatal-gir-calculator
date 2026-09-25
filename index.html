@@ -331,6 +331,46 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .home-tool{border-color:#cdddf8;background:linear-gradient(135deg,#f4f8ff 0%,#eaf1ff 58%,#f0edff 100%);color:#244d9d;box-shadow:0 8px 22px rgba(49,86,165,.07)}
 .home-tool:hover{border-color:#9dbaf0;background:linear-gradient(135deg,#eaf2ff 0%,#e3ecff 58%,#ebe7ff 100%);color:#1e40af}
 @media(max-width:760px){header{position:sticky;top:0}.bar{gap:10px}.nav{padding:3px 0}.nav a.active:not(.nav-home){background:linear-gradient(135deg,#e6efff,#e8e9ff)}}
+
+/* Phase 2 — GIR workspace presentation; calculation logic and clinical presets remain unchanged. */
+.gir-page-hero{position:relative;overflow:hidden;margin:0 0 22px;padding:clamp(24px,4vw,38px);border:1px solid #cbdcf8;border-radius:26px;background:radial-gradient(ellipse at 92% 5%,rgba(191,219,254,.72),transparent 40%),linear-gradient(135deg,#f9fbff 0%,#edf4ff 56%,#f1efff 100%);box-shadow:0 14px 34px rgba(30,64,175,.07)}
+.gir-page-eyebrow{display:flex;align-items:center;gap:9px;color:#4967a5;font-size:10px;font-weight:850;letter-spacing:.17em}
+.gir-live-dot{width:8px;height:8px;border-radius:50%;background:#4d83e4;box-shadow:0 0 0 4px rgba(77,131,228,.14)}
+.gir-page-hero h1{margin:13px 0 9px;color:#182957;font-size:clamp(29px,4vw,42px);line-height:1.08;letter-spacing:-.045em}
+.gir-page-hero p{max-width:700px;margin:0;color:#5a6e91;font-size:15px;line-height:1.65}
+.gir-hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:19px}
+.gir-hero-tags span{padding:7px 11px;border:1px solid rgba(193,211,245,.9);border-radius:999px;background:rgba(255,255,255,.72);color:#3e5c94;font-size:11px;font-weight:750}
+#gir .section{border-radius:22px;border-color:#dce6f6;padding:clamp(18px,2.7vw,26px);box-shadow:0 7px 24px rgba(35,67,125,.045);margin:16px 0}
+#gir .section>h2{margin:0 0 16px;color:#1d356c;font-size:clamp(19px,2.1vw,24px);letter-spacing:-.025em}
+#gir #patientSection{background:linear-gradient(145deg,#fff 0%,#f7faff 100%)}
+#gir #patientSection .grid{gap:14px}
+#gir #patientSection label{display:block;color:#425777;font-size:12px;font-weight:750}
+#gir #patientSection input,#gir #patientSection select{min-height:47px;border-color:#cfdbed;border-radius:12px;background:#fff;padding:12px 13px;font-size:15px;box-shadow:0 2px 5px rgba(31,61,117,.025)}
+#gir #patientSection input:focus,#gir #patientSection select:focus{outline:3px solid rgba(72,123,220,.16);border-color:#7da4e8}
+#gir #currentSection{background:linear-gradient(150deg,#fff 0%,#fbfcff 100%)}
+#gir .stats{gap:11px}
+#gir .stat{border:1px solid #dbe6f7;border-radius:17px;padding:16px 17px;background:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.92)}
+#gir .stat span{font-size:10px;letter-spacing:.075em;font-weight:800;color:#65799a}
+#gir .stat strong{font-size:clamp(21px,2.3vw,27px);letter-spacing:-.035em;color:#1c356e}
+#gir #targetSection{background:linear-gradient(145deg,#f6f9ff 0%,#edf2ff 58%,#f3f0ff 100%);border-color:#cbdaf6}
+#gir #targetSection>.stats:first-of-type .stat{background:transparent}
+#gir .plan{border:1px solid #cfddf5;border-radius:20px;background:rgba(255,255,255,.78);padding:clamp(16px,2.5vw,23px);box-shadow:inset 0 1px 0 rgba(255,255,255,.95)}
+#gir .plan h3{color:#1d3b7a;font-size:19px;letter-spacing:-.02em}
+#gir .plan .grid{gap:12px}
+#gir .plan label{color:#435a7d;font-size:12px;font-weight:750}
+#gir .plan input,#gir .plan select{min-height:45px;border-radius:11px;border-color:#cfdbed;background:#fff;padding:10px 12px}
+.gir-recipe{margin:16px 0 4px;padding:18px;border:1px solid #d4e1f7;border-radius:18px;background:linear-gradient(140deg,#f8fbff,#eef4ff 65%,#f4f1ff)}
+.gir-recipe-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.gir-recipe-kicker{display:block;color:#6a7fa4;font-size:9px;font-weight:850;letter-spacing:.16em}
+.gir-recipe-heading h3{margin:4px 0 0!important;font-size:17px!important;color:#1d356c!important}
+.gir-recipe-total{flex:0 0 auto;padding:7px 11px;border:1px solid #d6e3f8;border-radius:999px;background:rgba(255,255,255,.85);color:#31518e;font-size:12px;font-weight:800}
+.gir-recipe-bar{display:flex;overflow:hidden;width:100%;height:15px;border:1px solid rgba(255,255,255,.95);border-radius:999px;background:#e3eaf7;box-shadow:inset 0 1px 3px rgba(28,53,99,.08)}
+.gir-recipe-segment{display:block;height:100%;transition:width .18s ease}.gir-recipe-a{background:linear-gradient(90deg,#3478df,#5e91eb)}.gir-recipe-b{background:linear-gradient(90deg,#8c83df,#b1a8ef)}
+.gir-recipe-legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.gir-recipe-item{display:flex;align-items:flex-start;gap:9px;min-width:0}.gir-recipe-swatch{flex:0 0 10px;width:10px;height:10px;margin-top:4px;border-radius:3px}.gir-swatch-a{background:#4b83df}.gir-swatch-b{background:#9a90df}
+.gir-recipe-item strong{display:block;overflow-wrap:anywhere;color:#294777;font-size:12px}.gir-recipe-item small{display:block;margin-top:3px;color:#6b7e9d;font-size:11px;line-height:1.45}
+.gir-recipe-footnote{margin:12px 0 0;color:#7a8ba7;font-size:10px;line-height:1.5}
+@media(max-width:700px){.gir-page-hero{padding:23px 19px;border-radius:21px;margin-bottom:16px}.gir-hero-tags{gap:6px}.gir-hero-tags span{font-size:10px;padding:7px 9px}#gir .section{padding:17px 14px;border-radius:19px}#gir .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#gir .stat{padding:13px 12px;border-radius:15px}#gir .stat strong{font-size:22px}#gir .stat small{font-size:10px;margin-left:3px}.gir-recipe{padding:15px;border-radius:16px}.gir-recipe-legend{gap:8px}.gir-recipe-item strong{font-size:11px}.gir-recipe-item small{font-size:10px}}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -378,6 +418,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 
 <section id="gir" class="page">
 
+<div class="gir-page-hero"><div class="gir-page-eyebrow"><span class="gir-live-dot"></span> GLUCOSE INFUSION RATE</div><h1>GIR Calculator</h1><p>Review current fluids, set a target GIR, and build a TFI-aware fluid plan.</p><div class="gir-hero-tags"><span>Current fluid assessment</span><span>Target planning</span><span>Stock-fluid recipe</span></div></div>
 
 <div class="section" id="patientSection"><h2>1. Patient / Initial Inputs</h2><div class="grid g3">
 <div class="weight-control"><label>Weight</label><div class="weight-input-row"><input id="w" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Weight"><select id="weightUnit" aria-label="Weight unit"><option value="kg" selected>kg</option><option value="g">g</option><option value="lb">lb</option></select></div></div>
@@ -412,6 +453,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <label>Fluid B<select id="planB"></select></label>
 <label>Fluid B mL/day<input id="planBV" type="number" min="0" step="0.1" inputmode="decimal"></label>
 </div>
+<div class="gir-recipe" id="girRecipe" aria-live="polite"><div class="gir-recipe-heading"><div><span class="gir-recipe-kicker">PREPARATION RECIPE</span><h3>Fluid proportions</h3></div><span class="gir-recipe-total" id="girRecipeTotal">0 mL/day</span></div><div class="gir-recipe-bar" role="img" aria-label="Fluid proportions"><span class="gir-recipe-segment gir-recipe-a" id="girRecipeSegmentA"></span><span class="gir-recipe-segment gir-recipe-b" id="girRecipeSegmentB"></span></div><div class="gir-recipe-legend"><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-a"></span><div><strong id="girRecipeNameA">Fluid A</strong><small id="girRecipeVolumeA">0 mL/day · 0%</small></div></div><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-b"></span><div><strong id="girRecipeNameB">Fluid B</strong><small id="girRecipeVolumeB">0 mL/day · 0%</small></div></div></div><p class="gir-recipe-footnote">Proportions reflect the editable Fluid A and Fluid B volumes below.</p></div>
 <div class="actions"><button class="btn" id="resetPlan">↻ Reset to automatic plan</button></div>
 <div id="targetStatus" class="status">Enter patient inputs to generate a plan.</div></div>
 <div class="stats">
@@ -854,11 +896,21 @@ function autoSolveSelectedPlan(){
  }
  setPlan(a,b,av,bv);recalc(false);
 }
+function updateGirRecipe(a,b,av,bv){
+ const total=Math.max(0,av)+Math.max(0,bv),pa=total>0?Math.max(0,av)/total*100:0,pb=total>0?Math.max(0,bv)/total*100:0;
+ const set=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
+ const segA=$('girRecipeSegmentA'),segB=$('girRecipeSegmentB');
+ if(segA)segA.style.width=pa.toFixed(2)+'%';if(segB)segB.style.width=pb.toFixed(2)+'%';
+ set('girRecipeTotal',fmt(total,1)+' mL/day');set('girRecipeNameA',a||'Fluid A');set('girRecipeNameB',b||'Fluid B');
+ set('girRecipeVolumeA',fmt(Math.max(0,av),1)+' mL/day · '+fmt(pa,0)+'%');set('girRecipeVolumeB',fmt(Math.max(0,bv),1)+' mL/day · '+fmt(pb,0)+'%');
+ const bar=$('girRecipe');if(bar)bar.setAttribute('aria-label',(a||'Fluid A')+' '+fmt(Math.max(0,av),1)+' mL/day; '+(b||'Fluid B')+' '+fmt(Math.max(0,bv),1)+' mL/day');
+}
+
 function updateTarget(x){
  const add=Math.max(x.p.target-x.gir,0);const req=x.remaining>0?add*x.p.w*144/x.remaining:0;
  $('additionalGir').textContent=fmt(add);$('requiredConc').textContent=fmt(req);$('lineType').textContent=req<=12.5?'Peripheral':req<=50?'Central':'Beyond central limit';
  if(!$('planA').dataset.user){const a=autoPlan(x);setPlan(a.a,a.b,a.av,a.bv)}
- const a=$('planA').value,b=$('planB').value,{av,bv}=getPlanVolumes();const ach=x.gir+calcFluid({name:a,volume:av,conc:planConc(a),custom:false},x.p.w).g+calcFluid({name:b,volume:bv,conc:planConc(b),custom:false},x.p.w).g;const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
+ const a=$('planA').value,b=$('planB').value,{av,bv}=getPlanVolumes();updateGirRecipe(a,b,av,bv);const ach=x.gir+calcFluid({name:a,volume:av,conc:planConc(a),custom:false},x.p.w).g+calcFluid({name:b,volume:bv,conc:planConc(b),custom:false},x.p.w).g;const diff=x.p.target-ach;const pv=av+bv;const unused=Math.max(x.remaining-pv,0);
  $('achievedGir').textContent=fmt(ach);$('girDifference').textContent=fmt(diff);$('unusedTfi').textContent=fmt(unused,1);
  let flags=[];const solveError=$('planA').dataset.solveError||'';if(solveError)flags.push(solveError);if(x.over)flags.push('Current fluids exceed permitted TFI.');if(x.gir>x.p.target+0.001)flags.push('Current GIR already exceeds target.');if(a===b&&pv>0)flags.push('Same fluid selected twice.');if(pv>Math.max(x.remaining,0)+0.001)flags.push('Plan exceeds remaining TFI.');if(req>50&&add>0)flags.push('Target not achievable within the configured central limit.');if(diff>0.01)flags.push('Preferred plan is below target.');else if(diff<-0.01)flags.push('Preferred plan is above target.');else if(pv>0&&unused<0.01)flags.push('Target achieved with TFI balanced.');else if(pv>0)flags.push('Target achieved but unused TFI remains.');
  if(add<=0)flags.push('No additional GIR is required.');
