@@ -89,9 +89,11 @@ public class MainActivity extends Activity {
         root.addView(webView, new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f
         ));
-        root.addView(bottomNavigation, new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, dp(68)
-        ));
+        LinearLayout.LayoutParams navLayout = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, dp(72)
+        );
+        navLayout.setMargins(dp(10), dp(2), dp(10), dp(7));
+        root.addView(bottomNavigation, navLayout);
         setContentView(root);
         webView.requestFocus(View.FOCUS_DOWN);
         webView.loadUrl(HOME_URL);
@@ -123,8 +125,18 @@ public class MainActivity extends Activity {
         LinearLayout bar = new LinearLayout(this);
         bar.setOrientation(LinearLayout.HORIZONTAL);
         bar.setGravity(Gravity.CENTER);
-        bar.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.WHITE, Color.rgb(246, 249, 255)}));
-        bar.setElevation(dp(10));
+        GradientDrawable glass = new GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            new int[]{
+                Color.argb(235, 245, 249, 255),
+                Color.argb(220, 226, 235, 255),
+                Color.argb(228, 235, 231, 255)
+            }
+        );
+        glass.setCornerRadius(dp(24));
+        glass.setStroke(dp(1), Color.argb(190, 255, 255, 255));
+        bar.setBackground(glass);
+        bar.setElevation(dp(16));
         bar.setPadding(dp(8), dp(5), dp(8), dp(5));
 
         addNavigationItem(bar, "Home", "home", R.drawable.nav_home);
@@ -222,22 +234,17 @@ public class MainActivity extends Activity {
 
     private void handleBackNavigation() {
         if (webView == null) {
-            showExitConfirmation();
+            finish();
             return;
         }
+        // Return a simple string so older WebView versions can reliably identify the current page.
         webView.evaluateJavascript(
             "(function(){var path=location.pathname;var hash=location.hash.replace('#','')||'home';"
-                + "return JSON.stringify({home:path.endsWith('/index.html')&&hash==='home',calculator:path.endsWith('/index.html')});})()",
+                + "if(!path.endsWith('/index.html'))return 'outside';"
+                + "return hash==='home'?'home':'calculator';})()",
             value -> {
-                if (value == null || "null".equals(value)) {
-                    showExitConfirmation();
-                    return;
-                }
-                boolean onHome = value.contains("\"home\":true");
-                boolean onCalculator = value.contains("\"calculator\":true");
-                if (onHome) {
-                    showExitConfirmation();
-                } else if (onCalculator) {
+                if (isFinishing()) return;
+                if (value != null && value.contains("calculator")) {
                     webView.evaluateJavascript(
                         "(function(){history.replaceState({page:'home'},'', '#home');"
                             + "if(typeof activatePage==='function'){activatePage('home',true);}"
@@ -247,12 +254,21 @@ public class MainActivity extends Activity {
                     webView.clearHistory();
                     setSelectedPage("home");
                 } else {
-                    resetHistoryAfterHomeLoad = true;
-                    webView.loadUrl(HOME_URL);
-                    setSelectedPage("home");
+                    // On Home (or if the WebView cannot report its page), Back closes the app.
+                    finish();
                 }
             }
         );
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(android.view.KeyEvent event) {
+        if (event.getKeyCode() == android.view.KeyEvent.KEYCODE_BACK
+                && event.getAction() == android.view.KeyEvent.ACTION_UP) {
+            handleBackNavigation();
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
