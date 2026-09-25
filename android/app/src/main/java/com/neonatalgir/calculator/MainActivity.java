@@ -58,6 +58,13 @@ public class MainActivity extends Activity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        // The native app must run entirely from packaged assets without network access.
+        settings.setBlockNetworkLoads(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        }
         settings.setLoadsImagesAutomatically(true);
         settings.setSupportZoom(false);
         settings.setBuiltInZoomControls(false);
