@@ -251,11 +251,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            handleBackNavigation();
-        } else {
-            super.onBackPressed();
-        }
+        handleBackNavigation();
     }
 
     private void showExitConfirmation() {
