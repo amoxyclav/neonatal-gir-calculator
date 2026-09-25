@@ -50,7 +50,7 @@ jobs:
           cp android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml /tmp/android/android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml
           cp android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml /tmp/android/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
           cp android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml /tmp/android/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
-          cp android/app/src/main/res/values/launcher_colors.xml /tmp/android/android/app/src/main/res/values/launcher_colors.xml
+          cp android/app/src/main/res/values/launcher_colors.xml android/app/src/main/res/drawable/nav_*.xml /tmp/android/android/app/src/main/res/values/launcher_colors.xml
 
       - name: Commit synchronized assets
         working-directory: /tmp/android
