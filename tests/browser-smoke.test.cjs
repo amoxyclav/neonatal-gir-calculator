@@ -167,8 +167,7 @@ const { spawn } = require('child_process');
       }
     }
     const fluidVolume = page.locator('#fluidList [data-field="volumeDisplay"]').first();
-    await fluidVolume.click();
-    await fluidVolume.pressSequentially('10');
+    await fluidVolume.fill('10');
     const totalAfterFluid = await page.locator('#currentTotal').textContent();
     if(totalAfterFluid !== '10.0') throw new Error('Entering D5 volume did not update current fluid total; got '+totalAfterFluid);
 
