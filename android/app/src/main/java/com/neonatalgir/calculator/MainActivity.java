@@ -128,13 +128,13 @@ public class MainActivity extends Activity {
         GradientDrawable glass = new GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM,
             new int[]{
-                Color.argb(235, 245, 249, 255),
-                Color.argb(220, 226, 235, 255),
-                Color.argb(228, 235, 231, 255)
+                Color.argb(185, 245, 249, 255),
+                Color.argb(165, 226, 235, 255),
+                Color.argb(175, 235, 231, 255)
             }
         );
         glass.setCornerRadius(dp(24));
-        glass.setStroke(dp(1), Color.argb(190, 255, 255, 255));
+        glass.setStroke(dp(1), Color.argb(175, 255, 255, 255));
         bar.setBackground(glass);
         bar.setElevation(dp(16));
         bar.setPadding(dp(8), dp(5), dp(8), dp(5));
@@ -234,7 +234,7 @@ public class MainActivity extends Activity {
 
     private void handleBackNavigation() {
         if (webView == null) {
-            finish();
+            finishAndRemoveTask();
             return;
         }
         // Return a simple string so older WebView versions can reliably identify the current page.
@@ -254,8 +254,8 @@ public class MainActivity extends Activity {
                     webView.clearHistory();
                     setSelectedPage("home");
                 } else {
-                    // On Home (or if the WebView cannot report its page), Back closes the app.
-                    finish();
+                    // On Home (or if the WebView cannot report its page), Back closes and removes the app task.
+                    finishAndRemoveTask();
                 }
             }
         );
@@ -272,6 +272,17 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+        // Redmi Y2 / Android 9 and older MIUI builds can route the hardware Back
+        // key through onKeyDown instead of the newer back callbacks.
+        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            handleBackNavigation();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public void onBackPressed() {
         handleBackNavigation();
     }
@@ -285,7 +296,7 @@ public class MainActivity extends Activity {
             .setNegativeButton("Stay", (dialog, which) -> exitDialogVisible = false)
             .setPositiveButton("Exit", (dialog, which) -> {
                 exitDialogVisible = false;
-                finish();
+                finishAndRemoveTask();
             })
             .setOnCancelListener(dialog -> exitDialogVisible = false)
             .show();
