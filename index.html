@@ -1263,17 +1263,18 @@ function updateNutrition(renderEditor=true){
  $('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nCarb').textContent=fmt(c,2);$('nEnergyKg').textContent=fmt(pt.w?e/pt.w:0,1);$('nProteinKg').textContent=fmt(pt.w?p/pt.w:0,2);$('nCarbKg').textContent=fmt(pt.w?c/pt.w:0,2);
 }
 function updateNutrition_legacy_disabled(){}
-const MIXER_PRESETS=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk','3% NaCl','KCl 15%'];
+const MIXER_PRESETS=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk','Extra preterm formula feed','3% NaCl','KCl 15%'];
 function mixerPresetOptions(){
+ const names=[...MIXER_PRESETS,...Object.keys(PRODUCTS).filter(x=>PRODUCTS[x]?.customPreset&&!MIXER_PRESETS.includes(x))];
  const label=x=>x+' ('+(PRODUCTS[x]?.conc??0)+'%)';
- return '<option value="">Manual concentration</option>'+MIXER_PRESETS.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('');
+ return '<option value="">Manual concentration</option>'+names.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('');
 }
 function refreshMixerPresetOptions(){
  ['mPresetA','mPresetB','mPresetE','mPresetS'].forEach(id=>{
    const el=$(id);if(!el)return;
    const current=el.value;
    el.innerHTML=mixerPresetOptions();
-   if(current&&MIXER_PRESETS.includes(current))el.value=current;
+   if(current&&(MIXER_PRESETS.includes(current)||PRODUCTS[current]?.customPreset))el.value=current;
  });
 }
 function applyMixerPreset(selectId,inputId){
