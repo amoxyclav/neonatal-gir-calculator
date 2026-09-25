@@ -750,6 +750,35 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 </div>
 </section>
 
+<section id="settings" class="page">
+<div class="settings-shell">
+  <div class="settings-hero">
+    <div class="settings-eyebrow"><span class="settings-mark">⚙</span> CALCULATOR PREFERENCES</div>
+    <h1>Settings</h1>
+    <p>Manage fluid preset compositions and display preferences. Changes are applied only for this browser/app session and are not saved permanently.</p>
+  </div>
+  <div class="settings-safety"><span aria-hidden="true">!</span><div><strong>Clinical safety</strong><p>Changing a preset can change GIR, energy, protein, carbohydrate and electrolyte results wherever that preset is used. Verify every edited value against the product label and your unit protocol before using the calculator clinically.</p></div></div>
+  <div class="settings-panel">
+    <div class="settings-panel-head"><div><h2>Calculator preferences</h2><p>Used for this session only.</p></div></div>
+    <div class="settings-preferences">
+      <label>Default volume unit for newly added fluids<select id="settingsDefaultVolumeUnit" disabled><option value="mL/day">mL/day</option><option value="mL/hr">mL/hr</option></select></label>
+      <label>Default display decimal places<select id="settingsDisplayDecimals" disabled><option value="0">0 decimals</option><option value="1">1 decimal</option><option value="2">2 decimals</option><option value="3">3 decimals</option><option value="4">4 decimals</option></select></label>
+    </div>
+  </div>
+  <div class="settings-panel">
+    <div class="settings-panel-head"><div><h2>Fluid presets &amp; concentrations</h2><p>Edit only after unlocking. All values are numeric and use the units shown.</p></div></div>
+    <div id="settingsProductList" class="settings-product-list"></div>
+  </div>
+  <div class="settings-actions">
+    <button type="button" id="settingsEdit" class="btn primary">Unlock to edit</button>
+    <button type="button" id="settingsSave" class="btn primary" disabled>Save &amp; apply</button>
+    <button type="button" id="settingsCancel" class="btn" disabled>Cancel edits</button>
+    <button type="button" id="settingsReset" class="btn">Restore default presets</button>
+  </div>
+  <div id="settingsStatus" class="status" role="status" aria-live="polite">Settings are locked. Unlock to make changes.</div>
+</div>
+</section>
+
 <section id="about" class="page">
 <div class="section about-shell">
   <div class="about-hero">
