@@ -1366,9 +1366,10 @@ function setupFluidPicker(selectId){
  const dialog=$('fluidPickerDialog');
  if(!trigger||!dialog)return;
  const openPicker=()=>{
-  fluidPickerVolumeUnit=calculatorPreferences.defaultVolumeUnit||'mL/day';
-  setFluidPickerVolumeUnit(fluidPickerVolumeUnit==='mL/hr'?'mL/day':'mL/hr');
-  setFluidPickerVolumeUnit(calculatorPreferences.defaultVolumeUnit||'mL/day');
+  document.querySelectorAll('#fluidPickerDialog [data-picker-unit]').forEach(button=>{
+   const active=button.dataset.pickerUnit===fluidPickerVolumeUnit;
+   button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));
+  });
   const list=dialog.querySelector('.fluid-picker-list');list.replaceChildren();
   const groups=[
    {label:'Standard fluids',items:['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk']},
