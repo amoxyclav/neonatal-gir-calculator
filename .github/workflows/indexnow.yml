@@ -1,0 +1,37 @@
+name: Submit updated pages to IndexNow
+
+on:
+  workflow_run:
+    workflows: ["Deploy static site to GitHub Pages"]
+    types: [completed]
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify IndexNow about sitemap URLs
+        env:
+          INDEXNOW_KEY: "4fed8d3491e5cfca294f0620bb965aea"
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --request POST "https://api.indexnow.org/indexnow" \
+            --header "Content-Type: application/json; charset=utf-8" \
+            --data-binary @- <<JSON
+          {
+            "host": "amoxyclav.github.io",
+            "key": "${INDEXNOW_KEY}",
+            "keyLocation": "https://amoxyclav.github.io/neonatal-gir-calculator/${INDEXNOW_KEY}.txt",
+            "urlList": [
+              "https://amoxyclav.github.io/neonatal-gir-calculator/",
+              "https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-gir-calculator.html",
+              "https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-fluid-nutrition-calculator.html",
+              "https://amoxyclav.github.io/neonatal-gir-calculator/guides/neonatal-fluid-mixer.html"
+            ]
+          }
+          JSON
