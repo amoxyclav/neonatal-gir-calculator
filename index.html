@@ -769,10 +769,11 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 
 <section id="settings" class="page">
 <div class="settings-shell">
-  <div class="settings-hero">
-    <div class="settings-eyebrow"><span class="settings-mark">⚙</span> CALCULATOR PREFERENCES</div>
-    <h1>Settings</h1>
-    <p>Manage fluid preset compositions and display preferences. Changes are applied only for this browser/app session and are not saved permanently.</p>
+  <div class="settings-actions settings-actions-top" aria-label="Settings actions">
+    <button type="button" class="btn primary" data-settings-proxy="edit">Unlock to edit</button>
+    <button type="button" class="btn primary" data-settings-proxy="save" disabled>Save &amp; apply</button>
+    <button type="button" class="btn" data-settings-proxy="cancel" disabled>Cancel edits</button>
+    <button type="button" class="btn" data-settings-proxy="reset">Restore default presets</button>
   </div>
   <div class="settings-safety"><span aria-hidden="true">!</span><div><strong>Clinical safety</strong><p>Changing a preset can change GIR, energy, protein, carbohydrate and electrolyte results wherever that preset is used. Verify every edited value against the product label and your unit protocol before using the calculator clinically.</p></div></div>
   <div class="settings-panel">
@@ -949,6 +950,10 @@ function setSettingsEditing(enabled){
  settingsEditing=!!enabled;
  document.querySelectorAll('[data-settings-product],#settingsDefaultVolumeUnit,#settingsDisplayDecimals').forEach(el=>el.disabled=!settingsEditing);
  $('settingsEdit').disabled=settingsEditing;$('settingsSave').disabled=!settingsEditing;$('settingsCancel').disabled=!settingsEditing;
+ document.querySelectorAll('[data-settings-proxy]').forEach(button=>{
+   const action=button.dataset.settingsProxy;
+   button.disabled=action==='edit'?settingsEditing:action==='save'||action==='cancel'?!settingsEditing:false;
+ });
 }
 function applySettings(values,prefs){
  Object.entries(values).forEach(([name,fields])=>{if(!PRODUCTS[name])return;Object.entries(fields).forEach(([key,value])=>{if(SETTINGS_FIELDS.some(([field])=>field===key))PRODUCTS[name][key]=value;});});
@@ -1387,6 +1392,12 @@ $('settingsEdit').onclick=()=>{setSettingsEditing(true);settingsStatus('Editing 
 $('settingsSave').onclick=saveSettings;
 $('settingsCancel').onclick=()=>{renderSettings();settingsStatus('Edits cancelled. Existing settings remain unchanged.');};
 $('settingsReset').onclick=resetSettings;
+document.querySelectorAll('[data-settings-proxy]').forEach(button=>{
+ button.addEventListener('click',()=>{
+   const target={edit:'settingsEdit',save:'settingsSave',cancel:'settingsCancel',reset:'settingsReset'}[button.dataset.settingsProxy];
+   if(target&&!button.disabled)$(target)?.click();
+ });
+});
 refreshMixerPresetOptions();
 ['mPresetA','mPresetB','mPresetE','mPresetS'].forEach(id=>$(id).onchange=()=>{
  const map={mPresetA:'ma',mPresetB:'mb',mPresetE:'me2',mPresetS:'ms2'};
