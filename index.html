@@ -410,7 +410,54 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
 {"@type":"WebApplication","@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","applicationCategory":"HealthApplication","operatingSystem":"Web","description":"A browser-based clinical calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"isAccessibleForFree":true,"inLanguage":"en"},
 {"@type":"WebSite","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/"}
-]}</script></head>
+]}</script><style>
+/* Phase 4 — Nutrition workspace visual polish. Presentation-only; calculation logic and field IDs stay unchanged. */
+#nutrition>.section{position:relative;overflow:hidden;margin:20px 0;padding:clamp(18px,2.5vw,30px);border:1px solid #d8e4f5;border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(247,250,255,.98));box-shadow:0 12px 30px rgba(31,61,117,.055)}
+#nutrition>.section>h2{display:flex;align-items:center;gap:12px;margin:0 0 20px;color:#1b3266;font-size:clamp(19px,2vw,24px);letter-spacing:-.025em;line-height:1.3}
+#nutrition>.section>h2:before{content:"";width:5px;height:28px;flex:0 0 5px;border-radius:99px;background:linear-gradient(180deg,#3979df,#8b82e8)}
+#nutrition>.section>.grid{gap:16px}
+#nutrition>.section label{color:#334b75;font-size:13px;font-weight:750}
+#nutrition>.section input:not([type=checkbox]),#nutrition>.section select{border-color:#d1def1;border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(30,64,120,.025);transition:border-color .15s,box-shadow .15s}
+#nutrition>.section input:focus,#nutrition>.section select:focus{outline:none;border-color:#7ba4ed;box-shadow:0 0 0 3px rgba(72,125,220,.13)}
+#nutrition>.section .help,#nutrition>.section .mut{color:#687b9a;line-height:1.65}
+#nutrition>.section .stats{gap:12px;margin-top:16px}
+#nutrition>.section .stat{min-width:0;border:1px solid #dce7f7;border-radius:17px;padding:16px 17px;background:linear-gradient(145deg,#f8fbff,#edf4ff);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+#nutrition>.section .stat span{color:#657895;font-size:10px;font-weight:800;letter-spacing:.07em;line-height:1.45}
+#nutrition>.section .stat strong{color:#1b356d;font-size:clamp(21px,2vw,27px);font-weight:850;letter-spacing:-.035em;overflow-wrap:anywhere}
+#nutrition>.section .stat small{color:#7183a1;font-size:11px}
+#nutrition>.section .plan{margin-top:16px;padding:20px;border:1px solid #d7e4fa;border-radius:18px;background:linear-gradient(140deg,#f5f9ff,#f5f3ff)}
+#nutrition>.section .plan h3,#nutrition>.section .plan h4{color:#24477f}
+#nutrition>.section .plan .stats{margin-top:16px!important}
+#nutrition>.section .status{border-radius:12px;line-height:1.55}
+#nutrition>.section .actions{gap:10px}
+#nutrition>.section .actions .btn{border-radius:12px;padding:11px 16px;font-weight:750}
+#nutrition>.section .actions .btn.primary{background:linear-gradient(120deg,#2866d8,#4d62d1);box-shadow:0 7px 16px rgba(42,88,195,.16)}
+#nutrition .nutrition-extra{padding:15px 16px;margin:11px 0;border:1px solid #dce6f5;border-radius:17px;background:linear-gradient(145deg,#fff,#f8faff);box-shadow:0 4px 14px rgba(32,65,120,.025)}
+#nutrition .nutrition-extra-head{gap:14px;min-height:34px}
+#nutrition .nutrition-extra-toggle{color:#274575;font-weight:800}
+#nutrition .nutrition-extra-amount input{border-radius:11px}
+#nutrition .nutrition-extra-live{gap:10px 18px;flex-wrap:wrap;color:#6c7d98}
+#nutrition .nutrition-extra-live b{color:#23467f;font-weight:850}
+#nutrition .nutrition-extra .details-toggle{border-color:#cbdcf6;border-radius:11px;background:#edf4ff;color:#2b5db5;font-weight:800}
+#nutrition .nutrition-extra .details-toggle[aria-expanded=true]{background:#dceaff;border-color:#a9c5f2}
+#nutrition .nutrition-extra-details{border-color:#e0e9f7}
+#nutrition .nutrition-extra-details .grid{gap:12px}
+#nutrition .divider{background:#e4ebf6}
+#nutrition>.section.table{border-radius:18px}
+@media(max-width:760px){
+ #nutrition>.section{padding:18px 15px;margin:14px 0;border-radius:18px}
+ #nutrition>.section>h2{font-size:19px;margin-bottom:16px}
+ #nutrition>.section .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #nutrition>.section .stat{padding:13px 12px;border-radius:14px}
+ #nutrition>.section .stat strong{font-size:22px}
+ #nutrition>.section .plan{padding:15px}
+ #nutrition .nutrition-extra{padding:13px;border-radius:15px}
+ #nutrition .nutrition-extra-head{gap:12px}
+ #nutrition .nutrition-extra-live{gap:8px 12px}
+}
+@media(max-width:420px){#nutrition>.section .stats{grid-template-columns:1fr}#nutrition>.section .stat strong{font-size:24px}}
+</style>
+</head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
 <nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a></nav></div></header>
