@@ -745,10 +745,12 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
     <div class="mixer-stock-settings" id="mixerStockSettings" hidden>
       <div class="mixer-settings-title">Choose stock solutions</div>
       <div class="grid g2">
-        <div class="mixer-stock-config"><label for="mPresetA">Stock A preset</label><select id="mPresetA"></select><label for="ma">Stock A concentration (%)</label><input id="ma" type="number" min="0" step="0.1" value="10"></div>
-        <div class="mixer-stock-config"><label for="mPresetB">Stock B preset</label><select id="mPresetB"></select><label for="mb">Stock B concentration (%)</label><input id="mb" type="number" min="0" step="0.1" value="25"></div>
+        <div class="mixer-stock-config"><label for="mPresetA">Stock A preset</label><select id="mPresetA" aria-label="Stock A preset"></select></div>
+        <div class="mixer-stock-config"><label for="mPresetB">Stock B preset</label><select id="mPresetB" aria-label="Stock B preset"></select></div>
       </div>
-      <p class="mixer-helper">Choose the exact stock bags available. You can also enter a custom concentration in the fields.</p>
+      <input id="ma" type="hidden" value="10">
+      <input id="mb" type="hidden" value="25">
+      <p class="mixer-helper">Select the exact stock bags available. Each preset supplies its own concentration for the calculation.</p>
     </div>
     <div class="mixer-safety-note">Calculation aid only. Verify the final preparation, product compatibility, and institutional preparation requirements independently before administration.</div>
   </div>
@@ -1288,7 +1290,7 @@ const MIXER_PRESETS=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intrali
 function mixerPresetOptions(){
  const names=[...MIXER_PRESETS,...Object.keys(PRODUCTS).filter(x=>PRODUCTS[x]?.customPreset&&!MIXER_PRESETS.includes(x))];
  const label=x=>x+' ('+(PRODUCTS[x]?.conc??0)+'%)';
- return '<option value="">Manual concentration</option>'+names.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('');
+ return names.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('');
 }
 function refreshMixerPresetOptions(){
  ['mPresetA','mPresetB','mPresetE','mPresetS'].forEach(id=>{
