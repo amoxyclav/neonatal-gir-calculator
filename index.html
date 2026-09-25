@@ -1294,7 +1294,7 @@ function predefinedFluidOptions(){
  const custom=Object.keys(PRODUCTS).filter(x=>PRODUCTS[x]?.customPreset);
  const electrolyte=['Calcium gluconate 10%','3% NaCl','KCl 15%'];
  const label=x=>x==='Calcium gluconate 10%'?'Calcium gluconate 10% (0.465 mEq/mL Ca)':x==='3% NaCl'?'3% NaCl (0.513 mEq/mL Na)':x==='KCl 15%'?'KCl 15% (2 mEq/mL K)':x;
- return '<option value="">+ Add predefined fluid…</option><optgroup label="Standard fluids">'+core.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>'+(custom.length?'<optgroup label="My custom fluids">'+custom.map(x=>'<option value="'+x+'">'+x+'</option>').join('')+'</optgroup>':'')+'<optgroup label="Electrolytes / additives">'+electrolyte.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>';
+ return '<option value="">+ Add predefined fluid…</option><optgroup label="Standard fluids">'+core.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>'+(custom.length?custom.map(x=>'<option value="'+x+'">'+x+'</option>').join(''):'')+'<optgroup label="Electrolytes / additives">'+electrolyte.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>';
 }
 function setupFluidPicker(selectId){
  const trigger=document.querySelector('[data-fluid-picker="'+selectId+'"]');
@@ -1309,7 +1309,7 @@ function setupFluidPicker(selectId){
   ];
   groups.forEach(group=>{
    const section=document.createElement('section');section.className='fluid-picker-group';
-   const heading=document.createElement('h3');heading.textContent=group.label;section.appendChild(heading);
+   if(group.label!=='My custom fluids'){const heading=document.createElement('h3');heading.textContent=group.label;section.appendChild(heading);}
    group.items.filter(name=>PRODUCTS[name]).forEach(name=>{
     const item=document.createElement('button');item.type='button';item.className='fluid-picker-option';
     const label=document.createElement('span');label.textContent=name;
