@@ -125,7 +125,10 @@ const { spawn } = require('child_process');
     if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==0) throw new Error('A zero-volume fluid should not be added.');
     await chooseFluid('D5');
     if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==1) throw new Error('Selecting a positive D5 volume did not add the fluid.');
-    await page.locator('#fluidList .fluid').filter({hasText:'D5'}).first().locator('.remove').click();
+    await girPickerTrigger.click();
+    await page.locator('#fluidPickerDialog .fluid-picker-volume[data-fluid-name="D5"]').fill('0');
+    await page.locator('#fluidPickerDialog #applyPredefinedFluids').click();
+    if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==0) throw new Error('Setting an existing fluid volume to zero should remove its row.');
 
     await chooseFluid('Formula milk');
     const formulaFluid=page.locator('#fluidList .fluid').filter({hasText:'Formula milk'}).first();
