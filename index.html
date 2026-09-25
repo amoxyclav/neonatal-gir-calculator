@@ -405,6 +405,31 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 }
 @media(max-width:360px){#mixer .grid.g4{grid-template-columns:minmax(0,1fr)}}
 
+/* Settings page — guarded, session-only preset editing */
+.settings-shell{max-width:1080px;margin:0 auto}
+.settings-hero{padding:clamp(24px,4vw,38px);border:1px solid #d5e2f8;border-radius:24px;background:radial-gradient(ellipse at 90% 5%,rgba(191,219,254,.65),transparent 42%),linear-gradient(130deg,#f9fbff,#edf4ff 58%,#f3f0ff);box-shadow:0 12px 30px rgba(30,64,175,.055)}
+.settings-eyebrow{display:flex;align-items:center;gap:10px;color:#5b75a8;font-size:10px;font-weight:850;letter-spacing:.16em}
+.settings-mark{display:grid;place-items:center;width:30px;height:30px;border:1px solid #d7e4fa;border-radius:10px;background:#fff;color:#3868ba;font-size:17px}
+.settings-hero h1{margin:16px 0 9px;color:#1b2e60;font-size:clamp(29px,4vw,42px);letter-spacing:-.04em}
+.settings-hero p{max-width:780px;margin:0;color:#607391;font-size:14px;line-height:1.7}
+.settings-safety{display:flex;gap:12px;margin:16px 0;padding:15px 17px;border:1px solid #f0dca7;border-radius:15px;background:linear-gradient(110deg,#fffaf0,#fff7e5);color:#7b5817}
+.settings-safety>span{display:grid;place-items:center;flex:0 0 27px;height:27px;border-radius:50%;background:#ffedbd;color:#93610b;font-weight:900}
+.settings-safety strong{font-size:13px}.settings-safety p{margin:4px 0 0;font-size:12px;line-height:1.65}
+.settings-panel{margin:16px 0;padding:clamp(17px,2.5vw,25px);border:1px solid #dce6f6;border-radius:20px;background:linear-gradient(150deg,#fff,#fafcff);box-shadow:0 7px 23px rgba(35,67,125,.04)}
+.settings-panel-head{margin-bottom:16px}.settings-panel-head h2{margin:0;color:#1c3267;font-size:20px;letter-spacing:-.025em}.settings-panel-head p{margin:6px 0 0;color:#72819a;font-size:12px}
+.settings-preferences{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.settings-preferences label,.settings-field{display:block;color:#31466f;font-size:12px;font-weight:750}
+.settings-preferences select,.settings-field input{margin-top:6px;padding:10px 11px;border:1px solid #d3def0;border-radius:10px;background:#fff;color:#1b2d60;width:100%;min-width:0}
+.settings-product-list{display:grid;gap:12px}
+.settings-product{padding:14px;border:1px solid #e0e8f6;border-radius:15px;background:linear-gradient(145deg,#fff,#f8faff)}
+.settings-product-title{margin:0 0 12px;color:#24427e;font-size:14px;font-weight:850}
+.settings-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.settings-field{font-size:11px;line-height:1.4}
+.settings-field input:disabled,.settings-preferences select:disabled{background:#f4f7fc;color:#65748e;border-color:#e1e8f3;opacity:1}
+.settings-actions{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+.settings-actions button:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+#settingsStatus{border-radius:12px;line-height:1.6}
+@media(max-width:700px){.settings-hero{padding:23px 19px;border-radius:19px}.settings-safety{padding:12px;gap:9px}.settings-preferences{grid-template-columns:1fr}.settings-panel{padding:16px 12px;border-radius:16px}.settings-product{padding:11px}.settings-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.settings-actions button{flex:1 1 calc(50% - 9px);min-height:44px}}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -460,7 +485,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 </head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
-<nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a></nav></div></header>
+<nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a><a href="#settings" data-page="settings">Settings</a></nav></div></header>
 <main>
 <section id="home" class="page active"><div class="home-hero home-hero-premium">
   <div class="hero-copy">
@@ -704,6 +729,35 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 </div>
 </section>
 
+<section id="settings" class="page">
+<div class="settings-shell">
+  <div class="settings-hero">
+    <div class="settings-eyebrow"><span class="settings-mark">⚙</span> CALCULATOR PREFERENCES</div>
+    <h1>Settings</h1>
+    <p>Manage fluid preset compositions and display preferences. Changes are applied only for this browser/app session and are not saved permanently.</p>
+  </div>
+  <div class="settings-safety"><span aria-hidden="true">!</span><div><strong>Clinical safety</strong><p>Changing a preset can change GIR, energy, protein, carbohydrate and electrolyte results wherever that preset is used. Verify every edited value against the product label and your unit protocol before using the calculator clinically.</p></div></div>
+  <div class="settings-panel">
+    <div class="settings-panel-head"><div><h2>Calculator preferences</h2><p>Used for this session only.</p></div></div>
+    <div class="settings-preferences">
+      <label>Default volume unit for newly added fluids<select id="settingsDefaultVolumeUnit" disabled><option value="mL/day">mL/day</option><option value="mL/hr">mL/hr</option></select></label>
+      <label>Default display decimal places<select id="settingsDisplayDecimals" disabled><option value="0">0 decimals</option><option value="1">1 decimal</option><option value="2">2 decimals</option><option value="3">3 decimals</option><option value="4">4 decimals</option></select></label>
+    </div>
+  </div>
+  <div class="settings-panel">
+    <div class="settings-panel-head"><div><h2>Fluid presets &amp; concentrations</h2><p>Edit only after unlocking. All values are numeric and use the units shown.</p></div></div>
+    <div id="settingsProductList" class="settings-product-list"></div>
+  </div>
+  <div class="settings-actions">
+    <button type="button" id="settingsEdit" class="btn primary">Unlock to edit</button>
+    <button type="button" id="settingsSave" class="btn primary" disabled>Save &amp; apply</button>
+    <button type="button" id="settingsCancel" class="btn" disabled>Cancel edits</button>
+    <button type="button" id="settingsReset" class="btn">Restore default presets</button>
+  </div>
+  <div id="settingsStatus" class="status" role="status" aria-live="polite">Settings are locked. Unlock to make changes.</div>
+</div>
+</section>
+
 <section id="about" class="page">
 <div class="section about-shell">
   <div class="about-hero">
@@ -791,6 +845,8 @@ NS:{conc:.9,energy:0,protein:0,carb:0,sodium:.154,potassium:0,calcium:0,gir:fals
 '3% NaCl':{conc:3,energy:0,protein:0,carb:0,sodium:.513,potassium:0,calcium:0,gir:false,editable:true},
 'KCl 15%':{conc:15,energy:0,protein:0,carb:0,sodium:0,potassium:2,calcium:0,gir:false,editable:true}
 };
+const DEFAULT_PRODUCTS=JSON.parse(JSON.stringify(PRODUCTS));
+let calculatorPreferences={defaultVolumeUnit:'mL/day',displayDecimals:2};
 const PREDEF=Object.keys(PRODUCTS), PLAN=['NS','Isolyte P','D5','D10','D25','D50'];
 let fluids=[];let uid=0;
 const $=id=>document.getElementById(id);
@@ -836,11 +892,49 @@ document.addEventListener('click',e=>{
 window.addEventListener('popstate',()=>activatePage(location.hash.replace('#','')||'home',true));
 window.addEventListener('hashchange',()=>activatePage(location.hash.replace('#','')||'home',true));
 const n=(id)=>parseFloat($(id)?.value)||0;
-const fmt=(x,d=2)=>(Number.isFinite(x)?x:0).toFixed(d);
+let displayDecimals=2;const fmt=(x,d=displayDecimals)=>(Number.isFinite(x)?x:0).toFixed(d);
+const SETTINGS_FIELDS=[['conc','Concentration (%)'],['energy','Energy (kcal/100 mL)'],['protein','Protein/AA (g/100 mL)'],['carb','Carbohydrate (g/100 mL)'],['sodium','Sodium (mEq/mL)'],['potassium','Potassium (mEq/mL)'],['calcium','Calcium (mEq/mL)']];
+let settingsEditing=false;
+function settingsStatus(message,kind=''){const el=$('settingsStatus');if(el){el.textContent=message;el.className='status'+(kind?' '+kind:'');}}
+function renderSettings(){
+ const list=$('settingsProductList');if(!list)return;
+ list.innerHTML=Object.entries(PRODUCTS).map(([name,p])=>'<article class="settings-product"><h3 class="settings-product-title">'+name+'</h3><div class="settings-fields">'+SETTINGS_FIELDS.map(([key,label])=>'<label class="settings-field">'+label+'<input type="number" min="0" step="any" data-settings-product="'+name+'" data-settings-key="'+key+'" value="'+(Number(p[key])||0)+'" disabled></label>').join('')+'</div></article>').join('');
+ $('settingsDefaultVolumeUnit').value=calculatorPreferences.defaultVolumeUnit;
+ $('settingsDisplayDecimals').value=String(calculatorPreferences.displayDecimals);
+ setSettingsEditing(false);
+}
+function setSettingsEditing(enabled){
+ settingsEditing=!!enabled;
+ document.querySelectorAll('[data-settings-product],#settingsDefaultVolumeUnit,#settingsDisplayDecimals').forEach(el=>el.disabled=!settingsEditing);
+ $('settingsEdit').disabled=settingsEditing;$('settingsSave').disabled=!settingsEditing;$('settingsCancel').disabled=!settingsEditing;
+}
+function applySettings(values,prefs){
+ Object.entries(values).forEach(([name,fields])=>{if(!PRODUCTS[name])return;Object.entries(fields).forEach(([key,value])=>{if(SETTINGS_FIELDS.some(([field])=>field===key))PRODUCTS[name][key]=value;});});
+ calculatorPreferences={...prefs};displayDecimals=calculatorPreferences.displayDecimals;
+ fluids.forEach(f=>{if(f.custom||!PRODUCTS[f.name])return;SETTINGS_FIELDS.forEach(([key])=>{if(Object.prototype.hasOwnProperty.call(PRODUCTS[f.name],key))f[key]=PRODUCTS[f.name][key];});});
+ refreshMixerPresetOptions();renderFluids();recalc(false);if($('nutritionFluidEditor'))renderNutritionFluids();
+}
+function readSettingsDraft(){
+ const values={};
+ Object.keys(PRODUCTS).forEach(name=>{values[name]={};SETTINGS_FIELDS.forEach(([key])=>{const el=document.querySelector('[data-settings-product="'+name+'"][data-settings-key="'+key+'"]');const value=Number(el?.value);if(!Number.isFinite(value)||value<0)throw new Error('Enter a valid non-negative number for '+name+' — '+key+'.');values[name][key]=value;});});
+ const decimals=Number($('settingsDisplayDecimals').value);
+ if(!Number.isInteger(decimals)||decimals<0||decimals>4)throw new Error('Choose a display precision from 0 to 4 decimals.');
+ return {values,prefs:{defaultVolumeUnit:$('settingsDefaultVolumeUnit').value,displayDecimals:decimals}};
+}
+function saveSettings(){
+ if(!settingsEditing)return;let draft;try{draft=readSettingsDraft();}catch(err){settingsStatus(err.message,'warn');return;}
+ if(!window.confirm('Apply these preset and preference changes for this session? They can change calculator results. Verify every value before continuing.'))return;
+ applySettings(draft.values,draft.prefs);setSettingsEditing(false);
+ settingsStatus('Settings applied for this session only. Review the updated calculator results and verify preset values against product labels.','ok');
+}
+function resetSettings(){
+ if(!window.confirm('Restore all fluid preset values and calculator preferences to the built-in defaults? This will also update current fluid rows.'))return;
+ applySettings(DEFAULT_PRODUCTS,{defaultVolumeUnit:'mL/day',displayDecimals:2});renderSettings();settingsStatus('Built-in defaults restored for this session.','ok');
+}
 function patient(){const raw=n('w'),u=$('weightUnit')?.value||'kg';const w=u==='g'?raw/1000:u==='lb'?raw*0.45359237:raw;return{w,tfi:n('tfi'),target:n('tg')}}
 function addFluid(name,custom=false){
  const p=PRODUCTS[name]||{conc:0,energy:0,protein:0,carb:0,sodium:0,potassium:0,calcium:0,gir:true,editable:true};
- fluids.push({id:++uid,name,custom,volume:0,volumeUnit:'mL/day',volumeInitialized:false,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium||0,potassium:p.potassium||0,calcium:p.calcium||0,});
+ fluids.push({id:++uid,name,custom,volume:0,volumeUnit:calculatorPreferences.defaultVolumeUnit,volumeInitialized:false,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium||0,potassium:p.potassium||0,calcium:p.calcium||0,});
  renderFluids();recalc();if($('nutritionFluidEditor'))renderNutritionFluids();
 }
 function removeFluid(id){fluids=fluids.filter(f=>f.id!==id);renderFluids();recalc();if($('nutritionFluidEditor'))renderNutritionFluids()}
@@ -1230,6 +1324,11 @@ $('nutPlanBV').oninput=()=>{
  const raw=$('nutPlanBV').value; $('planBV').value=raw===''?'0':raw;$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
 };
 
+renderSettings();
+$('settingsEdit').onclick=()=>{setSettingsEditing(true);settingsStatus('Editing unlocked. Review every value carefully, then choose Save & apply or Cancel edits.','warn');};
+$('settingsSave').onclick=saveSettings;
+$('settingsCancel').onclick=()=>{renderSettings();settingsStatus('Edits cancelled. Existing settings remain unchanged.');};
+$('settingsReset').onclick=resetSettings;
 refreshMixerPresetOptions();
 ['mPresetA','mPresetB','mPresetE','mPresetS'].forEach(id=>$(id).onchange=()=>{
  const map={mPresetA:'ma',mPresetB:'mb',mPresetE:'me2',mPresetS:'ms2'};
