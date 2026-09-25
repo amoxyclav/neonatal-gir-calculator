@@ -1261,7 +1261,7 @@ function updateNutrition(renderEditor=true){
  $('nEnergy').textContent=fmt(e,1);$('nProtein').textContent=fmt(p,2);$('nCarb').textContent=fmt(c,2);$('nEnergyKg').textContent=fmt(pt.w?e/pt.w:0,1);$('nProteinKg').textContent=fmt(pt.w?p/pt.w:0,2);$('nCarbKg').textContent=fmt(pt.w?c/pt.w:0,2);
 }
 function updateNutrition_legacy_disabled(){}
-const MIXER_PRESETS=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk',,'3% NaCl','KCl 15%'];
+const MIXER_PRESETS=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk' ,'Formula milk','3% NaCl','KCl 15%'];
 function mixerPresetOptions(){
  const names=[...MIXER_PRESETS,...Object.keys(PRODUCTS).filter(x=>PRODUCTS[x]?.customPreset&&!MIXER_PRESETS.includes(x))];
  const label=x=>x+' ('+(PRODUCTS[x]?.conc??0)+'%)';
@@ -1289,8 +1289,8 @@ function syncProductFromFluid(f){
  }
 }
 function predefinedFluidOptions(){
- const core=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk',];
- const custom=Object.keys(PRODUCTS).filter(x=>PRODUCTS[x]?.customPreset&&x!==);
+ const core=['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk'];
+ const custom=Object.keys(PRODUCTS).filter(x=>PRODUCTS[x]?.customPreset;
  const electrolyte=['Calcium gluconate 10%','3% NaCl','KCl 15%'];
  const label=x=>x==='Calcium gluconate 10%'?'Calcium gluconate 10% (0.465 mEq/mL Ca)':x==='3% NaCl'?'3% NaCl (0.513 mEq/mL Na)':x==='KCl 15%'?'KCl 15% (2 mEq/mL K)':x;
  return '<option value="">+ Add predefined fluid…</option><optgroup label="Standard fluids">'+core.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>'+(custom.length?'<optgroup label="My custom fluids">'+custom.map(x=>'<option value="'+x+'">'+x+'</option>').join('')+'</optgroup>':'')+'<optgroup label="Electrolytes / additives">'+electrolyte.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>';
@@ -1303,7 +1303,7 @@ function setupFluidPicker(selectId){
   const list=dialog.querySelector('.fluid-picker-list');list.replaceChildren();
   const groups=[
    {label:'Standard fluids',items:['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk',]},
-   {label:'My custom fluids',items:Object.keys(PRODUCTS).filter(name=>PRODUCTS[name]?.customPreset&&name!==)},
+   {label:'My custom fluids',items:Object.keys(PRODUCTS).filter(name=>PRODUCTS[name]?.customPreset},
    {label:'Electrolytes / additives',items:['Calcium gluconate 10%','3% NaCl','KCl 15%']}
   ];
   groups.forEach(group=>{
