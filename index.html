@@ -1328,13 +1328,13 @@ calculateMixerExistingBag();
  const stockToggle=$('mixerStockToggle'),stockSettings=$('mixerStockSettings');
  stockToggle?.addEventListener('click',()=>{const open=stockToggle.getAttribute('aria-expanded')!=='true';stockToggle.setAttribute('aria-expanded',String(open));stockSettings.hidden=!open;});
  function val(id){const x=Number.parseFloat($(id)?.value);return Number.isFinite(x)?x:0;}
- function stockName(selectId,concId){const key=$(selectId)?.value||'';const p=window.PRODUCTS?.[key];const c=val(concId);if(/^D(5|10|25|50)$/.test(key))return 'Glucose '+(c||key.slice(1))+'%';if(key==='Isolyte P')return 'Isolyte P';if(key==='NS')return 'Normal saline';if(key==='Aminoven')return 'Aminoven '+c+'%';if(key==='Intralipid')return 'Intralipid '+c+'%';return key||('Stock '+c+'%');}
+ function stockName(selectId,concId){const key=$(selectId)?.value||'';const p=typeof PRODUCTS!=='undefined'?PRODUCTS[key]:null;const c=val(concId);if(/^D(5|10|25|50)$/.test(key))return 'Glucose '+(c||key.slice(1))+'%';if(key==='Isolyte P')return 'Isolyte P';if(key==='NS')return 'Normal saline';if(key==='Aminoven')return 'Aminoven '+c+'%';if(key==='Intralipid')return 'Intralipid '+c+'%';return key||('Stock '+c+'%');}
  function showResult(){
    const target=val('mt'),volume=val('mv'),a=val('ma'),b=val('mb');
    const av=Number.parseFloat($('mav')?.textContent)||0,bv=Number.parseFloat($('mbv')?.textContent)||0;
    const nameA=stockName('mPresetA','ma'),nameB=stockName('mPresetB','mb');
    const glucose=/^Glucose /.test(nameA)&&/^Glucose /.test(nameB);
-   const title=$('mixerMakeTitle');if(title)title.textContent='To make '+(volume?volume.toLocaleString(undefined,{maximumFractionDigits:1}:'0')+' mL of '+(glucose?'glucose ':'solution ')+target+'%';
+   const title=$('mixerMakeTitle');if(title)title.textContent='To make '+(volume?volume.toLocaleString(undefined,{maximumFractionDigits:1}):'0')+' mL of '+(glucose?'glucose ':'solution ')+target+'%';
    if($('mixerStockAName'))$('mixerStockAName').textContent=nameA;
    if($('mixerStockBName'))$('mixerStockBName').textContent=nameB;
    const total=Math.max(0,av)+Math.max(0,bv),pa=total>0?Math.max(0,av)/total*100:0,pb=total>0?Math.max(0,bv)/total*100:0;
