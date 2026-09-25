@@ -176,6 +176,11 @@ const { spawn } = require('child_process');
     const girCalciumTotal=await page.locator('#currentCa').textContent(); if(girCalciumTotal !== '1493.27') throw new Error('Calcium total card did not update from the calcium gluconate preset; got '+girCalciumTotal+'.');
 
     async function assertOnlyPageVisible(id){
+      // Navigation intentionally includes a short branded transition; wait for it to finish before asserting the active page.
+      await page.waitForFunction(expected=>{
+        const visible=[...document.querySelectorAll('.page')].filter(el=>el.getClientRects().length>0).map(el=>el.id);
+        return visible.length===1 && visible[0]===expected;
+      },id,{timeout:3000});
       const visible=await page.locator('.page:visible').evaluateAll(els=>els.map(el=>el.id));
       if(visible.length!==1 || visible[0]!==id) throw new Error('Expected only '+id+' to be visible; got '+visible.join(', '));
     }

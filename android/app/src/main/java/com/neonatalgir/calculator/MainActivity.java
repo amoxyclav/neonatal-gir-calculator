@@ -23,9 +23,9 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
     private static final String HOME_URL = "file:///android_asset/site/index.html#home";
-    private static final int BLUE = Color.rgb(37, 89, 197);
+    private static final int BLUE = Color.rgb(37, 99, 235);
     private static final int MUTED = Color.rgb(113, 128, 150);
-    private static final int ACTIVE_BG = Color.rgb(237, 244, 255);
+    private static final int ACTIVE_BG = Color.rgb(232, 241, 255);
     private WebView webView;
     private LinearLayout bottomNavigation;
     private boolean exitDialogVisible = false;
@@ -43,10 +43,10 @@ public class MainActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(Color.rgb(244, 247, 251));
+        GradientDrawable appBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.rgb(247, 250, 255), Color.rgb(239, 244, 253), Color.rgb(244, 242, 255)});\n        root.setBackground(appBackground);
 
         webView = new WebView(this);
-        webView.setBackgroundColor(Color.rgb(244, 247, 251));
+        webView.setBackgroundColor(Color.rgb(242, 246, 253));
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);
@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
         LinearLayout bar = new LinearLayout(this);
         bar.setOrientation(LinearLayout.HORIZONTAL);
         bar.setGravity(Gravity.CENTER);
-        bar.setBackgroundColor(Color.WHITE);
+        bar.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.WHITE, Color.rgb(246, 249, 255)}));
         bar.setElevation(dp(10));
         bar.setPadding(dp(8), dp(5), dp(8), dp(5));
 
@@ -170,7 +170,7 @@ public class MainActivity extends Activity {
             View child = bottomNavigation.getChildAt(i);
             boolean active = selectedPage.equals(String.valueOf(child.getTag()));
             GradientDrawable bg = new GradientDrawable();
-            bg.setColor(active ? ACTIVE_BG : Color.TRANSPARENT);
+            if (active) {\n                bg.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);\n                bg.setColors(new int[]{Color.rgb(219, 234, 254), Color.rgb(232, 229, 255)});\n            } else {\n                bg.setColor(Color.TRANSPARENT);\n            }
             bg.setCornerRadius(dp(15));
             child.setBackground(bg);
             if (child instanceof LinearLayout) {
@@ -251,11 +251,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            handleBackNavigation();
-        } else {
-            super.onBackPressed();
-        }
+        handleBackNavigation();
     }
 
     private void showExitConfirmation() {
