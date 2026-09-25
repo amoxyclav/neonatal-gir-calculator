@@ -1309,7 +1309,7 @@ function setupFluidPicker(selectId){
   ];
   groups.forEach(group=>{
    const section=document.createElement('section');section.className='fluid-picker-group';
-   const heading=document.createElement('h3');heading.textContent=group.label;section.appendChild(heading);
+   if(group.label!=='My custom fluids'){const heading=document.createElement('h3');heading.textContent=group.label;section.appendChild(heading);}
    group.items.filter(name=>PRODUCTS[name]).forEach(name=>{
     const item=document.createElement('button');item.type='button';item.className='fluid-picker-option';
     const label=document.createElement('span');label.textContent=name;
