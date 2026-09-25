@@ -93,13 +93,15 @@ const { spawn } = require('child_process');
     if(cardStyle.border !== 'rgb(219, 230, 247)') throw new Error('Premium display cards are missing the refined blue border.');
     if(cardStyle.radius !== '17px') throw new Error('Premium display cards do not have the intended rounded shape.');
 
-    async function chooseFluid(name){
+    async function chooseFluid(name,volume='0.001'){
       await page.locator('[data-fluid-picker="addFluid"]').click();
       const picker=page.locator('#fluidPickerDialog');
       if(!(await picker.isVisible())) throw new Error('Predefined-fluid picker did not open while selecting '+name+'.');
-      const option=picker.getByRole('button',{name:name,exact:true});
-      if(await option.count()!==1) throw new Error('Predefined-fluid option missing: '+name);
-      await option.click();
+      const option=picker.locator('.fluid-picker-volume').filter({has:page.locator('xpath=..')}).locator('xpath=..');
+      const input=picker.locator('.fluid-picker-volume[data-fluid-name="'+name+'"]');
+      if(await input.count()!==1) throw new Error('Predefined-fluid volume input missing: '+name);
+      await input.fill(String(volume));
+      await picker.locator('#applyPredefinedFluids').click();
     }
 
     const girPickerTrigger=page.locator('[data-fluid-picker="addFluid"]');
@@ -109,8 +111,13 @@ const { spawn } = require('child_process');
     if(await page.locator('#fluidPickerDialog').isVisible()!==true) { const pickerState=await page.locator('#fluidPickerDialog').evaluate(el=>({hidden:el.hidden,attr:el.getAttribute('hidden'),display:getComputedStyle(el).display,width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})); throw new Error('Predefined-fluid picker dialog did not open: '+JSON.stringify(pickerState)+' runtime='+errors.join(' | ')); }
     if(await page.locator('#fluidPickerDialog .fluid-picker-group').count()<2) throw new Error('Predefined-fluid picker groups are missing.');
     if(await page.locator('#fluidPickerDialog .fluid-picker-option').count()<13) throw new Error('Predefined-fluid picker options are incomplete.');
-    await page.locator('#fluidPickerDialog .fluid-picker-option').filter({hasText:/^D5/}).first().click();
-    if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==1) throw new Error('Selecting D5 from the custom picker did not add the fluid.');
+    const pickerD5=page.locator('#fluidPickerDialog .fluid-picker-volume[data-fluid-name="D5"]');
+    if(await pickerD5.getAttribute('placeholder')!=='Volume (mL/day)') throw new Error('Predefined-fluid volume box is missing its ghost placeholder.');
+    await pickerD5.fill('0');
+    await page.locator('#fluidPickerDialog #applyPredefinedFluids').click();
+    if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==0) throw new Error('A zero-volume fluid should not be added.');
+    await chooseFluid('D5');
+    if(await page.locator('#fluidList .fluid').filter({hasText:'D5'}).count()!==1) throw new Error('Selecting a positive D5 volume did not add the fluid.');
     await page.locator('#fluidList .fluid').filter({hasText:'D5'}).first().locator('.remove').click();
 
     await chooseFluid('Formula milk');
