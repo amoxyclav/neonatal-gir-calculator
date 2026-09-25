@@ -1371,9 +1371,12 @@ function applyPredefinedFluidVolumes(){
  const inputs=[...document.querySelectorAll('#fluidPickerDialog .fluid-picker-volume')];
  inputs.forEach(input=>{
   const volume=Number(input.value);
-  if(!Number.isFinite(volume)||volume<=0)return;
   const name=input.dataset.fluidName;
   let fluid=fluids.find(f=>f.name===name);
+  if(!Number.isFinite(volume)||volume<=0){
+   if(fluid)fluids=fluids.filter(f=>f.name!==name);
+   return;
+  }
   if(!fluid){
    const p=PRODUCTS[name]||{conc:0,energy:0,protein:0,carb:0,sodium:0,potassium:0,calcium:0};
    fluid={id:++uid,name,custom:!!p.customPreset,volume:0,volumeUnit:'mL/day',volumeInitialized:true,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium||0,potassium:p.potassium||0,calcium:p.calcium||0};
