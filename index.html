@@ -451,6 +451,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .fluid-picker-volume{width:154px;max-width:45%;min-width:0;height:42px;padding:0 11px;border:1px solid #d4e0f4;border-radius:11px;background:#fff;color:#172554;font:inherit;font-size:14px;font-weight:600;outline:none}
 .fluid-picker-volume::placeholder{color:#93a2bb;font-size:12px;font-weight:500;opacity:1}
 .fluid-picker-volume:focus{border-color:#3978e8;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.fluid-picker-volume-wrap{display:flex;align-items:center;gap:6px;flex:0 0 auto}.fluid-picker-unit{height:40px;max-width:94px;padding:0 7px;border:1px solid #d4e0f4;border-radius:11px;background:#fff;color:#263f70;font:inherit;font-size:12px;font-weight:700}.fluid-picker-unit:focus{outline:2px solid #3978e8;outline-offset:1px}
 .fluid-picker-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #e1e9f7;background:#fff}
 .fluid-picker-footer-note{color:#71819b;font-size:12px;font-weight:650}
 .fluid-picker-unit-wrap{display:flex;flex-direction:column;gap:5px;align-items:flex-start;min-width:0}
@@ -459,7 +460,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .fluid-picker-unit-toggle button.active{background:#fff;color:#1d5ed8;box-shadow:0 1px 4px rgba(35,70,130,.13)}
 .fluid-picker-unit-toggle button:focus-visible{outline:2px solid #3978e8;outline-offset:2px}
 .fluid-picker-apply{min-height:42px;padding:10px 18px}
-@media(max-width:600px){.fluid-picker-option{min-height:56px;padding:9px 11px}.fluid-picker-volume{width:142px;height:40px;font-size:13px}.fluid-picker-footer{padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:8px}.fluid-picker-unit-toggle button{padding:6px 9px;font-size:12px}.fluid-picker-apply{min-height:42px;padding:9px 12px;font-size:13px}}
+@media(max-width:600px){.fluid-picker-option{min-height:56px;padding:9px 11px}.fluid-picker-volume{width:116px;height:40px;font-size:13px}.fluid-picker-unit{max-width:83px;font-size:11px;padding:0 4px}.fluid-picker-footer{padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:8px}.fluid-picker-unit-toggle button{padding:6px 9px;font-size:12px}.fluid-picker-apply{min-height:42px;padding:9px 12px;font-size:13px}}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -909,7 +910,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
   </div>
 </div>
 </section>
-</main><div id="fluidPickerDialog" class="fluid-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="fluidPickerTitle" hidden><div class="fluid-picker-panel"><div class="fluid-picker-head"><div><h2 id="fluidPickerTitle" class="fluid-picker-title">Add predefined fluids</h2><p class="fluid-picker-subtitle">Enter the volume for each fluid. Leave blank or enter 0 to skip it.</p></div><button type="button" class="fluid-picker-close" aria-label="Close fluid picker">×</button></div><div class="fluid-picker-list"></div><div class="fluid-picker-footer"><div class="fluid-picker-unit-wrap"><span class="fluid-picker-footer-note">Volume unit</span><div class="fluid-picker-unit-toggle" role="group" aria-label="Predefined fluid volume unit"><button type="button" data-picker-unit="mL/day" aria-pressed="true" class="active">mL/day</button><button type="button" data-picker-unit="mL/hr" aria-pressed="false">mL/hr</button></div></div><button type="button" class="btn fluid-picker-apply" id="applyPredefinedFluids">Add selected fluids</button></div></div></div><footer style="text-align:center;padding:24px;color:#64748b;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="#about" data-page="about">About</a> • © 2026</footer>
+</main><div id="fluidPickerDialog" class="fluid-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="fluidPickerTitle" hidden><div class="fluid-picker-panel"><div class="fluid-picker-head"><div><h2 id="fluidPickerTitle" class="fluid-picker-title">Add predefined fluids</h2><p class="fluid-picker-subtitle">Enter the volume for each fluid. Leave blank or enter 0 to skip it.</p></div><button type="button" class="fluid-picker-close" aria-label="Close fluid picker">×</button></div><div class="fluid-picker-list"></div><div class="fluid-picker-footer"><span class="fluid-picker-footer-note">Choose mL/day or mL/hr separately for each fluid.</span><button type="button" class="btn fluid-picker-apply" id="applyPredefinedFluids">Add selected fluids</button></div></div></div><footer style="text-align:center;padding:24px;color:#64748b;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="#about" data-page="about">About</a> • © 2026</footer>
 
 <script>
 const PRODUCTS={
@@ -1345,31 +1346,11 @@ function predefinedFluidOptions(){
  const label=x=>x==='Calcium gluconate 10%'?'Calcium gluconate 10% (0.465 mEq/mL Ca)':x==='3% NaCl'?'3% NaCl (0.513 mEq/mL Na)':x==='KCl 15%'?'KCl 15% (2 mEq/mL K)':x;
  return '<option value="">+ Add predefined fluid…</option><optgroup label="Standard fluids">'+core.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>'+(custom.length?custom.map(x=>'<option value="'+x+'">'+x+'</option>').join(''):'')+'<optgroup label="Electrolytes / additives">'+electrolyte.map(x=>'<option value="'+x+'">'+label(x)+'</option>').join('')+'</optgroup>';
 }
-function setFluidPickerVolumeUnit(unit){
- if(unit!=='mL/day'&&unit!=='mL/hr')return;
- if(unit===fluidPickerVolumeUnit)return;
- const factor=unit==='mL/hr'?1/24:24;
- document.querySelectorAll('#fluidPickerDialog .fluid-picker-volume').forEach(input=>{
-  if(input.value!==''&&Number.isFinite(Number(input.value)))input.value=String(Number((Number(input.value)*factor).toFixed(4)));
-  input.placeholder='Volume ('+unit+')';
-  input.setAttribute('aria-label',(input.dataset.fluidName||'Fluid')+' volume in '+unit);
- });
- fluidPickerVolumeUnit=unit;
- document.querySelectorAll('#fluidPickerDialog [data-picker-unit]').forEach(button=>{
-  const active=button.dataset.pickerUnit===unit;
-  button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));
- });
-}
-document.querySelectorAll('#fluidPickerDialog [data-picker-unit]').forEach(button=>button.addEventListener('click',()=>setFluidPickerVolumeUnit(button.dataset.pickerUnit)));
 function setupFluidPicker(selectId){
  const trigger=document.querySelector('[data-fluid-picker="'+selectId+'"]');
  const dialog=$('fluidPickerDialog');
  if(!trigger||!dialog)return;
  const openPicker=()=>{
-  document.querySelectorAll('#fluidPickerDialog [data-picker-unit]').forEach(button=>{
-   const active=button.dataset.pickerUnit===fluidPickerVolumeUnit;
-   button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));
-  });
   const list=dialog.querySelector('.fluid-picker-list');list.replaceChildren();
   const groups=[
    {label:'Standard fluids',items:['NS','D5','D10','D25','D50','Isolyte P','Aminoven','Intralipid','Breast milk','Formula milk']},
@@ -1385,10 +1366,16 @@ function setupFluidPicker(selectId){
     label.htmlFor='fluid-picker-volume-'+encodeURIComponent(name).replace(/%/g,'_');
     const volume=document.createElement('input');volume.type='number';volume.min='0';volume.step='0.1';volume.inputMode='decimal';
     volume.className='fluid-picker-volume';volume.id=label.htmlFor;volume.dataset.fluidName=name;
-    volume.placeholder='Volume ('+fluidPickerVolumeUnit+')';volume.setAttribute('aria-label',name+' volume in '+fluidPickerVolumeUnit);
     const existing=fluids.find(f=>f.name===name);
-    if(existing&&Number(existing.volume)>0)volume.value=String(fluidPickerVolumeUnit==='mL/hr'?existing.volume/24:existing.volume);
-    item.append(label,volume);section.appendChild(item);
+    const unit=existing?.volumeUnit||calculatorPreferences.defaultVolumeUnit||'mL/day';
+    volume.placeholder='Volume ('+unit+')';volume.setAttribute('aria-label',name+' volume in '+unit);
+    if(existing&&Number(existing.volume)>0)volume.value=String(unit==='mL/hr'?existing.volume/24:existing.volume);
+    const unitSelect=document.createElement('select');unitSelect.className='fluid-picker-unit';unitSelect.dataset.fluidName=name;unitSelect.setAttribute('aria-label',name+' volume unit');
+    ['mL/day','mL/hr'].forEach(value=>{const option=document.createElement('option');option.value=value;option.textContent=value;option.selected=value===unit;unitSelect.appendChild(option);});
+    unitSelect.addEventListener('change',()=>{const old=volume.dataset.volumeUnit||unit;const next=unitSelect.value;const factor=old==='mL/hr'?24:1/24;if(volume.value!==''&&Number.isFinite(Number(volume.value)))volume.value=String(Number((Number(volume.value)*factor).toFixed(4)));volume.dataset.volumeUnit=next;volume.placeholder='Volume ('+next+')';volume.setAttribute('aria-label',name+' volume in '+next);});
+    volume.dataset.volumeUnit=unit;
+    const volumeWrap=document.createElement('div');volumeWrap.className='fluid-picker-volume-wrap';volumeWrap.append(volume,unitSelect);
+    item.append(label,volumeWrap);section.appendChild(item);
    });
    if(section.querySelector('.fluid-picker-option'))list.appendChild(section);
   });
@@ -1413,7 +1400,8 @@ function applyPredefinedFluidVolumes(){
    fluid={id:++uid,name,custom:!!p.customPreset,volume:0,volumeUnit:'mL/day',volumeInitialized:true,conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium||0,potassium:p.potassium||0,calcium:p.calcium||0};
    fluids.push(fluid);
   }
-  fluid.volume=fluidPickerVolumeUnit==='mL/hr'?volume*24:volume;fluid.volumeUnit=fluidPickerVolumeUnit;fluid.volumeInitialized=true;
+  const unit=input.dataset.volumeUnit||'mL/day';
+  fluid.volume=unit==='mL/hr'?volume*24:volume;fluid.volumeUnit=unit;fluid.volumeInitialized=true;
  });
  renderFluids();recalc();
  if($('nutritionFluidEditor'))renderNutritionFluids();
