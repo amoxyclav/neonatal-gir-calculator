@@ -762,17 +762,21 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
       <div class="mixer-result-heading"><div class="mixer-result-kicker">AUTOMATED ADJUSTMENT PLAN</div><h3 id="mixerAdjustTitle">Adjust the current bag to the target strength</h3><p class="mut">Update the current bag strength and stock details below. The adjustment plan recalculates as you edit.</p></div>
       <div class="mixer-stock-settings mixer-adjust-settings">
         <div class="mixer-settings-title">Adjustment inputs</div>
-        <div class="grid g2">
-          <div class="mixer-stock-config"><label for="me2">Current bag strength (%)</label><input id="me2" type="number" min="0" step="0.1" value="10"></div>
-          <div class="mixer-stock-config"><label for="mPresetS">Stock to add preset</label><select id="mPresetS"></select><label for="ms2">Stock strength (%)</label><input id="ms2" type="number" min="0" step="0.1" value="25"></div>
+        <div class="grid">
+          <div class="mixer-stock-config">
+            <label for="mPresetS">Stock strength to add</label>
+            <select id="mPresetS" aria-label="Stock strength to add"></select>
+          </div>
         </div>
+        <input id="me2" type="hidden" value="10">
+        <input id="ms2" type="hidden" value="25">
       </div>
       <div class="mixer-bar" aria-label="Current bag and added stock proportions"><span id="mixerAdjustBarA" class="mixer-bar-a" style="width:100%"></span><span id="mixerAdjustBarB" class="mixer-bar-b" style="width:0%"></span></div>
       <div class="mixer-stock-list">
         <div class="mixer-stock-row"><span class="mixer-stock-dot mixer-dot-a" aria-hidden="true"></span><strong id="mcurrentVol">100</strong><span class="mixer-unit">mL</span><span class="mixer-stock-name" id="mixerCurrentBagName">Current bag</span></div>
         <div class="mixer-stock-row"><span class="mixer-stock-dot mixer-dot-b" aria-hidden="true"></span><strong id="mxv2">0</strong><span class="mixer-unit">mL</span><span class="mixer-stock-name" id="mixerStockSName">Stock to add</span></div>
       </div>
-      <div class="mixer-adjust-results"><div><span>Final volume</span><strong><b id="mfinal2">0</b> <small>mL</small></strong></div><div><span>Final strength</span><strong><b id="mfinalc2">0</b> <small>%</small></strong></div><div><span>Added stock</span><strong><b id="maddVolSummary">0</b> <small>mL</small></strong></div></div>
+      <div class="mixer-adjust-results"><div><span>Final volume</span><strong><b id="mfinal2">0</b> <small>mL</small></strong></div><div><span>Final strength</span><strong><b id="mfinalc2">0</b> <small>%</small></strong></div></div>
       <div id="ms2out" class="mixer-status" role="status">Enter the bag details.</div>
     </div>
     <div class="mixer-safety-note">Addition-only calculation. Some targets cannot be reached by adding stock alone. Verify compatibility and preparation requirements independently.</div>
