@@ -371,6 +371,40 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .gir-recipe-item strong{display:block;overflow-wrap:anywhere;color:#294777;font-size:12px}.gir-recipe-item small{display:block;margin-top:3px;color:#6b7e9d;font-size:11px;line-height:1.45}
 .gir-recipe-footnote{margin:12px 0 0;color:#7a8ba7;font-size:10px;line-height:1.5}
 @media(max-width:700px){.gir-page-hero{padding:23px 19px;border-radius:21px;margin-bottom:16px}.gir-hero-tags{gap:6px}.gir-hero-tags span{font-size:10px;padding:7px 9px}#gir .section{padding:17px 14px;border-radius:19px}#gir .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#gir .stat{padding:13px 12px;border-radius:15px}#gir .stat strong{font-size:22px}#gir .stat small{font-size:10px;margin-left:3px}.gir-recipe{padding:15px;border-radius:16px}.gir-recipe-legend{gap:8px}.gir-recipe-item strong{font-size:11px}.gir-recipe-item small{font-size:10px}}
+
+/* Phase 3 — focused Fluid Mixer workspace polish. Presentation only; mixer inputs and calculations remain unchanged. */
+#mixer>.section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:clamp(20px,3vw,34px);background:radial-gradient(ellipse at 100% 0%,rgba(204,218,255,.42),transparent 38%),linear-gradient(145deg,#fff 0%,#f9fbff 100%);border-color:#d6e2f7;box-shadow:0 14px 38px rgba(34,65,125,.055)}
+#mixer>.section>.ey,#mixer>.section>h2{grid-column:1/-1}
+#mixer>.section>.ey{display:inline-flex;align-items:center;gap:8px;width:max-content;margin:0 0 -7px;padding:7px 11px;border:1px solid #d9e5fb;border-radius:999px;background:linear-gradient(120deg,#edf4ff,#f3f0ff);color:#5274b1;font-size:10px;font-weight:850;letter-spacing:.15em}
+#mixer>.section>h2{margin:0 0 2px;font-size:clamp(25px,3vw,34px);line-height:1.15;letter-spacing:-.045em;color:#1b3269}
+#mixer>.section>.section{min-width:0;margin:0;padding:clamp(16px,2vw,24px);border:1px solid #dce6f7;border-radius:19px;background:linear-gradient(155deg,rgba(255,255,255,.98),rgba(246,249,255,.98));box-shadow:0 8px 24px rgba(35,65,120,.045)}
+#mixer>.section>.section:first-of-type{margin-top:0}
+#mixer>.section>.section h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#203d7a;font-size:clamp(17px,1.6vw,20px);line-height:1.3;letter-spacing:-.025em}
+#mixer>.section>.section p.mut{margin:0 0 17px;color:#687b9a;font-size:13px;line-height:1.7}
+#mixer .grid.g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#mixer .grid.g4 label{min-width:0;line-height:1.45}
+#mixer .grid.g4 input,#mixer .grid.g4 select{min-width:0;margin-top:7px;padding:11px 12px;border-radius:12px}
+#mixer .stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px!important;gap:10px}
+#mixer .stat{min-width:0;padding:15px;border-radius:15px;background:linear-gradient(145deg,#edf4ff,#f8faff)}
+#mixer .stat span{font-size:10px;letter-spacing:.08em}
+#mixer .stat strong{display:block;margin:7px 0 2px;overflow-wrap:anywhere;font-size:clamp(19px,2.2vw,25px)}
+#mixer .stat small{margin-left:0}
+#mixer .stat:last-child{background:linear-gradient(145deg,#f2f1ff,#faf9ff);border-color:#e0def8}
+@media(max-width:760px){
+ #mixer>.section{grid-template-columns:minmax(0,1fr);gap:12px;padding:17px 13px}
+ #mixer>.section>.ey{margin-bottom:0}
+ #mixer>.section>h2{font-size:25px;margin-bottom:3px}
+ #mixer>.section>.section{padding:16px 13px;border-radius:17px}
+ #mixer>.section>.section h3{font-size:17px;margin-bottom:10px}
+ #mixer>.section>.section p.mut{font-size:12px;margin-bottom:14px}
+ #mixer .grid.g4{gap:10px}
+ #mixer .grid.g4 input,#mixer .grid.g4 select{padding:10px}
+ #mixer .stats{gap:8px;margin-top:12px!important}
+ #mixer .stat{padding:12px;border-radius:13px}
+ #mixer .stat strong{font-size:19px}
+}
+@media(max-width:360px){#mixer .grid.g4{grid-template-columns:minmax(0,1fr)}}
+
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
