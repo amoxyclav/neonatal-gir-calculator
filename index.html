@@ -920,7 +920,7 @@ document.addEventListener('click',e=>{
  const page=link.dataset.page;
  if(!activatePage(page,true))return;
  e.preventDefault();
- if(location.hash!=='#'+page)history.pushState({page}, '#'+page);
+ if(location.hash!=='#'+page)history.pushState({page}, '', '#'+page);
 },true);
 // Fluid detail controls use event delegation so every current-fluid card, including dynamically added presets, behaves identically.
 document.addEventListener('click',e=>{
