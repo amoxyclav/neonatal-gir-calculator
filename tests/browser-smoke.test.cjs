@@ -62,6 +62,7 @@ const fs = require('fs');
       mimeType:'application/json',
       buffer:Buffer.from(JSON.stringify({format:'neonatal-gir-settings',schemaVersion:1,profile:{name:'Imported Profile'},presets:{},preferences:{defaultVolumeUnit:'mL/day',displayDecimals:3}}))
     });
+    await page.waitForFunction(() => document.querySelector('#profileHeading')?.textContent === 'Hello, Imported Profile');
     if((await page.locator('#profileHeading').innerText())!=='Hello, Imported Profile') throw new Error('Settings import did not restore the profile name.');
     if(await page.locator('#settingsDisplayDecimals').inputValue()!=='3') throw new Error('Settings import did not restore display preferences.');
     await page.locator('[data-page="home"]').first().click();
