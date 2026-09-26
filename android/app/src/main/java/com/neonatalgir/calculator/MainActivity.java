@@ -261,7 +261,11 @@ public class MainActivity extends Activity {
             try {
                 Uri uri = Uri.parse(value);
                 String host = uri.getHost();
-                if (!"https".equalsIgnoreCase(uri.getScheme()) || host == null || !host.endsWith(".supabase.co")) {
+                String path = uri.getPath();
+                if (!"https".equalsIgnoreCase(uri.getScheme())
+                        || !"edazqjqqvgxbvotydhrw.supabase.co".equalsIgnoreCase(host)
+                        || path == null || !path.startsWith("/auth/v1/authorize")
+                        || uri.getUserInfo() != null || uri.getPort() != -1) {
                     return false;
                 }
                 runOnUiThread(() -> startActivity(new Intent(Intent.ACTION_VIEW, uri)));
