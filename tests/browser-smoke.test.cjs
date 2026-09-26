@@ -30,11 +30,11 @@ const fs = require('fs');
     if(mobileHero.artDisplay!=='none') throw new Error('Mobile hero artwork should be hidden; got display '+mobileHero.artDisplay+'.');
     await page.setViewportSize({width:1280,height:720});
     for(const selector of ['#gir #currentSection .stats','#gir #targetSection>.stats:first-of-type','#gir #targetSection>.stats:last-of-type']){
-      const columns=await page.locator(selector).evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+      const columns=await page.locator(selector).evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
       if(columns!==2) throw new Error('GIR summary cards should use a two-column grid at desktop width: '+selector+' has '+columns+' columns.');
     }
     await page.setViewportSize({width:390,height:844});
-    const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+    const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
     if(mobileGirColumns!==2) throw new Error('GIR summary cards should use a two-column grid on mobile; got '+mobileGirColumns+' columns.');
     await page.setViewportSize({width:1280,height:720});
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support section should remain hidden.');
