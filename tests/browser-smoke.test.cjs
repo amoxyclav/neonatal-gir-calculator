@@ -49,6 +49,22 @@ const fs = require('fs');
     const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>{const computed=getComputedStyle(el).gridTemplateColumns.trim();const repeated=computed.match(/^repeat\((\d+),/);return repeated?Number(repeated[1]):computed.split(/\s+/).length;});
     if(mobileGirColumns!==2) throw new Error('GIR summary cards should use a two-column grid on mobile; got '+mobileGirColumns+' columns.');
     await page.setViewportSize({width:1280,height:720});
+    await page.locator('[data-page="nutrition"]').first().click();
+    const nutritionRecipe=page.locator('#nutrition #nutGirRecipe');
+    if(await nutritionRecipe.count()!==1) throw new Error('Nutrition page should show the GIR-style preparation recipe card.');
+    if(await nutritionRecipe.locator('.gir-recipe-target-summary').count()!==1) throw new Error('Nutrition recipe should combine required concentration and line type in one summary card.');
+    for(const id of ['nutRequiredConc','nutLineType','nutPlanA','nutPlanAV','nutPlanB','nutPlanBV','nutRecipeTotal','nutRecipeVolumeA','nutRecipeVolumeB']){
+      if(await nutritionRecipe.locator('#'+id).count()!==1) throw new Error('Nutrition recipe is missing '+id+'.');
+    }
+    if(await page.locator('#nutrition #nutResetPlan').count()!==1) throw new Error('Nutrition recipe should include Reset to automatic plan.');
+    const nutritionRecipeColumns=await nutritionRecipe.locator('.gir-recipe-legend').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+    if(nutritionRecipeColumns!==2) throw new Error('Nutrition recipe Fluid A/B controls should be side by side on desktop.');
+    await page.locator('#nutPlanAV').fill('35.0');
+    await page.locator('#nutPlanBV').fill('26.1');
+    if((await page.locator('#nutRecipeTotal').innerText()).trim()!=='61.1 mL/day') throw new Error('Nutrition recipe total should update immediately when fluid volumes change.');
+    const nutritionShares=await nutritionRecipe.locator('.gir-recipe-segment').evaluateAll(els=>els.map(el=>parseFloat(el.style.width)||0));
+    if(Math.abs(nutritionShares.reduce((a,b)=>a+b,0)-100)>0.1) throw new Error('Nutrition recipe fluid proportion bar should total 100%.');
+    await page.locator('#nutResetPlan').click();
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support section should remain hidden.');
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support the developer section should be hidden from the homepage.');
     const savedSupport=await page.locator('#saved-home-support-section').evaluate(el=>el.innerHTML);
