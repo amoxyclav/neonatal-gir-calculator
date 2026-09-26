@@ -122,6 +122,37 @@ jobs:
 
           PY
           node --check /tmp/app.js
+          if [ -f account-auth.js ]; then
+            node --check account-auth.js
+            node --check auth-config.js
+            python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          html = Path("index.html").read_text(encoding="utf-8")
+          auth = Path("account-auth.js").read_text(encoding="utf-8")
+          manifest = ET.parse("android/app/src/main/AndroidManifest.xml").getroot()
+          android_ns = "{http://schemas.android.com/apk/res/android}"
+          permissions = {node.attrib.get(android_ns + "name") for node in manifest.findall("uses-permission")}
+          if "android.permission.INTERNET" not in permissions:
+              raise SystemExit("Android must allow network access for explicitly requested account actions.")
+          activity = manifest.find("application/activity")
+          filters = activity.findall("intent-filter") if activity is not None else []
+          has_callback = any(
+              any(data.attrib.get(android_ns + "scheme") == "neonatalgir" and data.attrib.get(android_ns + "host") == "auth-callback" for data in filt.findall("data"))
+              for filt in filters
+          )
+          if not has_callback:
+              raise SystemExit("Android sign-in callback deep link is missing.")
+          if 'src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"' in html:
+              raise SystemExit("Account SDK must not load during calculator startup.")
+          if "script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'" not in auth:
+              raise SystemExit("Account SDK must be loaded on demand by account actions.")
+          if 'src="account-auth.js"' not in html or 'src="auth-config.js"' not in html:
+              raise SystemExit("Local account modules are not referenced by the app.")
+          print("Offline-first account loading and Android auth callback configuration validated.")
+          PY
+          fi
           node tests/calculation-regression.test.js
 
       - name: Browser smoke test
