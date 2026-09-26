@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 (async()=>{
   const server = spawn('python3',['-m','http.server','4173'],{stdio:'ignore'});
@@ -38,6 +39,32 @@ const { spawn } = require('child_process');
     if(homeText.includes('A PRACTICAL TOOL FOR NEONATAL CARE')) throw new Error('Removed homepage eyebrow is still present.');
     if(homeText.includes('Simple. Flexible. NICU-focused.')) throw new Error('Removed homepage tagline is still present.');
     if(await page.locator('#home h1').count() !== 1) throw new Error('Premium Home page title should appear exactly once.');
+
+    // Local profile persists on this device and exports only profile/settings data.
+    await page.locator('[data-page="profile"]').first().click();
+    await page.locator('#localProfileName').fill('Test Clinician');
+    await page.locator('#saveLocalProfile').click();
+    if((await page.locator('#profileHeading').innerText())!=='Hello, Test Clinician') throw new Error('Local profile name was not saved.');
+    await page.reload({waitUntil:'networkidle'});
+    await page.locator('[data-page="profile"]').first().click();
+    if(await page.locator('#localProfileName').inputValue()!=='Test Clinician') throw new Error('Local profile did not persist after reload.');
+    const [settingsDownload] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#exportProfile').click()
+    ]);
+    const backupFile = await settingsDownload.path();
+    const backupData = JSON.parse(fs.readFileSync(backupFile, 'utf8'));
+    if(backupData.format!=='neonatal-gir-settings'||backupData.profile?.name!=='Test Clinician') throw new Error('Settings export did not include the local profile.');
+    if('patientInputs' in backupData || 'fluids' in backupData || 'calculationResults' in backupData) throw new Error('Settings export must not contain patient inputs, active fluids or calculation results.');
+    page.once('dialog', dialog => dialog.accept());
+    await page.locator('#importProfileFile').setInputFiles({
+      name:'neonatal-gir-settings-backup.json',
+      mimeType:'application/json',
+      buffer:Buffer.from(JSON.stringify({format:'neonatal-gir-settings',schemaVersion:1,profile:{name:'Imported Profile'},presets:{},preferences:{defaultVolumeUnit:'mL/day',displayDecimals:3}}))
+    });
+    if((await page.locator('#profileHeading').innerText())!=='Hello, Imported Profile') throw new Error('Settings import did not restore the profile name.');
+    if(await page.locator('#settingsDisplayDecimals').inputValue()!=='3') throw new Error('Settings import did not restore display preferences.');
+    await page.locator('[data-page="home"]').first().click();
 
     for (const guide of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html']) {
       await page.goto('http://127.0.0.1:4173/'+guide,{waitUntil:'networkidle'});
