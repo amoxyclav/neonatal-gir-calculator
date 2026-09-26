@@ -163,6 +163,7 @@ public class MainActivity extends Activity {
         addNavigationItem(bar, "GIR", "gir", R.drawable.nav_gir);
         addNavigationItem(bar, "Nutrition", "nutrition", R.drawable.nav_nutrition);
         addNavigationItem(bar, "Mixer", "mixer", R.drawable.nav_mixer);
+        addNavigationItem(bar, "Settings", "settings", R.drawable.nav_settings);
         addNavigationItem(bar, "Profile", "profile", R.drawable.nav_profile);
         updateNavigationSelection();
         return bar;
@@ -225,7 +226,7 @@ public class MainActivity extends Activity {
     }
 
     private void setSelectedPage(String page) {
-        if (!"home".equals(page) && !"gir".equals(page) && !"nutrition".equals(page) && !"mixer".equals(page) && !"profile".equals(page)) {
+        if (!"home".equals(page) && !"gir".equals(page) && !"nutrition".equals(page) && !"mixer".equals(page) && !"settings".equals(page) && !"profile".equals(page)) {
             page = "home";
         }
         selectedPage = page;
