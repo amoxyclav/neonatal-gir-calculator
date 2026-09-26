@@ -33,6 +33,7 @@ jobs:
         run: |
           mkdir -p android/app/src/main/assets/site/guides
           cp index.html about.html favicon.svg manifest.json android/app/src/main/assets/site/
+          for file in auth-config.js account-auth.js; do if [ -f "$file" ]; then cp "$file" android/app/src/main/assets/site/; fi; done
           cp guides/neonatal-gir-calculator.html guides/neonatal-fluid-nutrition-calculator.html guides/neonatal-fluid-mixer.html android/app/src/main/assets/site/guides/
       - name: Build debug APK
         working-directory: android
