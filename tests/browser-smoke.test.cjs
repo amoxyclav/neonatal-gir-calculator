@@ -60,11 +60,12 @@ const fs = require('fs');
     await page.locator('#importProfileFile').setInputFiles({
       name:'neonatal-gir-settings-backup.json',
       mimeType:'application/json',
-      buffer:Buffer.from(JSON.stringify({format:'neonatal-gir-settings',schemaVersion:1,profile:{name:'Imported Profile'},presets:{},preferences:{defaultVolumeUnit:'mL/day',displayDecimals:3}}))
+      buffer:Buffer.from(JSON.stringify({format:'neonatal-gir-settings',schemaVersion:1,profile:{name:'Imported Profile'},presets:{'Backup Test Fluid':{conc:5,energy:17,protein:0,carb:5,sodium:0,potassium:0,calcium:0,gir:true}},preferences:{defaultVolumeUnit:'mL/day',displayDecimals:3}}))
     });
     await page.waitForFunction(() => document.querySelector('#profileHeading')?.textContent === 'Hello, Imported Profile');
     if((await page.locator('#profileHeading').innerText())!=='Hello, Imported Profile') throw new Error('Settings import did not restore the profile name.');
     if(await page.locator('#settingsDisplayDecimals').inputValue()!=='3') throw new Error('Settings import did not restore display preferences.');
+    if(await page.locator('#settingsProductList .settings-product-title').filter({hasText:'Backup Test Fluid'}).count()!==1) throw new Error('Settings import did not restore the custom preset.');
     await page.locator('[data-page="home"]').first().click();
 
     for (const guide of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html']) {
