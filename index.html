@@ -1513,7 +1513,7 @@ function updatePatientInputs(){const x=patient();if($('patientPermittedTfi'))$('
 ['w','tfi','tg'].forEach(id=>{const el=$(id);el.addEventListener('input',updatePatientInputs);el.addEventListener('change',updatePatientInputs);});
 $('weightUnit').onchange=()=>{const f=patient(),u=$('weightUnit').value;const raw=u==='g'?f.w*1000:u==='lb'?f.w/0.45359237:f.w;$('w').value=fmt(raw,u==='kg'?2:1);updatePatientInputs()};
 fillPlanOptions();
-['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)});
+['planA','planB'].forEach(id=>$(id).onchange=()=>{$('planA').dataset.user='1';clearPlanExact();solveSelectedPlan(id);recalc(false)});['planAV','planBV'].forEach(id=>$(id).oninput=()=>{$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';recalc(false)});
 $('resetPlan').onclick=()=>{$('planA').dataset.user='';clearPlanExact();$('planA').dataset.solveError='';recalc(false)};
 ['hmf','hmfAdvance','mct','hmfEnergy','hmfProtein','hmfCarb','hmfAdvanceEnergy','hmfAdvanceProtein','hmfAdvanceCarb','mctEnergy','mctProtein','mctCarb'].forEach(id=>$(id).oninput=updateNutrition);
 document.querySelectorAll('[data-extra-details]').forEach(b=>b.onclick=()=>{const box=$('extra-details-'+b.dataset.extraDetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
