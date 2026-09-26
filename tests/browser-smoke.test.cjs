@@ -147,7 +147,7 @@ const fs = require('fs');
     if(await page.locator('#planA').evaluate(el=>el.dataset.user||'')!=='') throw new Error('Changing a current fluid volume should restore the automatic GIR plan.');
     await page.locator('#fluidList .fluid .remove').first().click();
 
-    const girPickerTrigger=page.locator('[data-fluid-picker="addFluid"]);
+    const girPickerTrigger=page.locator('[data-fluid-picker="addFluid"]');
     if(await girPickerTrigger.count()!==1) throw new Error('GIR predefined-fluid picker trigger is missing.');
     if(await girPickerTrigger.isVisible()!==true) throw new Error('GIR predefined-fluid picker trigger should be visible.');
     await girPickerTrigger.click();
