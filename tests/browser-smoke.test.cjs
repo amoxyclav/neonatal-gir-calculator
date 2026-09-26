@@ -32,9 +32,10 @@ const fs = require('fs');
     await page.locator('[data-page="gir"]').first().click();
     const girSummaryGroups=[page.locator('#gir #currentSection .stats'),...await page.locator('#gir #targetSection>.stats').all()];
     if(girSummaryGroups.length!==3) throw new Error('Expected three GIR summary card groups.');
-    for(const group of girSummaryGroups){
-      const columns=await group.evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
-      if(columns!==2) throw new Error('GIR summary cards should use a two-column grid at desktop width; got '+columns+' columns.');
+    for(let i=0;i<girSummaryGroups.length;i++){
+      const group=girSummaryGroups[i];
+      const info=await group.evaluate(el=>({columns:getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length,computed:getComputedStyle(el).gridTemplateColumns,inline:el.getAttribute('style'),id:el.id,parent:el.parentElement?.id}));
+      if(info.columns!==2) throw new Error('GIR summary group '+i+' ('+info.parent+') should have 2 columns; got '+info.computed+'; inline='+info.inline);
     }
     await page.setViewportSize({width:390,height:844});
     const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
