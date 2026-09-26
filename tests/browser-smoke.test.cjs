@@ -57,7 +57,7 @@ const fs = require('fs');
       if(await nutritionRecipe.locator('#'+id).count()!==1) throw new Error('Nutrition recipe is missing '+id+'.');
     }
     if(await page.locator('#nutrition #nutResetPlan').count()!==1) throw new Error('Nutrition recipe should include Reset to automatic plan.');
-    const nutritionRecipeColumns=await nutritionRecipe.locator('.gir-recipe-legend').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+    const nutritionRecipeColumns=await nutritionRecipe.locator('.gir-recipe-legend').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(' ').filter(Boolean).length);
     if(nutritionRecipeColumns!==2) throw new Error('Nutrition recipe Fluid A/B controls should be side by side on desktop.');
     await page.locator('#nutPlanAV').fill('35.0');
     await page.locator('#nutPlanBV').fill('26.1');
