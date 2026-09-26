@@ -43,6 +43,9 @@
     const out = {};
     for (const [name, item] of Object.entries(input)) {
       if (!name.trim() || !item || typeof item !== 'object' || Array.isArray(item)) throw new Error('A preset entry is invalid.');
+      if (typeof PRODUCTS !== 'undefined' && Object.prototype.hasOwnProperty.call(PRODUCTS, name) && !PRODUCTS[name]?.customPreset) {
+        throw new Error('Backup cannot replace built-in preset "' + name + '".');
+      }
       const clean = {};
       for (const field of fields) {
         const value = Number(item[field]);
