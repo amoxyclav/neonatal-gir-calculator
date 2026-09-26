@@ -23,18 +23,24 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends Activity {
     private static final String HOME_URL = "file:///android_asset/site/index.html#home";
     private static final int BLUE = Color.rgb(37, 99, 235);
     private static final int MUTED = Color.rgb(113, 128, 150);
     private static final int ACTIVE_BG = Color.rgb(232, 241, 255);
+    private static final int REQUEST_PROFILE_EXPORT = 701;
+    private static final int REQUEST_PROFILE_IMPORT = 702;
     private WebView webView;
     private LinearLayout bottomNavigation;
     private boolean exitDialogVisible = false;
     private boolean resetHistoryAfterHomeLoad = false;
     private String selectedPage = "home";
-    private String pendingAuthCallback;
+    private String pendingProfileBackup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +74,7 @@ public class MainActivity extends Activity {
         settings.setDisplayZoomControls(false);
         settings.setTextZoom(100);
         webView.addJavascriptInterface(new AppNavigationBridge(), "AndroidNav");
-        webView.addJavascriptInterface(new NativeAuthBridge(), "AndroidAuth");
-        captureAuthCallback(getIntent());
+        webView.addJavascriptInterface(new NativeProfileBridge(), "AndroidProfile");
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -96,7 +101,6 @@ public class MainActivity extends Activity {
                     webView.clearHistory();
                 }
                 injectAppPresentation(view);
-                deliverPendingAuthCallback();
             }
         });
         webView.setWebChromeClient(new WebChromeClient());
@@ -242,47 +246,70 @@ public class MainActivity extends Activity {
         return Math.round(value * getResources().getDisplayMetrics().density);
     }
 
-    private void captureAuthCallback(Intent intent) {
-        Uri data = intent == null ? null : intent.getData();
-        if (data != null && "neonatalgir".equals(data.getScheme()) && "auth-callback".equals(data.getHost())) {
-            pendingAuthCallback = data.toString();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != REQUEST_PROFILE_EXPORT && requestCode != REQUEST_PROFILE_IMPORT) return;
+        if (resultCode != RESULT_OK || data == null || data.getData() == null) {
+            Toast.makeText(this, "Settings transfer cancelled.", Toast.LENGTH_SHORT).show();
+            pendingProfileBackup = null;
+            return;
         }
-    }
-
-    private void deliverPendingAuthCallback() {
-        if (webView == null || pendingAuthCallback == null) return;
-        String callback = pendingAuthCallback;
-        pendingAuthCallback = null;
-        webView.evaluateJavascript("if(window.handleNativeAuthCallback){window.handleNativeAuthCallback(" + JSONObject.quote(callback) + ");}", null);
-    }
-
-    public class NativeAuthBridge {
-        @JavascriptInterface
-        public boolean openAuthUrl(String value) {
-            try {
-                Uri uri = Uri.parse(value);
-                String host = uri.getHost();
-                String path = uri.getPath();
-                if (!"https".equalsIgnoreCase(uri.getScheme())
-                        || !"edazqjqqvgxbvotydhrw.supabase.co".equalsIgnoreCase(host)
-                        || path == null || !path.startsWith("/auth/v1/authorize")
-                        || uri.getUserInfo() != null || uri.getPort() != -1) {
-                    return false;
+        Uri uri = data.getData();
+        if (requestCode == REQUEST_PROFILE_EXPORT) {
+            String backup = pendingProfileBackup;
+            pendingProfileBackup = null;
+            if (backup == null) {
+                Toast.makeText(this, "No settings backup is ready to save.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            try (OutputStream output = getContentResolver().openOutputStream(uri)) {
+                if (output == null) throw new java.io.IOException("Could not open the selected file.");
+                output.write(backup.getBytes("UTF-8"));
+                Toast.makeText(this, "Settings backup saved.", Toast.LENGTH_LONG).show();
+            } catch (Exception error) {
+                Toast.makeText(this, "Could not save settings backup.", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            try (InputStream input = getContentResolver().openInputStream(uri);
+                 ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+                if (input == null) throw new java.io.IOException("Could not open the selected file.");
+                byte[] buffer = new byte[8192];
+                int count;
+                while ((count = input.read(buffer)) != -1) output.write(buffer, 0, count);
+                String json = output.toString("UTF-8");
+                if (webView != null) {
+                    webView.evaluateJavascript("if(window.handleProfileBackupImport){window.handleProfileBackupImport(" + JSONObject.quote(json) + ");}", null);
                 }
-                runOnUiThread(() -> startActivity(new Intent(Intent.ACTION_VIEW, uri)));
-                return true;
-            } catch (Exception ignored) {
-                return false;
+            } catch (Exception error) {
+                Toast.makeText(this, "Could not read the selected backup file.", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        captureAuthCallback(intent);
-        deliverPendingAuthCallback();
+    public class NativeProfileBridge {
+        @JavascriptInterface
+        public void saveBackup(String json) {
+            if (json == null || json.length() > 1000000) return;
+            runOnUiThread(() -> {
+                pendingProfileBackup = json;
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/json");
+                intent.putExtra(Intent.EXTRA_TITLE, "neonatal-gir-settings-backup.json");
+                startActivityForResult(intent, REQUEST_PROFILE_EXPORT);
+            });
+        }
+
+        @JavascriptInterface
+        public void openBackupPicker() {
+            runOnUiThread(() -> {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/json");
+                startActivityForResult(intent, REQUEST_PROFILE_IMPORT);
+            });
+        }
     }
 
     public class AppNavigationBridge {

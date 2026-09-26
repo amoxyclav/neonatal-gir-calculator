@@ -31,8 +31,8 @@ jobs:
           git fetch origin android-apk-build
           git worktree add /tmp/android origin/android-apk-build
           cp index.html /tmp/android/index.html
-          cp auth-config.js /tmp/android/auth-config.js
-          cp account-auth.js /tmp/android/account-auth.js
+          cp local-profile.js /tmp/android/local-profile.js
+          rm -f /tmp/android/auth-config.js /tmp/android/account-auth.js
           cp favicon.svg /tmp/android/favicon.svg
           cp manifest.json /tmp/android/manifest.json
           cp guides/neonatal-gir-calculator.html /tmp/android/guides/neonatal-gir-calculator.html
@@ -59,7 +59,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html auth-config.js account-auth.js favicon.svg manifest.json guides/ android/app/src/main/AndroidManifest.xml android/app/src/main/java/com/neonatalgir/calculator/MainActivity.java android/app/src/main/res/drawable/launcher_foreground.xml android/app/src/main/res/mipmap-anydpi/ic_launcher.xml android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml android/app/src/main/res/values/launcher_colors.xml android/app/src/main/res/drawable/nav_*.xml
+          git add -A -- index.html local-profile.js auth-config.js account-auth.js favicon.svg manifest.json guides/ android/app/src/main/AndroidManifest.xml android/app/src/main/java/com/neonatalgir/calculator/MainActivity.java android/app/src/main/res/drawable/launcher_foreground.xml android/app/src/main/res/mipmap-anydpi/ic_launcher.xml android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml android/app/src/main/res/values/launcher_colors.xml android/app/src/main/res/drawable/nav_*.xml
           if git diff --cached --quiet; then
             echo "Android web assets are already synchronized."
             exit 0
