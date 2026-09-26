@@ -367,8 +367,8 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .gir-recipe-bar{display:flex;overflow:hidden;width:100%;height:15px;border:1px solid rgba(255,255,255,.95);border-radius:999px;background:#e3eaf7;box-shadow:inset 0 1px 3px rgba(28,53,99,.08)}
 .gir-recipe-segment{display:block;height:100%;transition:width .18s ease}.gir-recipe-a{background:linear-gradient(90deg,#3478df,#5e91eb)}.gir-recipe-b{background:linear-gradient(90deg,#8c83df,#b1a8ef)}
 .gir-recipe-legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
-.gir-recipe-item{display:flex;align-items:flex-start;gap:9px;min-width:0}.gir-recipe-swatch{flex:0 0 10px;width:10px;height:10px;margin-top:4px;border-radius:3px}.gir-swatch-a{background:#4b83df}.gir-swatch-b{background:#9a90df}
-.gir-recipe-item strong{display:block;overflow-wrap:anywhere;color:#294777;font-size:12px}.gir-recipe-item small{display:block;margin-top:3px;color:#6b7e9d;font-size:11px;line-height:1.45}
+.gir-recipe-item{display:flex;align-items:flex-start;gap:9px;min-width:0}.gir-recipe-swatch{flex:0 0 10px;width:10px;height:10px;margin-top:13px;border-radius:3px}.gir-swatch-a{background:#4b83df}.gir-swatch-b{background:#9a90df}
+.gir-recipe-fields{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;min-width:0;flex:1}.gir-recipe-fields label{display:block;color:#435a7d;font-size:12px;font-weight:750}.gir-recipe-fields select,.gir-recipe-fields input{width:100%;min-height:42px;margin-top:5px;border:1px solid #cfdbed;border-radius:10px;background:#fff;color:var(--ink);padding:9px 11px;font:inherit;font-size:14px}.gir-recipe-fields small{display:block;margin-top:2px;color:#6b7e9d;font-size:11px;line-height:1.45}
 .gir-recipe-footnote{margin:12px 0 0;color:#7a8ba7;font-size:10px;line-height:1.5}
 @media(max-width:700px){.gir-page-hero{padding:23px 19px;border-radius:21px;margin-bottom:16px}.gir-hero-tags{gap:6px}.gir-hero-tags span{font-size:10px;padding:7px 9px}#gir .section{padding:17px 14px;border-radius:19px}#gir .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#gir .stat{padding:13px 12px;border-radius:15px}#gir .stat strong{font-size:22px}#gir .stat small{font-size:10px;margin-left:3px}.gir-recipe{padding:15px;border-radius:16px}.gir-recipe-legend{gap:8px}.gir-recipe-item strong{font-size:11px}.gir-recipe-item small{font-size:10px}}
 
@@ -549,7 +549,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .profile-shell{max-width:780px;margin:10px auto}
 .profile-details{border-top:1px solid var(--line);margin-top:22px;padding-top:20px}
 .profile-details h2{margin:0 0 14px}
-.home-welcome{display:inline-flex;align-items:center;margin:12px 0 0;padding:8px 13px;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:750}
+.hero-topline{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.home-welcome{display:inline-flex;align-items:center;margin:0;padding:8px 13px;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:750;white-space:nowrap}
 @media(max-width:760px){.profile-nav{min-width:38px;min-height:38px;padding:3px!important}.profile-avatar{width:30px;height:30px}}
 @media(max-width:440px){.profile-avatar{width:28px;height:28px}}
 
@@ -562,11 +562,10 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <main>
 <section id="home" class="page active"><div class="home-hero home-hero-premium">
   <div class="hero-copy">
-    <div class="home-eyebrow"><span></span> CLINICAL TOOLS FOR NEONATAL CARE</div>
+    <div class="hero-topline"><div class="home-eyebrow"><span></span> CLINICAL TOOLS FOR NEONATAL CARE</div><p class="home-welcome" id="homeWelcome" hidden></p></div>
     <h1>Neonatal GIR &amp;<br><span>Nutrition Calculator</span></h1>
     <p class="hero-lead">Calculate fluids, GIR and Energy-Protein Ratio for neonates with ease.</p>
     <p class="hero-sub">Designed by a pediatrician, for everyday clinical use.</p>
-    <p class="home-welcome" id="homeWelcome" hidden></p>
   </div>
   <div class="home-hero-art" aria-hidden="true">
     <div class="hero-glow"></div><div class="hero-orbit hero-orbit-a"></div><div class="hero-orbit hero-orbit-b"></div>
@@ -621,13 +620,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <div class="stat"><span>Automated line type</span><strong id="lineType">—</strong><small>based on required concentration</small></div>
 </div>
 <div class="plan"><h3>Automatic plan — interactive</h3><p class="help">The automatic plan is the active plan. Change the preferred fluids or their actual mL/day and the calculation updates immediately. Fluid volumes can be entered to 1 decimal place.</p>
-<div class="grid g4">
-<label>Fluid A<select id="planA"></select></label>
-<label>Fluid A mL/day<input id="planAV" type="number" min="0" step="0.1" inputmode="decimal"></label>
-<label>Fluid B<select id="planB"></select></label>
-<label>Fluid B mL/day<input id="planBV" type="number" min="0" step="0.1" inputmode="decimal"></label>
-</div>
-<div class="gir-recipe" id="girRecipe" aria-live="polite"><div class="gir-recipe-heading"><div><span class="gir-recipe-kicker">PREPARATION RECIPE</span><h3>Fluid proportions</h3></div><span class="gir-recipe-total" id="girRecipeTotal">0 mL/day</span></div><div class="gir-recipe-bar" role="img" aria-label="Fluid proportions"><span class="gir-recipe-segment gir-recipe-a" id="girRecipeSegmentA"></span><span class="gir-recipe-segment gir-recipe-b" id="girRecipeSegmentB"></span></div><div class="gir-recipe-legend"><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-a"></span><div><strong id="girRecipeNameA">Fluid A</strong><small id="girRecipeVolumeA">0 mL/day · 0%</small></div></div><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-b"></span><div><strong id="girRecipeNameB">Fluid B</strong><small id="girRecipeVolumeB">0 mL/day · 0%</small></div></div></div><p class="gir-recipe-footnote">Proportions reflect the editable Fluid A and Fluid B volumes below.</p></div>
+<div class="gir-recipe" id="girRecipe" aria-live="polite"><div class="gir-recipe-heading"><div><span class="gir-recipe-kicker">PREPARATION RECIPE</span><h3>Fluid proportions</h3></div><span class="gir-recipe-total" id="girRecipeTotal">0 mL/day</span></div><div class="gir-recipe-bar" role="img" aria-label="Fluid proportions"><span class="gir-recipe-segment gir-recipe-a" id="girRecipeSegmentA"></span><span class="gir-recipe-segment gir-recipe-b" id="girRecipeSegmentB"></span></div><div class="gir-recipe-legend"><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-a"></span><div class="gir-recipe-fields"><label>Fluid A<select id="planA" aria-label="Fluid A type"></select></label><label>Volume (mL/day)<input id="planAV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Fluid A volume in mL per day"></label><small id="girRecipeVolumeA">0 mL/day · 0%</small></div></div><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-b"></span><div class="gir-recipe-fields"><label>Fluid B<select id="planB" aria-label="Fluid B type"></select></label><label>Volume (mL/day)<input id="planBV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Fluid B volume in mL per day"></label><small id="girRecipeVolumeB">0 mL/day · 0%</small></div></div></div><p class="gir-recipe-footnote">Edit each fluid type and its volume here. All GIR and nutrition results update from these two recipe entries.</p></div>
 <div class="actions"><button class="btn" id="resetPlan">↻ Reset to automatic plan</button></div>
 <div id="targetStatus" class="status">Enter patient inputs to generate a plan.</div></div>
 <div class="stats">
@@ -937,9 +930,9 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
       <div id="localProfileStatus" class="status" role="status" aria-live="polite">Your profile is stored only on this device.</div>
     </div>
     <div class="account-panel" style="margin-top:16px">
-      <div class="settings-panel-head"><div><h2>Backup &amp; transfer</h2><p>Export your profile name, custom presets and preferences to a JSON file. Import that file on another device to transfer these settings.</p></div></div>
+      <div class="settings-panel-head"><div><h2>Backup &amp; transfer</h2><p>Export your profile name, custom presets, editable preset overrides and calculator preferences to a JSON file. Import that file on another device to transfer these settings.</p></div></div>
       <div class="actions"><button type="button" class="btn primary" id="exportProfile">Export settings</button><button type="button" class="btn" id="importProfile">Import settings</button><input id="importProfileFile" type="file" accept="application/json,.json" hidden></div>
-      <p class="mut" style="font-size:12px;line-height:1.6">Backup files contain only your profile name, custom preset definitions and calculator preferences. Patient inputs, current fluid rows and calculation results are not included. Keep backup files private if they contain personal preset information.</p>
+      <p class="mut" style="font-size:12px;line-height:1.6">Backup files contain only your profile name, custom preset definitions, editable preset overrides and calculator preferences. Patient inputs, current fluid rows and calculation results are not included. Keep backup files private if they contain personal preset information.</p>
       <div id="backupStatus" class="status" role="status" aria-live="polite" hidden></div>
     </div>
   </div>
@@ -1253,8 +1246,9 @@ function updateGirRecipe(a,b,av,bv){
  const set=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
  const segA=$('girRecipeSegmentA'),segB=$('girRecipeSegmentB');
  if(segA)segA.style.width=pa.toFixed(2)+'%';if(segB)segB.style.width=pb.toFixed(2)+'%';
- set('girRecipeTotal',fmt(total,1)+' mL/day');set('girRecipeNameA',a||'Fluid A');set('girRecipeNameB',b||'Fluid B');
- set('girRecipeVolumeA',fmt(Math.max(0,av),1)+' mL/day · '+fmt(pa,0)+'%');set('girRecipeVolumeB',fmt(Math.max(0,bv),1)+' mL/day · '+fmt(pb,0)+'%');
+ set('girRecipeTotal',fmt(total,1)+' mL/day');
+ set('girRecipeVolumeA',fmt(Math.max(0,av),1)+' mL/day · '+fmt(pa,0)+'%');
+ set('girRecipeVolumeB',fmt(Math.max(0,bv),1)+' mL/day · '+fmt(pb,0)+'%');
  const bar=$('girRecipe');if(bar)bar.setAttribute('aria-label',(a||'Fluid A')+' '+fmt(Math.max(0,av),1)+' mL/day; '+(b||'Fluid B')+' '+fmt(Math.max(0,bv),1)+' mL/day');
 }
 
