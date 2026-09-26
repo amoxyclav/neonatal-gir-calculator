@@ -34,11 +34,11 @@ const fs = require('fs');
     if(girSummaryGroups.length!==3) throw new Error('Expected three GIR summary card groups.');
     for(let i=0;i<girSummaryGroups.length;i++){
       const group=girSummaryGroups[i];
-      const info=await group.evaluate(el=>({columns:getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length,computed:getComputedStyle(el).gridTemplateColumns,inline:el.getAttribute('style'),id:el.id,parent:el.parentElement?.id}));
+      const info=await group.evaluate(el=>{const computed=getComputedStyle(el).gridTemplateColumns.trim();const repeated=computed.match(/^repeat\((\d+),/);return {columns:repeated?Number(repeated[1]):computed.split(/\s+/).length,computed,inline:el.getAttribute('style'),id:el.id,parent:el.parentElement?.id};});
       if(info.columns!==2) throw new Error('GIR summary group '+i+' ('+info.parent+') should have 2 columns; got '+info.computed+'; inline='+info.inline);
     }
     await page.setViewportSize({width:390,height:844});
-    const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
+    const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>{const computed=getComputedStyle(el).gridTemplateColumns.trim();const repeated=computed.match(/^repeat\((\d+),/);return repeated?Number(repeated[1]):computed.split(/\s+/).length;});
     if(mobileGirColumns!==2) throw new Error('GIR summary cards should use a two-column grid on mobile; got '+mobileGirColumns+' columns.');
     await page.setViewportSize({width:1280,height:720});
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support section should remain hidden.');
