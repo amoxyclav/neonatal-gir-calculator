@@ -670,18 +670,40 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <h2>3. Automatic GIR Plan — Assumed Added to Patient</h2>
 <p class="mut">This mirrors the active interactive automatic plan from GIR. For nutrition calculations, these planned fluids are assumed to be added to the current patient fluids. You can edit the same Fluid A/B selections and volumes here.</p>
 <div class="plan">
-<div class="grid g4">
-<label>Fluid A<select id="nutPlanA"></select></label>
-<label>Fluid A mL/day<input id="nutPlanAV" type="number" min="0" step="0.1" inputmode="decimal"></label>
-<label>Fluid B<select id="nutPlanB"></select></label>
-<label>Fluid B mL/day<input id="nutPlanBV" type="number" min="0" step="0.1" inputmode="decimal"></label>
+<div class="gir-recipe" id="nutGirRecipe" aria-live="polite">
+  <div class="gir-recipe-heading">
+    <div><span class="gir-recipe-kicker">PREPARATION RECIPE</span><h3>Fluid proportions</h3></div>
+    <div class="gir-recipe-target-summary" aria-label="Required concentration and automated line type">
+      <div class="gir-recipe-target-metric"><span>Required average concentration</span><strong id="nutRequiredConc">0</strong><small>%</small></div>
+      <div class="gir-recipe-target-metric"><span>Automated line type</span><strong id="nutLineType">—</strong><small>based on required concentration</small></div>
+    </div>
+    <span class="gir-recipe-total" id="nutRecipeTotal">0 mL/day</span>
+  </div>
+  <div class="gir-recipe-bar" role="img" aria-label="Nutrition plan fluid proportions">
+    <span class="gir-recipe-segment gir-recipe-a" id="nutRecipeSegmentA"></span>
+    <span class="gir-recipe-segment gir-recipe-b" id="nutRecipeSegmentB"></span>
+  </div>
+  <div class="gir-recipe-legend">
+    <div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-a"></span><div class="gir-recipe-fields">
+      <label>Fluid A<select id="nutPlanA" aria-label="Nutrition plan Fluid A type"></select></label>
+      <label>Volume (mL/day)<input id="nutPlanAV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Nutrition plan Fluid A volume in mL per day"></label>
+      <small id="nutRecipeVolumeA">0 mL/day · 0%</small>
+    </div></div>
+    <div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-b"></span><div class="gir-recipe-fields">
+      <label>Fluid B<select id="nutPlanB" aria-label="Nutrition plan Fluid B type"></select></label>
+      <label>Volume (mL/day)<input id="nutPlanBV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Nutrition plan Fluid B volume in mL per day"></label>
+      <small id="nutRecipeVolumeB">0 mL/day · 0%</small>
+    </div></div>
+  </div>
+  <p class="gir-recipe-footnote">Edit each fluid type and its volume here. Nutrition calculations update from these two recipe entries, assumed added to the current patient fluids.</p>
 </div>
-<div class="stats" style="margin-top:14px">
-<div class="stat"><span>Planned fluid volume</span><strong id="nutPlanVolume">0</strong><small>mL/day</small></div>
-<div class="stat"><span>GIR after plan</span><strong id="nutPlanGir">0</strong><small>mg/kg/min</small></div>
-<div class="stat"><span>Unused TFI after plan</span><strong id="nutPlanUnused">0</strong><small>mL/day</small></div>
-</div>
+<div class="actions"><button class="btn" id="nutResetPlan" type="button">↻ Reset to automatic plan</button></div>
 <div id="nutPlanStatus" class="status ok" style="margin-top:14px">Automatic plan is set to achieve the target GIR.</div>
+<div class="stats" style="margin-top:14px">
+  <div class="stat"><span>Planned fluid volume</span><strong id="nutPlanVolume">0</strong><small>mL/day</small></div>
+  <div class="stat"><span>GIR after plan</span><strong id="nutPlanGir">0</strong><small>mg/kg/min</small></div>
+  <div class="stat"><span>Unused TFI after plan</span><strong id="nutPlanUnused">0</strong><small>mL/day</small></div>
+</div>
 </div>
 </div>
 
