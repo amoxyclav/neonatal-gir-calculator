@@ -30,9 +30,11 @@ const fs = require('fs');
     if(mobileHero.artDisplay!=='none') throw new Error('Mobile hero artwork should be hidden; got display '+mobileHero.artDisplay+'.');
     await page.setViewportSize({width:1280,height:720});
     await page.locator('[data-page="gir"]').first().click();
-    for(const selector of ['#gir #currentSection .stats','#gir #targetSection>.stats:first-of-type','#gir #targetSection>.stats:last-of-type']){
-      const columns=await page.locator(selector).evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
-      if(columns!==2) throw new Error('GIR summary cards should use a two-column grid at desktop width: '+selector+' has '+columns+' columns.');
+    const girSummaryGroups=[page.locator('#gir #currentSection .stats'),...await page.locator('#gir #targetSection>.stats').all()];
+    if(girSummaryGroups.length!==3) throw new Error('Expected three GIR summary card groups.');
+    for(const group of girSummaryGroups){
+      const columns=await group.evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
+      if(columns!==2) throw new Error('GIR summary cards should use a two-column grid at desktop width; got '+columns+' columns.');
     }
     await page.setViewportSize({width:390,height:844});
     const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
