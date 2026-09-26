@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import org.json.JSONObject;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
     private boolean exitDialogVisible = false;
     private boolean resetHistoryAfterHomeLoad = false;
     private String selectedPage = "home";
+    private String pendingAuthCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class MainActivity extends Activity {
         settings.setDisplayZoomControls(false);
         settings.setTextZoom(100);
         webView.addJavascriptInterface(new AppNavigationBridge(), "AndroidNav");
+        webView.addJavascriptInterface(new NativeAuthBridge(), "AndroidAuth");
+        captureAuthCallback(getIntent());
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -92,6 +96,7 @@ public class MainActivity extends Activity {
                     webView.clearHistory();
                 }
                 injectAppPresentation(view);
+                deliverPendingAuthCallback();
             }
         });
         webView.setWebChromeClient(new WebChromeClient());
@@ -154,6 +159,7 @@ public class MainActivity extends Activity {
         addNavigationItem(bar, "GIR", "gir", R.drawable.nav_gir);
         addNavigationItem(bar, "Nutrition", "nutrition", R.drawable.nav_nutrition);
         addNavigationItem(bar, "Mixer", "mixer", R.drawable.nav_mixer);
+        addNavigationItem(bar, "Profile", "profile", R.drawable.nav_profile);
         updateNavigationSelection();
         return bar;
     }
@@ -215,7 +221,7 @@ public class MainActivity extends Activity {
     }
 
     private void setSelectedPage(String page) {
-        if (!"home".equals(page) && !"gir".equals(page) && !"nutrition".equals(page) && !"mixer".equals(page)) {
+        if (!"home".equals(page) && !"gir".equals(page) && !"nutrition".equals(page) && !"mixer".equals(page) && !"profile".equals(page)) {
             page = "home";
         }
         selectedPage = page;
@@ -234,6 +240,49 @@ public class MainActivity extends Activity {
 
     private int dp(float value) {
         return Math.round(value * getResources().getDisplayMetrics().density);
+    }
+
+    private void captureAuthCallback(Intent intent) {
+        Uri data = intent == null ? null : intent.getData();
+        if (data != null && "neonatalgir".equals(data.getScheme()) && "auth-callback".equals(data.getHost())) {
+            pendingAuthCallback = data.toString();
+        }
+    }
+
+    private void deliverPendingAuthCallback() {
+        if (webView == null || pendingAuthCallback == null) return;
+        String callback = pendingAuthCallback;
+        pendingAuthCallback = null;
+        webView.evaluateJavascript("if(window.handleNativeAuthCallback){window.handleNativeAuthCallback(" + JSONObject.quote(callback) + ");}", null);
+    }
+
+    public class NativeAuthBridge {
+        @JavascriptInterface
+        public boolean openAuthUrl(String value) {
+            try {
+                Uri uri = Uri.parse(value);
+                String host = uri.getHost();
+                String path = uri.getPath();
+                if (!"https".equalsIgnoreCase(uri.getScheme())
+                        || !"edazqjqqvgxbvotydhrw.supabase.co".equalsIgnoreCase(host)
+                        || path == null || !path.startsWith("/auth/v1/authorize")
+                        || uri.getUserInfo() != null || uri.getPort() != -1) {
+                    return false;
+                }
+                runOnUiThread(() -> startActivity(new Intent(Intent.ACTION_VIEW, uri)));
+                return true;
+            } catch (Exception ignored) {
+                return false;
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        captureAuthCallback(intent);
+        deliverPendingAuthCallback();
     }
 
     public class AppNavigationBridge {
