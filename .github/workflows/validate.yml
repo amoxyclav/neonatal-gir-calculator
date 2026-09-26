@@ -122,6 +122,21 @@ jobs:
 
           PY
           node --check /tmp/app.js
+          node --check local-profile.js
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path("index.html").read_text(encoding="utf-8")
+          profile = Path("local-profile.js").read_text(encoding="utf-8")
+          for marker in ['id="localProfileName"', 'id="saveLocalProfile"', 'id="exportProfile"', 'id="importProfile"', 'src="local-profile.js"']:
+              if marker not in html:
+                  raise SystemExit("Local profile UI is missing " + marker)
+          for marker in ["neonatalGirLocalProfile.v1", "neonatal-gir-settings", "schemaVersion:1", "Patient inputs", "importSettings"]:
+              if marker not in profile:
+                  raise SystemExit("Local profile backup validation is missing " + marker)
+          if "accountGoogleButton" in html or "accountAppleButton" in html or "accountEmailButton" in html:
+              raise SystemExit("Cloud sign-in controls must be removed from the local-profile build.")
+          print("Local profile, persistent settings and backup/import markers validated.")
+          PY
           if [ -f account-auth.js ]; then
             node --check account-auth.js
             node --check auth-config.js
