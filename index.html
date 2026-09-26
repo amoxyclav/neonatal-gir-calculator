@@ -606,7 +606,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <div class="section" id="currentSection"><h2>2. Current IV / Oral Fluids</h2><p class="help">Enter the fluids already being administered or planned for.</p>
 <div id="fluidList"></div>
 <div class="actions"><button class="btn fluid-picker-trigger" type="button" data-fluid-picker="addFluid">＋ Add predefined fluid</button><button class="btn" id="addCustom">+ Add custom fluid</button></div>
-<div class="divider"></div><div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+<div class="divider"></div><div class="stats" style="display:grid;grid-template-columns:1fr 1fr">
 
 <div class="stat"><span>Total current fluid</span><strong id="currentTotal">0</strong><small>mL/day</small></div>
 <div class="stat"><span>Remaining TFI</span><strong id="remaining">0</strong><small>mL/day</small></div>
@@ -618,7 +618,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 </div><div id="fluidStatus" class="status">No current fluids selected.</div></div>
 
 <div class="section" id="targetSection"><h2>3. Target GIR + TFI-Aware Interactive Automatic Plan</h2>
-<div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+<div class="stats" style="display:grid;grid-template-columns:1fr 1fr">
 <div class="stat"><span>Additional GIR required</span><strong id="additionalGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>Required average concentration</span><strong id="requiredConc">0</strong><small>%</small></div>
 <div class="stat"><span>Automated line type</span><strong id="lineType">—</strong><small>based on required concentration</small></div>
@@ -627,7 +627,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <div class="gir-recipe" id="girRecipe" aria-live="polite"><div class="gir-recipe-heading"><div><span class="gir-recipe-kicker">PREPARATION RECIPE</span><h3>Fluid proportions</h3></div><span class="gir-recipe-total" id="girRecipeTotal">0 mL/day</span></div><div class="gir-recipe-bar" role="img" aria-label="Fluid proportions"><span class="gir-recipe-segment gir-recipe-a" id="girRecipeSegmentA"></span><span class="gir-recipe-segment gir-recipe-b" id="girRecipeSegmentB"></span></div><div class="gir-recipe-legend"><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-a"></span><div class="gir-recipe-fields"><label>Fluid A<select id="planA" aria-label="Fluid A type"></select></label><label>Volume (mL/day)<input id="planAV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Fluid A volume in mL per day"></label><small id="girRecipeVolumeA">0 mL/day · 0%</small></div></div><div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-b"></span><div class="gir-recipe-fields"><label>Fluid B<select id="planB" aria-label="Fluid B type"></select></label><label>Volume (mL/day)<input id="planBV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Fluid B volume in mL per day"></label><small id="girRecipeVolumeB">0 mL/day · 0%</small></div></div></div><p class="gir-recipe-footnote">Edit each fluid type and its volume here. All GIR and nutrition results update from these two recipe entries.</p></div>
 <div class="actions"><button class="btn" id="resetPlan">↻ Reset to automatic plan</button></div>
 <div id="targetStatus" class="status">Enter patient inputs to generate a plan.</div></div>
-<div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+<div class="stats" style="display:grid;grid-template-columns:1fr 1fr">
 <div class="stat"><span>Calculated GIR</span><strong id="achievedGir">0</strong><small>mg/kg/min</small></div>
 <div class="stat"><span>GIR difference</span><strong id="girDifference">0</strong><small>target − calculated</small></div>
 <div class="stat"><span>Unused TFI</span><strong id="unusedTfi">0</strong><small>mL/day</small></div>
