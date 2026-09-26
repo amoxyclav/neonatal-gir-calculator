@@ -405,7 +405,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 }
 @media(max-width:360px){#mixer .grid.g4{grid-template-columns:minmax(0,1fr)}}
 
-/* Settings page — guarded, session-only preset editing */
+/* Settings page — guarded, device-persistent preset editing */
 .settings-shell{max-width:1080px;margin:0 auto}
 .settings-hero{padding:clamp(24px,4vw,38px);border:1px solid #d5e2f8;border-radius:24px;background:radial-gradient(ellipse at 90% 5%,rgba(191,219,254,.65),transparent 42%),linear-gradient(130deg,#f9fbff,#edf4ff 58%,#f3f0ff);box-shadow:0 12px 30px rgba(30,64,175,.055)}
 .settings-eyebrow{display:flex;align-items:center;gap:10px;color:#5b75a8;font-size:10px;font-weight:850;letter-spacing:.16em}
@@ -964,9 +964,14 @@ NS:{conc:.9,energy:0,protein:0,carb:0,sodium:.154,potassium:0,calcium:0,gir:fals
 };
 const DEFAULT_PRODUCTS=JSON.parse(JSON.stringify(PRODUCTS));
 const CUSTOM_PRESETS_KEY='neonatalGirCustomPresets.v1';
+const EDITABLE_PRESETS_KEY='neonatalGirEditablePresets.v1';
+const PRESET_VALUE_FIELDS=['conc','energy','protein','carb','sodium','potassium','calcium'];
 function readCustomPresets(){try{let raw=localStorage.getItem(CUSTOM_PRESETS_KEY);if(!raw){raw=sessionStorage.getItem(CUSTOM_PRESETS_KEY);if(raw)localStorage.setItem(CUSTOM_PRESETS_KEY,raw);}const saved=JSON.parse(raw||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){Object.entries(saved).forEach(([name,p])=>{if(name&&p&&typeof p==='object')PRODUCTS[name]={conc:Number(p.conc)||0,energy:Number(p.energy)||0,protein:Number(p.protein)||0,carb:Number(p.carb)||0,sodium:Number(p.sodium)||0,potassium:Number(p.potassium)||0,calcium:Number(p.calcium)||0,gir:p.gir!==false,editable:true,customPreset:true};});}}catch(e){}}
 function persistCustomPresets(){try{const saved={};Object.entries(PRODUCTS).forEach(([name,p])=>{if(p.customPreset)saved[name]={conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium,potassium:p.potassium,calcium:p.calcium,gir:p.gir!==false};});localStorage.setItem(CUSTOM_PRESETS_KEY,JSON.stringify(saved));}catch(e){}}
+function loadEditablePresets(){try{const saved=JSON.parse(localStorage.getItem(EDITABLE_PRESETS_KEY)||'{}');if(!saved||typeof saved!=='object'||Array.isArray(saved))return;Object.entries(saved).forEach(([name,fields])=>{const product=PRODUCTS[name],defaults=DEFAULT_PRODUCTS[name];if(!product||!defaults||!product.editable||product.customPreset||!fields||typeof fields!=='object'||Array.isArray(fields))return;PRESET_VALUE_FIELDS.forEach(field=>{const value=fields[field];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&Object.prototype.hasOwnProperty.call(defaults,field))product[field]=value;});});}catch(e){}}
+function persistEditablePresets(){try{const saved={};Object.entries(PRODUCTS).forEach(([name,product])=>{const defaults=DEFAULT_PRODUCTS[name];if(!defaults||!product.editable||product.customPreset)return;const changed={};PRESET_VALUE_FIELDS.forEach(field=>{const value=Number(product[field]),original=Number(defaults[field]);if(Number.isFinite(value)&&value>=0&&value!==original)changed[field]=value;});if(Object.keys(changed).length)saved[name]=changed;});if(Object.keys(saved).length)localStorage.setItem(EDITABLE_PRESETS_KEY,JSON.stringify(saved));else localStorage.removeItem(EDITABLE_PRESETS_KEY);}catch(e){}}
 readCustomPresets();
+loadEditablePresets();
 let calculatorPreferences={defaultVolumeUnit:'mL/day',displayDecimals:2};
 try{const savedPrefs=JSON.parse(localStorage.getItem('neonatalGirPreferences.v1')||'null');if(savedPrefs&&typeof savedPrefs==='object'){calculatorPreferences={defaultVolumeUnit:savedPrefs.defaultVolumeUnit==='mL/hr'?'mL/hr':'mL/day',displayDecimals:Number.isInteger(savedPrefs.displayDecimals)&&savedPrefs.displayDecimals>=0&&savedPrefs.displayDecimals<=4?savedPrefs.displayDecimals:2};}}catch(e){}
 const PREDEF=Object.keys(PRODUCTS), PLAN=['NS','Isolyte P','D5','D10','D25','D50'];
@@ -1038,6 +1043,7 @@ function setSettingsEditing(enabled){
 function applySettings(values,prefs){
  Object.entries(values).forEach(([name,fields])=>{if(!PRODUCTS[name])return;Object.entries(fields).forEach(([key,value])=>{if(SETTINGS_FIELDS.some(([field])=>field===key))PRODUCTS[name][key]=value;});});
  persistCustomPresets();
+ persistEditablePresets();
  calculatorPreferences={...prefs};displayDecimals=calculatorPreferences.displayDecimals;try{localStorage.setItem('neonatalGirPreferences.v1',JSON.stringify(calculatorPreferences));}catch(e){}
  fluids.forEach(f=>{if(!PRODUCTS[f.name])return;SETTINGS_FIELDS.forEach(([key])=>{if(Object.prototype.hasOwnProperty.call(PRODUCTS[f.name],key))f[key]=PRODUCTS[f.name][key];});});
  refreshMixerPresetOptions();renderFluids();recalc(false);if($('nutritionFluidEditor'))renderNutritionFluids();
@@ -1056,9 +1062,9 @@ function saveSettings(){
  settingsStatus('Settings saved on this device. Review the updated calculator results and verify preset values against product labels.','ok');
 }
 function resetSettings(){
- if(!window.confirm('Restore all fluid preset values and calculator preferences to the built-in defaults? This will also update current fluid rows. Custom presets will be removed for this session.'))return;
+ if(!window.confirm('Restore all fluid preset values and calculator preferences to the built-in defaults? This will also update current fluid rows. Custom presets will be removed, and all editable presets will return to their built-in defaults on this device.'))return;
  Object.keys(PRODUCTS).forEach(name=>{if(PRODUCTS[name]?.customPreset)delete PRODUCTS[name];});
- try{localStorage.removeItem(CUSTOM_PRESETS_KEY);sessionStorage.removeItem(CUSTOM_PRESETS_KEY);localStorage.removeItem('neonatalGirPreferences.v1');}catch(e){}
+ try{localStorage.removeItem(CUSTOM_PRESETS_KEY);sessionStorage.removeItem(CUSTOM_PRESETS_KEY);localStorage.removeItem(EDITABLE_PRESETS_KEY);localStorage.removeItem('neonatalGirPreferences.v1');}catch(e){}
  applySettings(DEFAULT_PRODUCTS,{defaultVolumeUnit:'mL/day',displayDecimals:2});renderSettings();settingsStatus('Built-in defaults restored on this device.','ok');
 }
 function patient(){const raw=n('w'),u=$('weightUnit')?.value||'kg';const w=u==='g'?raw/1000:u==='lb'?raw*0.45359237:raw;return{w,tfi:n('tfi'),target:n('tg')}}
@@ -1124,6 +1130,7 @@ function applyPickerConcentration(name,value){
  Object.assign(p,updates);
  fluids.filter(f=>f.name===name).forEach(f=>{Object.assign(f,updates);syncFluidEditorFields(f,'picker','conc');});
  if(p.customPreset)persistCustomPresets();
+ persistEditablePresets();
  if(!settingsEditing&&typeof SETTINGS_FIELDS!=='undefined')SETTINGS_FIELDS.forEach(([key])=>{const input=document.querySelector('[data-settings-product="'+name+'"][data-settings-key="'+key+'"]');if(input)input.value=Number(p[key])||0;});
  refreshMixerPresetOptions();
  renderFluids();recalc(false);
@@ -1408,6 +1415,7 @@ function syncProductFromFluid(f){
    const p=PRODUCTS[f.name];
    p.conc=f.conc;p.energy=f.energy;p.protein=f.protein;p.carb=f.carb;p.sodium=f.sodium;p.potassium=f.potassium;p.calcium=f.calcium;
    if(p.customPreset)persistCustomPresets();
+   persistEditablePresets();
    refreshMixerPresetOptions();
    if(!settingsEditing&&typeof SETTINGS_FIELDS!=='undefined')SETTINGS_FIELDS.forEach(([key])=>{const input=document.querySelector('[data-settings-product="'+f.name+'"][data-settings-key="'+key+'"]');if(input)input.value=Number(p[key])||0;});
    if(p.customPreset&&typeof renderSettings==='function')renderSettings();
