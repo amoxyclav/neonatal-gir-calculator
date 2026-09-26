@@ -835,7 +835,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
   </div>
   <div class="settings-safety"><span aria-hidden="true">!</span><div><strong>Clinical safety</strong><p>Changing a preset can change GIR, energy, protein, carbohydrate and electrolyte results wherever that preset is used. Verify every edited value against the product label and your unit protocol before using the calculator clinically.</p></div></div>
   <div class="settings-panel">
-    <div class="settings-panel-head"><div><h2>Calculator preferences</h2><p>Used for this session only.</p></div></div>
+    <div class="settings-panel-head"><div><h2>Calculator preferences</h2><p>Saved on this device.</p></div></div>
     <div class="settings-preferences">
       <label>Default volume unit for newly added fluids<select id="settingsDefaultVolumeUnit" disabled><option value="mL/day">mL/day</option><option value="mL/hr">mL/hr</option></select></label>
       <label>Default display decimal places<select id="settingsDisplayDecimals" disabled><option value="0">0 decimals</option><option value="1">1 decimal</option><option value="2">2 decimals</option><option value="3">3 decimals</option><option value="4">4 decimals</option></select></label>
@@ -927,39 +927,20 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <section id="profile" class="page">
   <div class="section profile-shell">
     <div class="profile-hero">
-      <div class="profile-avatar profile-avatar-large" id="profileAvatar" aria-hidden="true">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </div>
-      <div><div class="ey">YOUR ACCOUNT</div><h1 id="profileHeading">Profile</h1><p class="mut">Sign in to save your profile and sync personal presets across devices.</p></div>
+      <div class="profile-avatar profile-avatar-large" id="profileAvatar" aria-hidden="true"><span id="profileInitials">U</span></div>
+      <div><div class="ey">ON-DEVICE PROFILE</div><h1 id="profileHeading">Your profile</h1><p class="mut">Create a local profile on this device. No account or internet connection is required.</p></div>
     </div>
-  <div class="account-panel" id="accountPanel">
-    <div class="settings-panel-head"><div><h2>Account &amp; Personal Presets</h2><p>Sign in to sync your editable custom presets and calculator preferences across devices. Guest mode and offline calculations remain available.</p></div></div>
-    <div id="accountSignInControls">
-      <div class="actions" style="margin-top:8px">
-        <button type="button" class="btn primary" id="accountGoogleButton" data-account-auth>Continue with Google</button>
-        <button type="button" class="btn" id="accountAppleButton" data-account-auth>Continue with Apple</button>
-      </div>
-      <div class="settings-preferences" style="margin-top:12px">
-        <label>Email address<input id="accountEmailInput" type="email" autocomplete="email" placeholder="name@example.com"></label>
-        <div style="display:flex;align-items:end"><button type="button" class="btn" id="accountEmailButton" data-account-auth>Send sign-in link</button></div>
-      </div>
+    <div class="account-panel" id="localProfilePanel">
+      <div class="settings-panel-head"><div><h2>Local profile &amp; saved settings</h2><p>Your name, custom presets and calculator preferences are saved on this device and remain available offline.</p></div></div>
+      <label for="localProfileName">Profile name<input id="localProfileName" type="text" maxlength="80" autocomplete="name" placeholder="Enter your name"></label>
+      <div class="actions"><button type="button" class="btn primary" id="saveLocalProfile">Save profile</button></div>
+      <div id="localProfileStatus" class="status" role="status" aria-live="polite">Your profile is stored only on this device.</div>
     </div>
-    <div id="accountSignedInControls" hidden>
-      <p class="mut">Signed in as <strong id="accountEmail"></strong></p>
-      <div class="actions"><button type="button" class="btn primary" id="accountSyncButton">Sync personal presets</button></div>
-    </div>
-    <div id="accountStatus" class="status" role="status" aria-live="polite">Account features are loading. You can continue using the calculator as a guest.</div>
-    <p class="mut" style="font-size:12px;line-height:1.6">Only editable custom preset values and calculator display preferences are eligible for sync. Patient inputs, current fluid rows, and calculation results are not uploaded. Account features require an internet connection; core calculations remain available offline.</p>
-  </div>
-
-    <div id="profileDetails" class="profile-details" hidden>
-      <h2>Basic details</h2>
-      <div class="settings-preferences">
-        <label for="profileNameInput">Name<input id="profileNameInput" type="text" autocomplete="name" maxlength="80" placeholder="Your name"></label>
-        <label for="profileEmailInput">Email address<input id="profileEmailInput" type="email" autocomplete="email" readonly></label>
-      </div>
-      <div class="actions"><button type="button" class="btn primary" id="profileSaveButton">Save profile</button><button type="button" class="btn" id="profileLogoutButton">Log out</button></div>
-      <div id="profileSaveStatus" class="status" role="status" aria-live="polite" hidden></div>
+    <div class="account-panel" style="margin-top:16px">
+      <div class="settings-panel-head"><div><h2>Backup &amp; transfer</h2><p>Export your profile name, custom presets and preferences to a JSON file. Import that file on another device to transfer these settings.</p></div></div>
+      <div class="actions"><button type="button" class="btn primary" id="exportProfile">Export settings</button><button type="button" class="btn" id="importProfile">Import settings</button><input id="importProfileFile" type="file" accept="application/json,.json" hidden></div>
+      <p class="mut" style="font-size:12px;line-height:1.6">Backup files contain only your profile name, custom preset definitions and calculator preferences. Patient inputs, current fluid rows and calculation results are not included. Keep backup files private if they contain personal preset information.</p>
+      <div id="backupStatus" class="status" role="status" aria-live="polite" hidden></div>
     </div>
   </div>
 </section>
@@ -983,10 +964,11 @@ NS:{conc:.9,energy:0,protein:0,carb:0,sodium:.154,potassium:0,calcium:0,gir:fals
 };
 const DEFAULT_PRODUCTS=JSON.parse(JSON.stringify(PRODUCTS));
 const CUSTOM_PRESETS_KEY='neonatalGirCustomPresets.v1';
-function readCustomPresets(){try{const saved=JSON.parse(sessionStorage.getItem(CUSTOM_PRESETS_KEY)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){Object.entries(saved).forEach(([name,p])=>{if(name&&p&&typeof p==='object')PRODUCTS[name]={conc:Number(p.conc)||0,energy:Number(p.energy)||0,protein:Number(p.protein)||0,carb:Number(p.carb)||0,sodium:Number(p.sodium)||0,potassium:Number(p.potassium)||0,calcium:Number(p.calcium)||0,gir:p.gir!==false,editable:true,customPreset:true};});}}catch(e){}}
-function persistCustomPresets(){try{const saved={};Object.entries(PRODUCTS).forEach(([name,p])=>{if(p.customPreset)saved[name]={conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium,potassium:p.potassium,calcium:p.calcium,gir:p.gir!==false};});sessionStorage.setItem(CUSTOM_PRESETS_KEY,JSON.stringify(saved));}catch(e){}}
+function readCustomPresets(){try{let raw=localStorage.getItem(CUSTOM_PRESETS_KEY);if(!raw){raw=sessionStorage.getItem(CUSTOM_PRESETS_KEY);if(raw)localStorage.setItem(CUSTOM_PRESETS_KEY,raw);}const saved=JSON.parse(raw||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){Object.entries(saved).forEach(([name,p])=>{if(name&&p&&typeof p==='object')PRODUCTS[name]={conc:Number(p.conc)||0,energy:Number(p.energy)||0,protein:Number(p.protein)||0,carb:Number(p.carb)||0,sodium:Number(p.sodium)||0,potassium:Number(p.potassium)||0,calcium:Number(p.calcium)||0,gir:p.gir!==false,editable:true,customPreset:true};});}}catch(e){}}
+function persistCustomPresets(){try{const saved={};Object.entries(PRODUCTS).forEach(([name,p])=>{if(p.customPreset)saved[name]={conc:p.conc,energy:p.energy,protein:p.protein,carb:p.carb,sodium:p.sodium,potassium:p.potassium,calcium:p.calcium,gir:p.gir!==false};});localStorage.setItem(CUSTOM_PRESETS_KEY,JSON.stringify(saved));}catch(e){}}
 readCustomPresets();
 let calculatorPreferences={defaultVolumeUnit:'mL/day',displayDecimals:2};
+try{const savedPrefs=JSON.parse(localStorage.getItem('neonatalGirPreferences.v1')||'null');if(savedPrefs&&typeof savedPrefs==='object'){calculatorPreferences={defaultVolumeUnit:savedPrefs.defaultVolumeUnit==='mL/hr'?'mL/hr':'mL/day',displayDecimals:Number.isInteger(savedPrefs.displayDecimals)&&savedPrefs.displayDecimals>=0&&savedPrefs.displayDecimals<=4?savedPrefs.displayDecimals:2};}}catch(e){}
 const PREDEF=Object.keys(PRODUCTS), PLAN=['NS','Isolyte P','D5','D10','D25','D50'];
 let fluids=[];let uid=0;
 let fluidPickerVolumeUnit=calculatorPreferences.defaultVolumeUnit||'mL/day';
@@ -1056,7 +1038,7 @@ function setSettingsEditing(enabled){
 function applySettings(values,prefs){
  Object.entries(values).forEach(([name,fields])=>{if(!PRODUCTS[name])return;Object.entries(fields).forEach(([key,value])=>{if(SETTINGS_FIELDS.some(([field])=>field===key))PRODUCTS[name][key]=value;});});
  persistCustomPresets();
- calculatorPreferences={...prefs};displayDecimals=calculatorPreferences.displayDecimals;
+ calculatorPreferences={...prefs};displayDecimals=calculatorPreferences.displayDecimals;try{localStorage.setItem('neonatalGirPreferences.v1',JSON.stringify(calculatorPreferences));}catch(e){}
  fluids.forEach(f=>{if(!PRODUCTS[f.name])return;SETTINGS_FIELDS.forEach(([key])=>{if(Object.prototype.hasOwnProperty.call(PRODUCTS[f.name],key))f[key]=PRODUCTS[f.name][key];});});
  refreshMixerPresetOptions();renderFluids();recalc(false);if($('nutritionFluidEditor'))renderNutritionFluids();
 }
@@ -1069,15 +1051,15 @@ function readSettingsDraft(){
 }
 function saveSettings(){
  if(!settingsEditing)return;let draft;try{draft=readSettingsDraft();}catch(err){settingsStatus(err.message,'warn');return;}
- if(!window.confirm('Apply these preset and preference changes for this session? They can change calculator results. Verify every value before continuing.'))return;
+ if(!window.confirm('Apply these preset and preference changes on this device? They can change calculator results. Verify every value before continuing.'))return;
  applySettings(draft.values,draft.prefs);setSettingsEditing(false);
- settingsStatus('Settings applied for this session only. Review the updated calculator results and verify preset values against product labels.','ok');
+ settingsStatus('Settings saved on this device. Review the updated calculator results and verify preset values against product labels.','ok');
 }
 function resetSettings(){
  if(!window.confirm('Restore all fluid preset values and calculator preferences to the built-in defaults? This will also update current fluid rows. Custom presets will be removed for this session.'))return;
  Object.keys(PRODUCTS).forEach(name=>{if(PRODUCTS[name]?.customPreset)delete PRODUCTS[name];});
- try{sessionStorage.removeItem(CUSTOM_PRESETS_KEY);}catch(e){}
- applySettings(DEFAULT_PRODUCTS,{defaultVolumeUnit:'mL/day',displayDecimals:2});renderSettings();settingsStatus('Built-in defaults restored for this session.','ok');
+ try{localStorage.removeItem(CUSTOM_PRESETS_KEY);sessionStorage.removeItem(CUSTOM_PRESETS_KEY);localStorage.removeItem('neonatalGirPreferences.v1');}catch(e){}
+ applySettings(DEFAULT_PRODUCTS,{defaultVolumeUnit:'mL/day',displayDecimals:2});renderSettings();settingsStatus('Built-in defaults restored on this device.','ok');
 }
 function patient(){const raw=n('w'),u=$('weightUnit')?.value||'kg';const w=u==='g'?raw/1000:u==='lb'?raw*0.45359237:raw;return{w,tfi:n('tfi'),target:n('tg')}}
 function addFluid(name,custom=false){
@@ -1698,6 +1680,5 @@ calculateMixerExistingBag();
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
 })();
 </script>
-<script src="auth-config.js"></script>
-<script src="account-auth.js"></script>
+<script src="local-profile.js"></script>
 </body></html>
