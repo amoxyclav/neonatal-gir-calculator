@@ -82,7 +82,7 @@
       const link = document.createElement('a');
       link.href = url; link.download = 'neonatal-gir-settings-backup.json';
       document.body.appendChild(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1500);
-      showStatus('backupStatus', 'Backup exported. Import this JSON file on another device to transfer your profile name, custom presets and preferences.', 'ok');
+      showStatus('backupStatus', 'Backup exported. Import this JSON file on another device to transfer your profile name, custom presets, editable preset overrides and preferences.', 'ok');
     } catch (error) { showStatus('backupStatus', 'Could not export settings: ' + (error.message || 'Device storage is unavailable.'), 'warn'); }
   }
   function importSettings(data) {
@@ -90,7 +90,7 @@
     const presets = validatePresets(data.presets || {});
     const preferences = validatePreferences(data.preferences || {});
     const name = typeof data.profile?.name === 'string' ? data.profile.name.trim().slice(0, 80) : '';
-    if (!window.confirm('Import this backup? It will replace the local profile name, custom presets and preferences on this device. Patient inputs and current fluid rows will not be changed.')) return;
+    if (!window.confirm('Import this backup? It will replace the local profile name, custom presets, editable preset overrides and preferences on this device. Patient inputs and current fluid rows will not be changed.')) return;
     localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
     localStorage.setItem(PREFS_KEY, JSON.stringify(preferences));
     localStorage.setItem(PROFILE_KEY, JSON.stringify({ name }));
