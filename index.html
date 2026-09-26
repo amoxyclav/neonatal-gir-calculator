@@ -452,6 +452,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .fluid-picker-volume::placeholder{color:#93a2bb;font-size:12px;font-weight:500;opacity:1}
 .fluid-picker-volume:focus{border-color:#3978e8;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
 .fluid-picker-volume-wrap{display:flex;align-items:center;gap:6px;flex:0 0 auto}.fluid-picker-unit{height:40px;max-width:92px;padding:0 7px;border:1px solid #d4e0f4;border-radius:11px;background:#fff;color:#263f70;font:inherit;font-size:12px;font-weight:700}.fluid-picker-unit:focus{outline:2px solid #3978e8;outline-offset:1px}
+.fluid-picker-controls{display:flex;align-items:center;gap:7px;flex:0 0 auto;min-width:0}.fluid-picker-conc-wrap{display:flex;align-items:center;gap:4px;color:#6b7f9f;font-size:11px;font-weight:800;white-space:nowrap}.fluid-picker-conc{width:72px;max-width:none;min-width:0;height:40px;padding:0 8px;border:1px solid #d4e0f4;border-radius:11px;background:#fff;color:#172554;font:inherit;font-size:13px;font-weight:650}.fluid-picker-conc:focus{outline:2px solid #3978e8;outline-offset:1px}
 .fluid-picker-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #e1e9f7;background:#fff}
 .fluid-picker-footer-note{color:#71819b;font-size:12px;font-weight:650}
 .fluid-picker-unit-wrap{display:flex;flex-direction:column;gap:5px;align-items:flex-start;min-width:0}
@@ -460,7 +461,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .fluid-picker-unit-toggle button.active{background:#fff;color:#1d5ed8;box-shadow:0 1px 4px rgba(35,70,130,.13)}
 .fluid-picker-unit-toggle button:focus-visible{outline:2px solid #3978e8;outline-offset:2px}
 .fluid-picker-apply{min-height:42px;padding:10px 18px}
-@media(max-width:600px){.fluid-picker-option{min-height:56px;padding:9px 11px}.fluid-picker-volume{width:116px;height:40px;font-size:13px}.fluid-picker-unit{max-width:83px;font-size:11px;padding:0 4px}.fluid-picker-footer{padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:8px}.fluid-picker-unit-toggle button{padding:6px 9px;font-size:12px}.fluid-picker-apply{min-height:42px;padding:9px 12px;font-size:13px}}
+@media(max-width:600px){.fluid-picker-option{min-height:56px;padding:9px 11px}.fluid-picker-volume{width:116px;height:40px;font-size:13px}.fluid-picker-unit{max-width:83px;font-size:11px;padding:0 4px} .fluid-picker-option.has-concentration{flex-wrap:wrap;align-items:flex-start}.fluid-picker-option.has-concentration .fluid-picker-option-name{flex:1 1 100%}.fluid-picker-option.has-concentration .fluid-picker-controls{width:100%;justify-content:flex-end;gap:6px}.fluid-picker-conc{width:68px;padding:0 6px;font-size:12px}.fluid-picker-footer{padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:8px}.fluid-picker-unit-toggle button{padding:6px 9px;font-size:12px}.fluid-picker-apply{min-height:42px;padding:9px 12px;font-size:13px}}
 </style><script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebPage","name":"Neonatal GIR & Nutrition Calculator","url":"https://amoxyclav.github.io/neonatal-gir-calculator/","description":"A browser-based calculation aid for neonatal glucose infusion rate, total fluid intake and nutrition planning.","isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Dr. Damam Sreeharsha"},"mainEntity":{"@id":"https://amoxyclav.github.io/neonatal-gir-calculator/#calculator"}},
@@ -1054,12 +1055,52 @@ function productRow(f){
  (calciumProduct?'<div class="divider"></div><div class="note">10% solution = 100 mg/mL calcium gluconate salt, equivalent to approximately 9.3 mg/mL elemental calcium (0.465 mEq/mL). If diluted with D5 or D10, include that diluent volume in the current fluid calculation. If the D5/D10 diluent is already included in a current fluid entered above, do not add it again. Otherwise, add the corresponding D5 or D10 as a separate current fluid.</div>':'')+(f.name==='Isolyte P'?'<div class="divider"></div><div class="note">Preset verified: 5% dextrose with sodium 23 mEq/L and potassium 20 mEq/L. Isolyte P also contains magnesium, chloride, acetate and phosphate; this calculator currently tracks Na, K and Ca only, so those additional electrolytes are not included in the electrolyte cards.</div>':'')+(f.name==='Formula milk'?'<div class="divider"></div><div class="note">Preset note: For this calculator, glucose is used for GIR and sodium, potassium and calcium are the tracked electrolytes. Other formula components are not included in the electrolyte cards.</div>':'')+
  '</div></div>';
 }
+function syncFluidEditorFields(f,source,field){
+ const keys=field==='conc'?['conc','energy','protein','carb','sodium','potassium','calcium']:[field];
+ keys.forEach(key=>{
+  if(source!=='gir'||(field==='conc'&&key!=='conc')){
+   const el=document.querySelector('[data-field="'+key+'"][data-id="'+f.id+'"]');
+   if(el){if(el.type==='checkbox')el.checked=!!f[key];else if(key!=='volumeDisplay')el.value=f[key]??0;}
+  }
+  if(source!=='nutrition'||(field==='conc'&&key!=='conc')){
+   const el=document.querySelector('[data-nfield="'+key+'"][data-nid="'+f.id+'"]');
+   if(el){if(el.type==='checkbox')el.checked=!!f[key];else if(key!=='volumeDisplay')el.value=f[key]??0;}
+  }
+ });
+ if(field==='volumeDisplay'){
+  const unit=f.volumeUnit||'mL/day',display=unit==='mL/hr'?(f.volume||0)/24:(f.volume||0);
+  if(source!=='gir'){const el=document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]');if(el)el.value=f.volumeInitialized?String(display):'';}
+  if(source!=='nutrition'){const el=document.querySelector('[data-nfield="volumeDisplay"][data-nid="'+f.id+'"]');if(el)el.value=f.volumeInitialized?String(display):'';}
+ }
+}
+function pickerConcentrationMeta(name){
+ if(name==='Aminoven')return{label:'AA%',aria:'Aminoven amino acid concentration (%)'};
+ if(name==='Intralipid')return{label:'Conc%',aria:'Intralipid concentration (%)'};
+ if(name==='Isolyte P')return{label:'D%',aria:'Isolyte P dextrose concentration (%)'};
+ return null;
+}
+function applyPickerConcentration(name,value){
+ const p=PRODUCTS[name],conc=Number(value);
+ if(!p||!Number.isFinite(conc)||conc<0)return;
+ const updates={conc};
+ if(name==='Aminoven'){updates.protein=conc;updates.energy=conc*4;}
+ else if(name==='Intralipid'){updates.energy=conc*10;}
+ else if(name==='Isolyte P'){updates.carb=conc;updates.energy=conc*3.4;}
+ else return;
+ Object.assign(p,updates);
+ fluids.filter(f=>f.name===name).forEach(f=>{Object.assign(f,updates);syncFluidEditorFields(f,'picker','conc');});
+ if(p.customPreset)persistCustomPresets();
+ if(!settingsEditing&&typeof SETTINGS_FIELDS!=='undefined')SETTINGS_FIELDS.forEach(([key])=>{const input=document.querySelector('[data-settings-product="'+name+'"][data-settings-key="'+key+'"]');if(input)input.value=Number(p[key])||0;});
+ refreshMixerPresetOptions();
+ renderFluids();recalc(false);
+ if($('nutritionFluidEditor'))renderNutritionFluids();
+}
 function renderFluids(){
  $('fluidList').innerHTML=fluids.length?fluids.map(productRow).join(''):'<div class="status">No current fluids selected. Unselected fluids are treated as zero.</div>';
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFluid(+b.dataset.remove));
  document.querySelectorAll('[data-unit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.unitId);if(!f)return;const old=f.volumeUnit||'mL/day',displayed=valNum(document.querySelector('[data-field="volumeDisplay"][data-id="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;recalc(false);updateFluidRowOnly(f);});
  document.querySelectorAll('[data-field]').forEach(x=>x.onfocus=()=>{if(x.dataset.field==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.id);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
- document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;if(x.dataset.field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else if(x.dataset.field==='carrierIncluded'){f.carrierIncluded=x.checked}else{f[x.dataset.field]=valNum(x.value);if(x.dataset.field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}if(x.dataset.field==='conc'){const e=document.querySelector('[data-field="energy"][data-id="'+f.id+'"]'),p=document.querySelector('[data-field="protein"][data-id="'+f.id+'"]'),c=document.querySelector('[data-field="carb"][data-id="'+f.id+'"]'),na=document.querySelector('[data-field="sodium"][data-id="'+f.id+'"]'),k=document.querySelector('[data-field="potassium"][data-id="'+f.id+'"]'),ca=document.querySelector('[data-field="calcium"][data-id="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}}syncProductFromFluid(f);recalc(false);updateFluidRowOnly(f);});
+ document.querySelectorAll('[data-field]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.id);if(!f)return;const field=x.dataset.field;if(field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}else if(field==='carrierIncluded'){f.carrierIncluded=x.checked}else{f[field]=valNum(x.value);if(field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}}syncProductFromFluid(f);syncFluidEditorFields(f,'gir',field);recalc(false);updateFluidRowOnly(f);updateNutritionFluidRow(f);});
 }
 function updateFluidRowOnly(f){const w=patient().w||0,r=calcFluid(f,w),caMg=r.calciumMg;const g=document.querySelector('[data-row-gir="'+f.id+'"]'),e=document.querySelector('[data-row-energy="'+f.id+'"]'),p=document.querySelector('[data-row-protein="'+f.id+'"]'),c=document.querySelector('[data-row-carb="'+f.id+'"]');if(g)g.textContent=fmt(r.g);if(e)e.textContent=fmt(r.e,1);if(p)p.textContent=fmt(r.p,2);if(c)c.textContent=fmt(r.carb,2);const cmkg=document.querySelector('[data-row-ca-mgkg="'+f.id+'"]'),cm=document.querySelector('[data-row-ca-mg="'+f.id+'"]'),nkg=document.querySelector('[data-row-na-kg="'+f.id+'"]'),nm=document.querySelector('[data-row-na="'+f.id+'"]'),kkg=document.querySelector('[data-row-k-kg="'+f.id+'"]'),km=document.querySelector('[data-row-k="'+f.id+'"]');if(cmkg)cmkg.textContent=fmt(w?caMg/w:0,2);if(cm)cm.textContent=fmt(caMg,2);if(nkg)nkg.textContent=fmt(w?r.sodium/w:0,2);if(nm)nm.textContent=fmt(r.sodium,2);if(kkg)kkg.textContent=fmt(w?r.potassium/w:0,2);if(km)km.textContent=fmt(r.potassium,2)}
 const CALCIUM_MG_PER_MEQ=20;
@@ -1221,12 +1262,10 @@ function renderNutritionFluids(){
  document.querySelectorAll('[data-ndetails]').forEach(b=>b.onclick=()=>{const box=$('ndetails-'+b.dataset.ndetails),open=b.getAttribute('aria-expanded')==='true';box.hidden=open;b.setAttribute('aria-expanded',String(!open));});
  document.querySelectorAll('[data-nunit-id]').forEach(x=>x.onchange=()=>{const f=fluids.find(z=>z.id==x.dataset.nunitId);if(!f)return;const old=f.volumeUnit||'mL/day',displayed=valNum(document.querySelector('[data-nfield="volumeDisplay"][data-nid="'+f.id+'"]')?.value);f.volume=old==='mL/hr'?displayed*24:displayed;f.volumeUnit=x.value;f.volumeInitialized=true;recalc(false);renderNutritionFluids();});
  document.querySelectorAll('[data-nfield]').forEach(x=>x.onfocus=()=>{if(x.dataset.nfield==='volumeDisplay'){const f=fluids.find(z=>z.id==x.dataset.nid);if(f&&!f.volumeInitialized){x.value='';f.volumeInitialized=true;}}});
- document.querySelectorAll('[data-nfield]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.nid);if(!f)return;
-   if(x.dataset.nfield==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}
-   else{f[x.dataset.nfield]=valNum(x.value);if(x.dataset.nfield==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}}
-   syncProductFromFluid(f);
-   recalc(false);updateNutritionFluidRow(f);
-   if(x.dataset.nfield==='conc'){const e=document.querySelector('[data-nfield="energy"][data-nid="'+f.id+'"]'),p=document.querySelector('[data-nfield="protein"][data-nid="'+f.id+'"]'),c=document.querySelector('[data-nfield="carb"][data-nid="'+f.id+'"]'),na=document.querySelector('[data-nfield="sodium"][data-nid="'+f.id+'"]'),k=document.querySelector('[data-nfield="potassium"][data-nid="'+f.id+'"]'),ca=document.querySelector('[data-nfield="calcium"][data-nid="'+f.id+'"]');if(e)e.value=f.energy;if(p)p.value=f.protein;if(c)c.value=f.carb;if(na)na.value=f.sodium;if(k)k.value=f.potassium;if(ca)ca.value=f.calcium}
+ document.querySelectorAll('[data-nfield]').forEach(x=>x.oninput=()=>{const f=fluids.find(z=>z.id==x.dataset.nid);if(!f)return;const field=x.dataset.nfield;
+   if(field==='volumeDisplay'){const displayed=valNum(x.value);f.volumeInitialized=true;f.volume=(f.volumeUnit||'mL/day')==='mL/hr'?displayed*24:displayed}
+   else{f[field]=valNum(x.value);if(field==='conc'&&!f.custom){if(f.name==='Aminoven'){f.protein=f.conc;f.energy=f.conc*4}else if(f.name==='Isolyte P'){f.carb=f.conc;f.energy=f.conc*3.4}else if(f.name==='Intralipid'){f.energy=f.conc*10}else if(f.name==='NS'){f.sodium=f.conc*(154/900)}else if(f.name==='Calcium gluconate 10%'){f.calcium=f.conc*0.00465}else if(f.name==='3% NaCl'){f.sodium=f.conc*0.171}else if(f.name==='KCl 15%'){f.potassium=f.conc*(2/15)}}}
+   syncProductFromFluid(f);syncFluidEditorFields(f,'nutrition',field);recalc(false);updateNutritionFluidRow(f);updateFluidRowOnly(f);
  });
 }
 let nutritionPatientEditing=false;
@@ -1336,6 +1375,7 @@ function syncProductFromFluid(f){
    p.conc=f.conc;p.energy=f.energy;p.protein=f.protein;p.carb=f.carb;p.sodium=f.sodium;p.potassium=f.potassium;p.calcium=f.calcium;
    if(p.customPreset)persistCustomPresets();
    refreshMixerPresetOptions();
+   if(!settingsEditing&&typeof SETTINGS_FIELDS!=='undefined')SETTINGS_FIELDS.forEach(([key])=>{const input=document.querySelector('[data-settings-product="'+f.name+'"][data-settings-key="'+key+'"]');if(input)input.value=Number(p[key])||0;});
    if(p.customPreset&&typeof renderSettings==='function')renderSettings();
  }
 }
@@ -1371,11 +1411,21 @@ function setupFluidPicker(selectId){
     volume.dataset.volumeUnit=unit;
     volume.placeholder='Volume ('+unit+')';volume.setAttribute('aria-label',name+' volume in '+unit);
     if(existing&&Number(existing.volume)>0)volume.value=String(unit==='mL/hr'?existing.volume/24:existing.volume);
+    const controls=document.createElement('div');controls.className='fluid-picker-controls';
+    const concMeta=pickerConcentrationMeta(name);
+    if(concMeta){
+     item.classList.add('has-concentration');
+     const concWrap=document.createElement('label');concWrap.className='fluid-picker-conc-wrap';
+     const concLabel=document.createElement('span');concLabel.textContent=concMeta.label;
+     const concInput=document.createElement('input');concInput.type='number';concInput.min='0';concInput.step='0.1';concInput.inputMode='decimal';concInput.className='fluid-picker-conc';concInput.dataset.fluidName=name;concInput.setAttribute('aria-label',concMeta.aria);concInput.value=String(existing?.conc??PRODUCTS[name].conc);
+     concInput.addEventListener('input',()=>{const value=concInput.value===''?0:Number(concInput.value);if(Number.isFinite(value)&&value>=0)applyPickerConcentration(name,value);});
+     concWrap.append(concLabel,concInput);controls.appendChild(concWrap);
+    }
     const unitSelect=document.createElement('select');unitSelect.className='fluid-picker-unit';unitSelect.dataset.fluidName=name;unitSelect.setAttribute('aria-label',name+' volume unit');
     ['mL/day','mL/hr'].forEach(value=>{const option=document.createElement('option');option.value=value;option.textContent=value;option.selected=value===unit;unitSelect.appendChild(option);});
     unitSelect.addEventListener('change',()=>{const oldUnit=volume.dataset.volumeUnit||'mL/day';const nextUnit=unitSelect.value;const factor=oldUnit==='mL/hr'?24:1/24;if(volume.value!==''&&Number.isFinite(Number(volume.value)))volume.value=String(Number((Number(volume.value)*factor).toFixed(4)));volume.dataset.volumeUnit=nextUnit;volume.placeholder='Volume ('+nextUnit+')';volume.setAttribute('aria-label',name+' volume in '+nextUnit);});
-    const volumeWrap=document.createElement('div');volumeWrap.className='fluid-picker-volume-wrap';volumeWrap.append(volume,unitSelect);
-    item.append(label,volumeWrap);section.appendChild(item);
+    const volumeWrap=document.createElement('div');volumeWrap.className='fluid-picker-volume-wrap';volumeWrap.append(volume,unitSelect);controls.appendChild(volumeWrap);
+    item.append(label,controls);section.appendChild(item);
    });
    if(section.querySelector('.fluid-picker-option'))list.appendChild(section);
   });
