@@ -29,6 +29,18 @@ const fs = require('fs');
     if(mobileHero.height>300) throw new Error('Mobile homepage hero is too tall after hiding artwork: '+mobileHero.height+'px.');
     if(mobileHero.artDisplay!=='none') throw new Error('Mobile hero artwork should be hidden; got display '+mobileHero.artDisplay+'.');
     await page.setViewportSize({width:1280,height:720});
+    await page.locator('[data-page="gir"]').first().click();
+    const girSummaryGroups=[page.locator('#gir #currentSection .stats'),...await page.locator('#gir #targetSection>.stats').all()];
+    if(girSummaryGroups.length!==3) throw new Error('Expected three GIR summary card groups.');
+    for(let i=0;i<girSummaryGroups.length;i++){
+      const group=girSummaryGroups[i];
+      const info=await group.evaluate(el=>{const computed=getComputedStyle(el).gridTemplateColumns.trim();const repeated=computed.match(/^repeat\((\d+),/);return {columns:repeated?Number(repeated[1]):computed.split(/\s+/).length,computed,inline:el.getAttribute('style'),id:el.id,parent:el.parentElement?.id};});
+      if(info.columns!==2) throw new Error('GIR summary group '+i+' ('+info.parent+') should have 2 columns; got '+info.computed+'; inline='+info.inline);
+    }
+    await page.setViewportSize({width:390,height:844});
+    const mobileGirColumns=await page.locator('#gir #currentSection .stats').evaluate(el=>{const computed=getComputedStyle(el).gridTemplateColumns.trim();const repeated=computed.match(/^repeat\((\d+),/);return repeated?Number(repeated[1]):computed.split(/\s+/).length;});
+    if(mobileGirColumns!==2) throw new Error('GIR summary cards should use a two-column grid on mobile; got '+mobileGirColumns+' columns.');
+    await page.setViewportSize({width:1280,height:720});
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support section should remain hidden.');
     if(await page.locator('#home .home-support').count()!==0) throw new Error('Support the developer section should be hidden from the homepage.');
     const savedSupport=await page.locator('#saved-home-support-section').evaluate(el=>el.innerHTML);
