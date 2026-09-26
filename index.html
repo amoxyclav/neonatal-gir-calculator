@@ -670,18 +670,40 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <h2>3. Automatic GIR Plan — Assumed Added to Patient</h2>
 <p class="mut">This mirrors the active interactive automatic plan from GIR. For nutrition calculations, these planned fluids are assumed to be added to the current patient fluids. You can edit the same Fluid A/B selections and volumes here.</p>
 <div class="plan">
-<div class="grid g4">
-<label>Fluid A<select id="nutPlanA"></select></label>
-<label>Fluid A mL/day<input id="nutPlanAV" type="number" min="0" step="0.1" inputmode="decimal"></label>
-<label>Fluid B<select id="nutPlanB"></select></label>
-<label>Fluid B mL/day<input id="nutPlanBV" type="number" min="0" step="0.1" inputmode="decimal"></label>
+<div class="gir-recipe" id="nutGirRecipe" aria-live="polite">
+  <div class="gir-recipe-heading">
+    <div><span class="gir-recipe-kicker">PREPARATION RECIPE</span><h3>Fluid proportions</h3></div>
+    <div class="gir-recipe-target-summary" aria-label="Required concentration and automated line type">
+      <div class="gir-recipe-target-metric"><span>Required average concentration</span><strong id="nutRequiredConc">0</strong><small>%</small></div>
+      <div class="gir-recipe-target-metric"><span>Automated line type</span><strong id="nutLineType">—</strong><small>based on required concentration</small></div>
+    </div>
+    <span class="gir-recipe-total" id="nutRecipeTotal">0 mL/day</span>
+  </div>
+  <div class="gir-recipe-bar" role="img" aria-label="Nutrition plan fluid proportions">
+    <span class="gir-recipe-segment gir-recipe-a" id="nutRecipeSegmentA"></span>
+    <span class="gir-recipe-segment gir-recipe-b" id="nutRecipeSegmentB"></span>
+  </div>
+  <div class="gir-recipe-legend">
+    <div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-a"></span><div class="gir-recipe-fields">
+      <label>Fluid A<select id="nutPlanA" aria-label="Nutrition plan Fluid A type"></select></label>
+      <label>Volume (mL/day)<input id="nutPlanAV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Nutrition plan Fluid A volume in mL per day"></label>
+      <small id="nutRecipeVolumeA">0 mL/day · 0%</small>
+    </div></div>
+    <div class="gir-recipe-item"><span class="gir-recipe-swatch gir-swatch-b"></span><div class="gir-recipe-fields">
+      <label>Fluid B<select id="nutPlanB" aria-label="Nutrition plan Fluid B type"></select></label>
+      <label>Volume (mL/day)<input id="nutPlanBV" type="number" min="0" step="0.1" inputmode="decimal" aria-label="Nutrition plan Fluid B volume in mL per day"></label>
+      <small id="nutRecipeVolumeB">0 mL/day · 0%</small>
+    </div></div>
+  </div>
+  <p class="gir-recipe-footnote">Edit each fluid type and its volume here. Nutrition calculations update from these two recipe entries, assumed added to the current patient fluids.</p>
 </div>
-<div class="stats" style="margin-top:14px">
-<div class="stat"><span>Planned fluid volume</span><strong id="nutPlanVolume">0</strong><small>mL/day</small></div>
-<div class="stat"><span>GIR after plan</span><strong id="nutPlanGir">0</strong><small>mg/kg/min</small></div>
-<div class="stat"><span>Unused TFI after plan</span><strong id="nutPlanUnused">0</strong><small>mL/day</small></div>
-</div>
+<div class="actions"><button class="btn" id="nutResetPlan" type="button">↻ Reset to automatic plan</button></div>
 <div id="nutPlanStatus" class="status ok" style="margin-top:14px">Automatic plan is set to achieve the target GIR.</div>
+<div class="stats" style="margin-top:14px">
+  <div class="stat"><span>Planned fluid volume</span><strong id="nutPlanVolume">0</strong><small>mL/day</small></div>
+  <div class="stat"><span>GIR after plan</span><strong id="nutPlanGir">0</strong><small>mg/kg/min</small></div>
+  <div class="stat"><span>Unused TFI after plan</span><strong id="nutPlanUnused">0</strong><small>mL/day</small></div>
+</div>
 </div>
 </div>
 
@@ -1332,6 +1354,20 @@ function syncNutritionPlan(){
  $('nutPlanA').value=$('planA').value;$('nutPlanB').value=$('planB').value;
  $('nutPlanAV').value=$('planAV').value;$('nutPlanBV').value=$('planBV').value;
 }
+function updateNutritionRecipe(a,b,av,bv,requiredConc){
+ const total=Math.max(0,av)+Math.max(0,bv),pa=total>0?Math.max(0,av)/total*100:0,pb=total>0?Math.max(0,bv)/total*100:0;
+ const set=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
+ const segA=$('nutRecipeSegmentA'),segB=$('nutRecipeSegmentB');
+ if(segA)segA.style.width=pa.toFixed(2)+'%';
+ if(segB)segB.style.width=pb.toFixed(2)+'%';
+ set('nutRecipeTotal',fmt(total,1)+' mL/day');
+ set('nutRecipeVolumeA',fmt(Math.max(0,av),1)+' mL/day · '+fmt(pa,0)+'%');
+ set('nutRecipeVolumeB',fmt(Math.max(0,bv),1)+' mL/day · '+fmt(pb,0)+'%');
+ set('nutRequiredConc',fmt(requiredConc));
+ set('nutLineType',requiredConc<=12.5?'Peripheral':requiredConc<=50?'Central':'Beyond central limit');
+ const bar=$('nutGirRecipe');
+ if(bar)bar.setAttribute('aria-label',(a||'Fluid A')+' '+fmt(Math.max(0,av),1)+' mL/day; '+(b||'Fluid B')+' '+fmt(Math.max(0,bv),1)+' mL/day');
+}
 function updateNutrition(renderEditor=true){
  const x=currentTotals(),pt=patient();
  syncNutritionPatient();
@@ -1358,6 +1394,8 @@ function updateNutrition(renderEditor=true){
  const planBFluid={name:b,volume:bv,conc:PRODUCTS[b]?.conc||0,energy:PRODUCTS[b]?.energy||0,protein:PRODUCTS[b]?.protein||0,carb:PRODUCTS[b]?.carb||0};
  const ra=calcFluid(planAFluid,pt.w),rb=calcFluid(planBFluid,pt.w);
  const planVol=av+bv,planGir=x.gir+ra.g+rb.g,planE=ra.e+rb.e,planP=ra.p+rb.p,planC=ra.carb+rb.carb;
+ const additionalGir=Math.max(x.p.target-x.gir,0),requiredConc=x.remaining>0?additionalGir*pt.w*144/x.remaining:0;
+ updateNutritionRecipe(a,b,av,bv,requiredConc);
  if($('nutPlanVolume'))$('nutPlanVolume').textContent=fmt(planVol,1);
  if($('nutPlanGir'))$('nutPlanGir').textContent=fmt(planGir);
  if($('nutPlanUnused'))$('nutPlanUnused').textContent=fmt(Math.max(x.remaining-planVol,0),1);
@@ -1561,6 +1599,7 @@ $('nutPlanAV').oninput=()=>{
 $('nutPlanBV').oninput=()=>{
  const raw=$('nutPlanBV').value; $('planBV').value=raw===''?'0':raw;$('planA').dataset.user='1';clearPlanExact();$('planA').dataset.solveError='';nutritionPlanEditing=true;recalc(false);nutritionPlanEditing=false;
 };
+$('nutResetPlan').onclick=()=>{$('resetPlan')?.click();};
 
 renderSettings();
 $('settingsEdit').onclick=()=>{setSettingsEditing(true);settingsStatus('Editing unlocked. Review every value carefully, then choose Save & apply or Cancel edits.','warn');};
