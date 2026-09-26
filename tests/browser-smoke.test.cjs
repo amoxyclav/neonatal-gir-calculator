@@ -30,6 +30,14 @@ const fs = require('fs');
     if(mobileHero.artDisplay!=='none') throw new Error('Mobile hero artwork should be hidden; got display '+mobileHero.artDisplay+'.');
     await page.setViewportSize({width:1280,height:720});
     await page.locator('[data-page="gir"]').first().click();
+    const recipeSummary=page.locator('#girRecipe .gir-recipe-target-summary');
+    if(await recipeSummary.count()!==1) throw new Error('Required concentration and line type should appear together in one recipe summary card.');
+    for(const id of ['requiredConc','lineType']){
+      const metric=page.locator('#'+id);
+      if(await metric.count()!==1) throw new Error('Expected exactly one '+id+' output.');
+      if(await metric.locator('xpath=ancestor::*[contains(concat(" ",normalize-space(@class)," ")," gir-recipe-target-summary ")]').count()!==1) throw new Error(id+' should be inside the combined recipe summary card.');
+    }
+    if(await page.locator('#gir #targetSection>.stats #requiredConc, #gir #targetSection>.stats #lineType').count()!==0) throw new Error('Required concentration and line type should no longer occupy separate summary cards.');
     const girSummaryGroups=[page.locator('#gir #currentSection .stats'),...await page.locator('#gir #targetSection>.stats').all()];
     if(girSummaryGroups.length!==3) throw new Error('Expected three GIR summary card groups.');
     for(let i=0;i<girSummaryGroups.length;i++){
