@@ -59,7 +59,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- index.html local-profile.js auth-config.js account-auth.js favicon.svg manifest.json guides/ android/app/src/main/AndroidManifest.xml android/app/src/main/java/com/neonatalgir/calculator/MainActivity.java android/app/src/main/res/drawable/launcher_foreground.xml android/app/src/main/res/mipmap-anydpi/ic_launcher.xml android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml android/app/src/main/res/values/launcher_colors.xml android/app/src/main/res/drawable/nav_*.xml
+          git add -A -- index.html local-profile.js favicon.svg manifest.json guides/ android/app/src/main/AndroidManifest.xml android/app/src/main/java/com/neonatalgir/calculator/MainActivity.java android/app/src/main/res/drawable/launcher_foreground.xml android/app/src/main/res/mipmap-anydpi/ic_launcher.xml android/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml android/app/src/main/res/values/launcher_colors.xml android/app/src/main/res/drawable/nav_*.xml
           if git diff --cached --quiet; then
             echo "Android web assets are already synchronized."
             exit 0
