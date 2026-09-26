@@ -68,11 +68,17 @@
   }
   function exportSettings() {
     try {
-      const blob = new Blob([JSON.stringify(exportData(), null, 2)], { type:'application/json' });
+      const data = exportData();
+      if (window.AndroidProfile && typeof window.AndroidProfile.saveBackup === 'function') {
+        window.AndroidProfile.saveBackup(JSON.stringify(data));
+        showStatus('backupStatus', 'Choose a location to save your settings backup.', 'ok');
+        return;
+      }
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url; link.download = 'neonatal-gir-settings-backup.json';
-      document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+      document.body.appendChild(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1500);
       showStatus('backupStatus', 'Backup exported. Import this JSON file on another device to transfer your profile name, custom presets and preferences.', 'ok');
     } catch (error) { showStatus('backupStatus', 'Could not export settings: ' + (error.message || 'Device storage is unavailable.'), 'warn'); }
   }
@@ -102,12 +108,19 @@
   $('saveLocalProfile')?.addEventListener('click', saveProfile);
   $('localProfileName')?.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); saveProfile(); } });
   $('exportProfile')?.addEventListener('click', exportSettings);
-  $('importProfile')?.addEventListener('click', () => $('importProfileFile')?.click());
+  $('importProfile')?.addEventListener('click', () => {
+    if (window.AndroidProfile && typeof window.AndroidProfile.openBackupPicker === 'function') window.AndroidProfile.openBackupPicker();
+    else $('importProfileFile')?.click();
+  });
   $('importProfileFile')?.addEventListener('change', async event => {
     const file = event.target.files?.[0]; if (!file) return;
     try { importSettings(JSON.parse(await file.text())); }
     catch (error) { showStatus('backupStatus', 'Import failed: ' + (error.message || 'Choose a valid settings backup JSON file.'), 'warn'); }
     finally { event.target.value = ''; }
   });
+  window.handleProfileBackupImport = (raw) => {
+    try { importSettings(JSON.parse(raw)); }
+    catch (error) { showStatus('backupStatus', 'Import failed: ' + (error.message || 'Choose a valid settings backup JSON file.'), 'warn'); }
+  };
   renderProfile();
 })();
