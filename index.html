@@ -536,12 +536,29 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 #mixerAdjustPanel .mixer-adjust-plan-card .mixer-result-heading{margin-bottom:0}
 #mixerAdjustPanel .mixer-adjust-plan-card .mixer-adjust-settings{margin:0}
 @media(max-width:620px){#mixerAdjustPanel .mixer-adjust-inputs{grid-template-columns:minmax(0,1fr);gap:12px}}
+
+.profile-nav{padding:5px!important;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px}
+.profile-nav.active{background:transparent!important}
+.profile-avatar{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#dbeafe,#e0e7ff);border:1px solid #bfdbfe;color:#1d4ed8;font-size:13px;font-weight:800;flex:0 0 auto}
+.profile-avatar svg{width:21px;height:21px}.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-avatar-large{width:76px;height:76px;font-size:25px}
+.profile-avatar-large svg{width:36px;height:36px}.profile-avatar-large img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-hero{display:flex;align-items:center;gap:18px;margin:8px 0 22px}
+.profile-hero h1{margin:5px 0;color:#172554;font-size:clamp(26px,4vw,36px)}
+.profile-hero p{margin:0}
+.profile-shell{max-width:780px;margin:10px auto}
+.profile-details{border-top:1px solid var(--line);margin-top:22px;padding-top:20px}
+.profile-details h2{margin:0 0 14px}
+.home-welcome{display:inline-flex;align-items:center;margin:12px 0 0;padding:8px 13px;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:750}
+@media(max-width:760px){.profile-nav{min-width:38px;min-height:38px;padding:3px!important}.profile-avatar{width:30px;height:30px}}
+@media(max-width:440px){.profile-avatar{width:28px;height:28px}}
+
 </style>
 <meta name="msvalidate.01" content="4639EECBB4D7B4E3E826FC94D4E24197" />
 </head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
-<nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a><a href="#settings" data-page="settings">Settings</a></nav></div></header>
+<nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a><a href="#settings" data-page="settings">Settings</a><a href="#profile" data-page="profile" class="profile-nav" aria-label="Profile" title="Profile"><span class="profile-avatar" id="navProfileAvatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="sr-only">Profile</span></a></nav></div></header>
 <main>
 <section id="home" class="page active"><div class="home-hero home-hero-premium">
   <div class="hero-copy">
@@ -549,6 +566,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
     <h1>Neonatal GIR &amp;<br><span>Nutrition Calculator</span></h1>
     <p class="hero-lead">Calculate fluids, GIR and Energy-Protein Ratio for neonates with ease.</p>
     <p class="hero-sub">Designed by a pediatrician, for everyday clinical use.</p>
+    <p class="home-welcome" id="homeWelcome" hidden></p>
   </div>
   <div class="home-hero-art" aria-hidden="true">
     <div class="hero-glow"></div><div class="hero-orbit hero-orbit-a"></div><div class="hero-orbit hero-orbit-b"></div>
@@ -905,6 +923,45 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
     </div>
   </div>
 </div>
+</section>
+<section id="profile" class="page">
+  <div class="section profile-shell">
+    <div class="profile-hero">
+      <div class="profile-avatar profile-avatar-large" id="profileAvatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div><div class="ey">YOUR ACCOUNT</div><h1 id="profileHeading">Profile</h1><p class="mut">Sign in to save your profile and sync personal presets across devices.</p></div>
+    </div>
+  <div class="account-panel" id="accountPanel">
+    <div class="settings-panel-head"><div><h2>Account &amp; Personal Presets</h2><p>Sign in to sync your editable custom presets and calculator preferences across devices. Guest mode and offline calculations remain available.</p></div></div>
+    <div id="accountSignInControls">
+      <div class="actions" style="margin-top:8px">
+        <button type="button" class="btn primary" id="accountGoogleButton" data-account-auth>Continue with Google</button>
+        <button type="button" class="btn" id="accountAppleButton" data-account-auth>Continue with Apple</button>
+      </div>
+      <div class="settings-preferences" style="margin-top:12px">
+        <label>Email address<input id="accountEmailInput" type="email" autocomplete="email" placeholder="name@example.com"></label>
+        <div style="display:flex;align-items:end"><button type="button" class="btn" id="accountEmailButton" data-account-auth>Send sign-in link</button></div>
+      </div>
+    </div>
+    <div id="accountSignedInControls" hidden>
+      <p class="mut">Signed in as <strong id="accountEmail"></strong></p>
+      <div class="actions"><button type="button" class="btn primary" id="accountSyncButton">Sync personal presets</button></div>
+    </div>
+    <div id="accountStatus" class="status" role="status" aria-live="polite">Account features are loading. You can continue using the calculator as a guest.</div>
+    <p class="mut" style="font-size:12px;line-height:1.6">Only editable custom preset values and calculator display preferences are eligible for sync. Patient inputs, current fluid rows, and calculation results are not uploaded. Account features require an internet connection; core calculations remain available offline.</p>
+  </div>
+
+    <div id="profileDetails" class="profile-details" hidden>
+      <h2>Basic details</h2>
+      <div class="settings-preferences">
+        <label for="profileNameInput">Name<input id="profileNameInput" type="text" autocomplete="name" maxlength="80" placeholder="Your name"></label>
+        <label for="profileEmailInput">Email address<input id="profileEmailInput" type="email" autocomplete="email" readonly></label>
+      </div>
+      <div class="actions"><button type="button" class="btn primary" id="profileSaveButton">Save profile</button><button type="button" class="btn" id="profileLogoutButton">Log out</button></div>
+      <div id="profileSaveStatus" class="status" role="status" aria-live="polite" hidden></div>
+    </div>
+  </div>
 </section>
 </main><div id="fluidPickerDialog" class="fluid-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="fluidPickerTitle" hidden><div class="fluid-picker-panel"><div class="fluid-picker-head"><div><h2 id="fluidPickerTitle" class="fluid-picker-title">Add predefined fluids</h2><p class="fluid-picker-subtitle">Enter the volume for each fluid. Leave blank or enter 0 to skip it.</p></div><button type="button" class="fluid-picker-close" aria-label="Close fluid picker">×</button></div><div class="fluid-picker-list"></div><div class="fluid-picker-footer"><span class="fluid-picker-footer-note">Choose mL/day or mL/hr separately for each fluid.</span><button type="button" class="btn fluid-picker-apply" id="applyPredefinedFluids">Add selected fluids</button></div></div></div><footer style="text-align:center;padding:24px;color:#64748b;font-size:12px">Neonatal GIR & Nutrition Calculator • Calculation aid only • <a href="#about" data-page="about">About</a> • © 2026</footer>
 
@@ -1641,4 +1698,6 @@ calculateMixerExistingBag();
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
 })();
 </script>
+<script src="auth-config.js"></script>
+<script src="account-auth.js"></script>
 </body></html>
