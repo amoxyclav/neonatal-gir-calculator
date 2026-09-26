@@ -114,6 +114,14 @@ const fs = require('fs');
     if(await page.locator('#planBV').inputValue()!=='129.6') throw new Error('D10 plan volume should be 129.6 mL/day when NS contributes no glucose.');
     await page.locator('#resetPlan').click();
 
+    // Automatic recipe must refresh after a patient target change, even if the user edited the prior recipe.
+    await page.locator('#planAV').fill('30');
+    await page.locator('#tg').fill('7');
+    if(await page.locator('#planA').evaluate(el=>el.dataset.user||'')!=='') throw new Error('Changing target GIR should restore the automatic plan after a manual recipe edit.');
+    if(await page.locator('#planA').inputValue()!=='D5'||await page.locator('#planB').inputValue()!=='D25') throw new Error('Automatic recipe did not recalculate the fluid pair for the changed target GIR.');
+    if(await page.locator('#planAV').inputValue()!=='111.9'||await page.locator('#planBV').inputValue()!=='38.1') throw new Error('Automatic recipe volumes did not refresh for target GIR 7.');
+    await page.locator('#tg').fill('6');
+
     if(await page.locator('#patientStatus').count()!==0) throw new Error('Patient helper status text should be removed from the GIR page.');
 
     const displayCard=page.locator('#gir .stat').first();
