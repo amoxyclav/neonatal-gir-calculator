@@ -549,7 +549,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 .profile-shell{max-width:780px;margin:10px auto}
 .profile-details{border-top:1px solid var(--line);margin-top:22px;padding-top:20px}
 .profile-details h2{margin:0 0 14px}
-.home-welcome{display:inline-flex;align-items:center;margin:12px 0 0;padding:8px 13px;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:750}
+.hero-topline{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.home-welcome{display:inline-flex;align-items:center;margin:0;padding:8px 13px;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:750;white-space:nowrap}
 @media(max-width:760px){.profile-nav{min-width:38px;min-height:38px;padding:3px!important}.profile-avatar{width:30px;height:30px}}
 @media(max-width:440px){.profile-avatar{width:28px;height:28px}}
 
@@ -562,11 +562,10 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <main>
 <section id="home" class="page active"><div class="home-hero home-hero-premium">
   <div class="hero-copy">
-    <div class="home-eyebrow"><span></span> CLINICAL TOOLS FOR NEONATAL CARE</div>
+    <div class="hero-topline"><div class="home-eyebrow"><span></span> CLINICAL TOOLS FOR NEONATAL CARE</div><p class="home-welcome" id="homeWelcome" hidden></p></div>
     <h1>Neonatal GIR &amp;<br><span>Nutrition Calculator</span></h1>
     <p class="hero-lead">Calculate fluids, GIR and Energy-Protein Ratio for neonates with ease.</p>
     <p class="hero-sub">Designed by a pediatrician, for everyday clinical use.</p>
-    <p class="home-welcome" id="homeWelcome" hidden></p>
   </div>
   <div class="home-hero-art" aria-hidden="true">
     <div class="hero-glow"></div><div class="hero-orbit hero-orbit-a"></div><div class="hero-orbit hero-orbit-b"></div>
