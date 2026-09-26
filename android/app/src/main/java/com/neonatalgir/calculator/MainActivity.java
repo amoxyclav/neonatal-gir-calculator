@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
     private WebView webView;
     private LinearLayout bottomNavigation;
     private boolean exitDialogVisible = false;
+    private boolean backActionPending = false;
     private boolean resetHistoryAfterHomeLoad = false;
     private String selectedPage = "home";
     private String pendingProfileBackup;
@@ -106,13 +108,27 @@ public class MainActivity extends Activity {
         webView.setWebChromeClient(new WebChromeClient());
 
         bottomNavigation = createBottomNavigation();
-        root.addView(webView, new LinearLayout.LayoutParams(
+        FrameLayout contentFrame = new FrameLayout(this);
+        contentFrame.addView(webView, new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        ImageView homeButton = createFloatingButton(R.drawable.nav_home, "Home", () -> openTab("home"));
+        FrameLayout.LayoutParams homeParams = new FrameLayout.LayoutParams(dp(50), dp(50), Gravity.TOP | Gravity.START);
+        homeParams.setMargins(dp(14), dp(10), 0, 0);
+        contentFrame.addView(homeButton, homeParams);
+
+        ImageView profileButton = createFloatingButton(R.drawable.nav_profile, "Profile", () -> openTab("profile"));
+        FrameLayout.LayoutParams profileParams = new FrameLayout.LayoutParams(dp(50), dp(50), Gravity.TOP | Gravity.END);
+        profileParams.setMargins(0, dp(10), dp(14), 0);
+        contentFrame.addView(profileButton, profileParams);
+
+        root.addView(contentFrame, new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f
         ));
         LinearLayout.LayoutParams navLayout = new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, dp(72)
+            ViewGroup.LayoutParams.MATCH_PARENT, dp(58)
         );
-        navLayout.setMargins(dp(10), dp(2), dp(10), dp(7));
+        navLayout.setMargins(dp(9), dp(1), dp(9), dp(5));
         root.addView(bottomNavigation, navLayout);
         setContentView(root);
         webView.requestFocus(View.FOCUS_DOWN);
@@ -130,7 +146,7 @@ public class MainActivity extends Activity {
         String script = "(function(){"
             + "var s=document.getElementById('native-app-presentation');"
             + "if(!s){s=document.createElement('style');s.id='native-app-presentation';"
-            + "s.textContent='header{display:none!important}main{padding-top:14px!important} .wrap{padding-top:14px!important}';"
+            + "s.textContent='header{display:none!important}main{padding:76px 14px 18px!important}';"
             + "document.head.appendChild(s);}"
             + "if(!window.__nativeNavBound){window.__nativeNavBound=true;"
             + "document.addEventListener('click',function(e){var a=e.target.closest('[data-page]');"
@@ -153,18 +169,16 @@ public class MainActivity extends Activity {
                 Color.argb(175, 235, 231, 255)
             }
         );
-        glass.setCornerRadius(dp(24));
+        glass.setCornerRadius(dp(20));
         glass.setStroke(dp(1), Color.argb(175, 255, 255, 255));
         bar.setBackground(glass);
         bar.setElevation(dp(16));
-        bar.setPadding(dp(8), dp(5), dp(8), dp(5));
+        bar.setPadding(dp(6), dp(2), dp(6), dp(2));
 
-        addNavigationItem(bar, "Home", "home", R.drawable.nav_home);
         addNavigationItem(bar, "GIR", "gir", R.drawable.nav_gir);
         addNavigationItem(bar, "Nutrition", "nutrition", R.drawable.nav_nutrition);
         addNavigationItem(bar, "Mixer", "mixer", R.drawable.nav_mixer);
         addNavigationItem(bar, "Settings", "settings", R.drawable.nav_settings);
-        addNavigationItem(bar, "Profile", "profile", R.drawable.nav_profile);
         updateNavigationSelection();
         return bar;
     }
@@ -173,7 +187,7 @@ public class MainActivity extends Activity {
         LinearLayout item = new LinearLayout(this);
         item.setOrientation(LinearLayout.VERTICAL);
         item.setGravity(Gravity.CENTER);
-        item.setPadding(dp(4), dp(5), dp(4), dp(4));
+        item.setPadding(dp(3), dp(1), dp(3), dp(1));
         item.setClickable(true);
         item.setFocusable(true);
         item.setContentDescription(label);
@@ -181,22 +195,41 @@ public class MainActivity extends Activity {
 
         ImageView icon = new ImageView(this);
         icon.setImageResource(iconId);
-        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(dp(23), dp(23));
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(dp(21), dp(21));
         item.addView(icon, iconParams);
 
         TextView text = new TextView(this);
         text.setText(label);
-        text.setTextSize(10);
+        text.setTextSize(9.5f);
         text.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
         text.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        textParams.topMargin = dp(3);
+        textParams.topMargin = dp(1);
         item.addView(text, textParams);
 
         item.setOnClickListener(v -> openTab(page));
         bar.addView(item, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+    }
+
+    private ImageView createFloatingButton(int iconId, String label, Runnable action) {
+        ImageView button = new ImageView(this);
+        button.setImageResource(iconId);
+        button.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        button.setPadding(dp(13), dp(13), dp(13), dp(13));
+        GradientDrawable circle = new GradientDrawable();
+        circle.setShape(GradientDrawable.OVAL);
+        circle.setColor(Color.argb(224, 255, 255, 255));
+        circle.setStroke(dp(1), Color.argb(210, 191, 219, 254));
+        button.setBackground(circle);
+        button.setElevation(dp(10));
+        button.setImageTintList(ColorStateList.valueOf(BLUE));
+        button.setContentDescription(label);
+        button.setClickable(true);
+        button.setFocusable(true);
+        button.setOnClickListener(v -> action.run());
+        return button;
     }
 
     private void updateNavigationSelection() {
@@ -321,49 +354,32 @@ public class MainActivity extends Activity {
     }
 
     private void handleBackNavigation() {
-        if (webView == null) {
-            finishAndRemoveTask();
-            return;
-        }
-        // Return a simple string so older WebView versions can reliably identify the current page.
+        if (webView == null || backActionPending || exitDialogVisible) return;
+        backActionPending = true;
         webView.evaluateJavascript(
             "(function(){var path=location.pathname;var hash=location.hash.replace('#','')||'home';"
                 + "if(!path.endsWith('/index.html'))return 'outside';"
                 + "return hash==='home'?'home':'calculator';})()",
             value -> {
+                backActionPending = false;
                 if (isFinishing()) return;
-                if (value != null && value.contains("calculator")) {
-                    webView.evaluateJavascript(
-                        "(function(){history.replaceState({page:'home'},'', '#home');"
-                            + "if(typeof activatePage==='function'){activatePage('home',true);}"
-                            + "else{location.hash='#home';}})()",
-                        null
-                    );
+                if (value != null && value.contains("home")) {
+                    showExitConfirmation();
+                } else {
+                    openTab("home");
                     webView.clearHistory();
                     setSelectedPage("home");
-                } else {
-                    // On Home (or if the WebView cannot report its page), Back closes and removes the app task.
-                    finishAndRemoveTask();
                 }
             }
         );
     }
 
     @Override
-    public boolean dispatchKeyEvent(android.view.KeyEvent event) {
-        if (event.getKeyCode() == android.view.KeyEvent.KEYCODE_BACK
-                && event.getAction() == android.view.KeyEvent.ACTION_UP) {
-            handleBackNavigation();
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
         // Redmi Y2 / Android 9 and older MIUI builds can route the hardware Back
         // key through onKeyDown instead of the newer back callbacks.
-        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                && keyCode == android.view.KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             handleBackNavigation();
             return true;
         }
@@ -379,10 +395,10 @@ public class MainActivity extends Activity {
         if (exitDialogVisible || isFinishing()) return;
         exitDialogVisible = true;
         new AlertDialog.Builder(this)
-            .setTitle("Exit calculator?")
-            .setMessage("You are on the Home page. Do you want to close the app?")
-            .setNegativeButton("Stay", (dialog, which) -> exitDialogVisible = false)
-            .setPositiveButton("Exit", (dialog, which) -> {
+            .setTitle("Exit app?")
+            .setMessage("Are you sure you want to exit?")
+            .setNegativeButton("No", (dialog, which) -> exitDialogVisible = false)
+            .setPositiveButton("Yes, exit", (dialog, which) -> {
                 exitDialogVisible = false;
                 finishAndRemoveTask();
             })
