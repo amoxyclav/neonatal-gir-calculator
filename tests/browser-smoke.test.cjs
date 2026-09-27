@@ -407,6 +407,8 @@ const fs = require('fs');
       if(await card.locator('.nutrition-extra-details').getAttribute('hidden')===null) throw new Error(source.id+' composition panel remains visible after closing.');
     }
 
+    await page.locator('[data-page="settings"]').first().click();
+    await page.locator('.nav .nav-home').waitFor({state:'visible'});
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
 
@@ -457,6 +459,8 @@ const fs = require('fs');
     if(await page.locator('#about .section > *').last().getAttribute('id')!=='creator') throw new Error('Creator showcase should be the final section on the About page.');
     if(await creator.locator('.creator-capabilities span').count()!==4) throw new Error('Creator showcase capability tags are incomplete.');
 
+    await page.locator('[data-page="settings"]').first().click();
+    await page.locator('.nav .nav-home').waitFor({state:'visible'});
     await page.locator('[data-page="home"]').first().click();
     await assertOnlyPageVisible('home');
 
