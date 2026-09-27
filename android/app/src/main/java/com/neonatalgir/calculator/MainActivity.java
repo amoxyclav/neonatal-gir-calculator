@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -38,6 +39,9 @@ public class MainActivity extends Activity {
     private static final int REQUEST_PROFILE_IMPORT = 702;
     private WebView webView;
     private LinearLayout bottomNavigation;
+    private ImageView homeButton;
+    private ImageView profileButton;
+    private boolean fluidPickerVisible = false;
     private boolean exitDialogVisible = false;
     private boolean backActionPending = false;
     private boolean resetHistoryAfterHomeLoad = false;
@@ -49,6 +53,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.WHITE);
         getWindow().setNavigationBarColor(Color.WHITE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         );
@@ -112,12 +117,12 @@ public class MainActivity extends Activity {
         contentFrame.addView(webView, new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         ));
-        ImageView homeButton = createFloatingButton(R.drawable.nav_home, "Home", () -> openTab("home"));
+        homeButton = createFloatingButton(R.drawable.nav_home, "Home", () -> openTab("home"));
         FrameLayout.LayoutParams homeParams = new FrameLayout.LayoutParams(dp(50), dp(50), Gravity.TOP | Gravity.START);
         homeParams.setMargins(dp(14), dp(10), 0, 0);
         contentFrame.addView(homeButton, homeParams);
 
-        ImageView profileButton = createFloatingButton(R.drawable.nav_profile, "Profile", () -> openTab("profile"));
+        profileButton = createFloatingButton(R.drawable.nav_profile, "Profile", () -> openTab("profile"));
         FrameLayout.LayoutParams profileParams = new FrameLayout.LayoutParams(dp(50), dp(50), Gravity.TOP | Gravity.END);
         profileParams.setMargins(0, dp(10), dp(14), 0);
         contentFrame.addView(profileButton, profileParams);
@@ -258,12 +263,22 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void updateFloatingActionVisibility() {
+        boolean showSettingsActions = "settings".equals(selectedPage) && !fluidPickerVisible;
+        if (homeButton != null) homeButton.setVisibility(showSettingsActions ? View.VISIBLE : View.GONE);
+        if (profileButton != null) profileButton.setVisibility(showSettingsActions ? View.VISIBLE : View.GONE);
+        if (bottomNavigation != null) bottomNavigation.setVisibility(fluidPickerVisible ? View.GONE : View.VISIBLE);
+    }
+
     private void setSelectedPage(String page) {
         if (!"home".equals(page) && !"gir".equals(page) && !"nutrition".equals(page) && !"mixer".equals(page) && !"settings".equals(page) && !"profile".equals(page)) {
             page = "home";
         }
         selectedPage = page;
-        runOnUiThread(this::updateNavigationSelection);
+        runOnUiThread(() -> {
+            updateNavigationSelection();
+            updateFloatingActionVisibility();
+        });
     }
 
     private void openTab(String page) {
@@ -350,6 +365,14 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void onPageChanged(String page) {
             setSelectedPage(page);
+        }
+
+        @JavascriptInterface
+        public void onFluidPickerVisibility(boolean visible) {
+            runOnUiThread(() -> {
+                fluidPickerVisible = visible;
+                updateFloatingActionVisibility();
+            });
         }
     }
 
