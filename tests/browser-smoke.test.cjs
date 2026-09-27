@@ -30,6 +30,7 @@ const fs = require('fs');
     if(mobileHero.artDisplay!=='none') throw new Error('Mobile hero artwork should be hidden; got display '+mobileHero.artDisplay+'.');
     await page.setViewportSize({width:1280,height:720});
     await page.locator('[data-page="gir"]').first().click();
+    if(await page.locator('.nav .nav-home').isVisible()||await page.locator('.nav .profile-nav').isVisible()) throw new Error('Home and Profile shortcuts should be hidden on the GIR page.');
     const recipeSummary=page.locator('#girRecipe .gir-recipe-target-summary');
     if(await recipeSummary.count()!==1) throw new Error('Required concentration and line type should appear together in one recipe summary card.');
     for(const id of ['requiredConc','lineType']){
@@ -50,6 +51,7 @@ const fs = require('fs');
     if(mobileGirColumns!==2) throw new Error('GIR summary cards should use a two-column grid on mobile; got '+mobileGirColumns+' columns.');
     await page.setViewportSize({width:1280,height:720});
     await page.locator('[data-page="nutrition"]').first().click();
+    if(await page.locator('.nav .nav-home').isVisible()||await page.locator('.nav .profile-nav').isVisible()) throw new Error('Home and Profile shortcuts should be hidden on the Nutrition page.');
     const nutritionRecipe=page.locator('#nutrition #nutGirRecipe');
     if(await nutritionRecipe.count()!==1) throw new Error('Nutrition page should show the GIR-style preparation recipe card.');
     if(await nutritionRecipe.locator('.gir-recipe-target-summary').count()!==1) throw new Error('Nutrition recipe should combine required concentration and line type in one summary card.');
@@ -77,6 +79,8 @@ const fs = require('fs');
     if(await page.locator('#home h1').count() !== 1) throw new Error('Premium Home page title should appear exactly once.');
 
     // Local profile persists on this device and exports only profile/settings data.
+    await page.locator('[data-page="settings"]').first().click();
+    if(!await page.locator('.nav .nav-home').isVisible()||!await page.locator('.nav .profile-nav').isVisible()) throw new Error('Home and Profile shortcuts should remain available on Settings.');
     await page.locator('[data-page="profile"]').first().click();
     await page.locator('#localProfileName').fill('Test Clinician');
     await page.locator('#saveLocalProfile').click();
