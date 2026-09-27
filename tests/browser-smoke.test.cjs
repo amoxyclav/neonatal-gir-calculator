@@ -80,12 +80,15 @@ const fs = require('fs');
 
     // Local profile persists on this device and exports only profile/settings data.
     await page.locator('[data-page="settings"]').first().click();
-    if(!await page.locator('.nav .nav-home').isVisible()||!await page.locator('.nav .profile-nav').isVisible()) throw new Error('Home and Profile shortcuts should remain available on Settings.');
+    await page.locator('.nav .nav-home').waitFor({state:'visible'});
+    if(!await page.locator('.nav .nav-profile').isVisible()&&!await page.locator('.nav .profile-nav').isVisible()) throw new Error('Home and Profile shortcuts should remain available on Settings.');
     await page.locator('[data-page="profile"]').first().click();
     await page.locator('#localProfileName').fill('Test Clinician');
     await page.locator('#saveLocalProfile').click();
     if((await page.locator('#profileHeading').innerText())!=='Hello, Test Clinician') throw new Error('Local profile name was not saved.');
     await page.reload({waitUntil:'networkidle'});
+    await page.locator('[data-page="settings"]').first().click();
+    await page.locator('.nav .nav-home').waitFor({state:'visible'});
     await page.locator('[data-page="profile"]').first().click();
     if(await page.locator('#localProfileName').inputValue()!=='Test Clinician') throw new Error('Local profile did not persist after reload.');
     const [settingsDownload] = await Promise.all([
