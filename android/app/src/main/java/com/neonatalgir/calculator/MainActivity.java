@@ -38,6 +38,9 @@ public class MainActivity extends Activity {
     private static final int REQUEST_PROFILE_IMPORT = 702;
     private WebView webView;
     private LinearLayout bottomNavigation;
+    private ImageView homeButton;
+    private ImageView profileButton;
+    private boolean fluidPickerOpen = false;
     private boolean exitDialogVisible = false;
     private boolean backActionPending = false;
     private boolean resetHistoryAfterHomeLoad = false;
@@ -112,12 +115,12 @@ public class MainActivity extends Activity {
         contentFrame.addView(webView, new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         ));
-        ImageView homeButton = createFloatingButton(R.drawable.nav_home, "Home", () -> openTab("home"));
+        homeButton = createFloatingButton(R.drawable.nav_home, "Home", () -> openTab("home"));
         FrameLayout.LayoutParams homeParams = new FrameLayout.LayoutParams(dp(50), dp(50), Gravity.TOP | Gravity.START);
         homeParams.setMargins(dp(14), dp(10), 0, 0);
         contentFrame.addView(homeButton, homeParams);
 
-        ImageView profileButton = createFloatingButton(R.drawable.nav_profile, "Profile", () -> openTab("profile"));
+        profileButton = createFloatingButton(R.drawable.nav_profile, "Profile", () -> openTab("profile"));
         FrameLayout.LayoutParams profileParams = new FrameLayout.LayoutParams(dp(50), dp(50), Gravity.TOP | Gravity.END);
         profileParams.setMargins(0, dp(10), dp(14), 0);
         contentFrame.addView(profileButton, profileParams);
@@ -146,13 +149,14 @@ public class MainActivity extends Activity {
         String script = "(function(){"
             + "var s=document.getElementById('native-app-presentation');"
             + "if(!s){s=document.createElement('style');s.id='native-app-presentation';"
-            + "s.textContent='header{display:none!important}main{padding:76px 14px 18px!important}';"
+            + "s.textContent='header{display:none!important}main{padding:14px 14px 18px!important}body.native-floating-actions main{padding:76px 14px 18px!important}';"
             + "document.head.appendChild(s);}"
             + "if(!window.__nativeNavBound){window.__nativeNavBound=true;"
             + "document.addEventListener('click',function(e){var a=e.target.closest('[data-page]');"
-            + "if(a&&window.AndroidNav)window.AndroidNav.onPageChanged(a.dataset.page);},true);}"
+            + "if(a){var p=a.dataset.page;document.body.classList.toggle('native-floating-actions',p==='home'||p==='settings');"
+            + "if(window.AndroidNav)window.AndroidNav.onPageChanged(p);}},true);}"
             + "if(window.AndroidNav){var p=location.pathname.endsWith('/index.html')?"
-            + "(location.hash.replace('#','')||'home'):'home';window.AndroidNav.onPageChanged(p);}"
+            + "(location.hash.replace('#','')||'home'):'home';document.body.classList.toggle('native-floating-actions',p==='home'||p==='settings');window.AndroidNav.onPageChanged(p);}"
             + "})()";
         view.evaluateJavascript(script, null);
     }
@@ -263,7 +267,24 @@ public class MainActivity extends Activity {
             page = "home";
         }
         selectedPage = page;
-        runOnUiThread(this::updateNavigationSelection);
+        runOnUiThread(() -> {
+            updateNavigationSelection();
+            updateNativeChromeVisibility();
+        });
+    }
+
+    private void updateNativeChromeVisibility() {
+        boolean showHome = !fluidPickerOpen && "settings".equals(selectedPage);
+        boolean showProfile = !fluidPickerOpen
+            && ("settings".equals(selectedPage) || "home".equals(selectedPage));
+        if (homeButton != null) homeButton.setVisibility(showHome ? View.VISIBLE : View.GONE);
+        if (profileButton != null) profileButton.setVisibility(showProfile ? View.VISIBLE : View.GONE);
+        if (bottomNavigation != null) bottomNavigation.setVisibility(fluidPickerOpen ? View.GONE : View.VISIBLE);
+    }
+
+    private void setFluidPickerOpen(boolean open) {
+        fluidPickerOpen = open;
+        runOnUiThread(this::updateNativeChromeVisibility);
     }
 
     private void openTab(String page) {
@@ -350,6 +371,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void onPageChanged(String page) {
             setSelectedPage(page);
+        }
+
+        @JavascriptInterface
+        public void onFluidPickerChanged(boolean open) {
+            setFluidPickerOpen(open);
         }
     }
 
