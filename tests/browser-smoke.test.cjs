@@ -109,6 +109,8 @@ const fs = require('fs');
     if((await page.locator('#profileHeading').innerText())!=='Hello, Imported Profile') throw new Error('Settings import did not restore the profile name.');
     if(await page.locator('#settingsDisplayDecimals').inputValue()!=='3') throw new Error('Settings import did not restore display preferences.');
     if(await page.locator('#settingsProductList .settings-product-title').filter({hasText:'Backup Test Fluid'}).count()!==1) throw new Error('Settings import did not restore the custom preset.');
+    await page.locator('[data-page="settings"]').first().click();
+    await page.locator('.nav .nav-home').waitFor({state:'visible'});
     await page.locator('[data-page="home"]').first().click();
 
     for (const guide of ['guides/neonatal-gir-calculator.html','guides/neonatal-fluid-nutrition-calculator.html','guides/neonatal-fluid-mixer.html']) {
