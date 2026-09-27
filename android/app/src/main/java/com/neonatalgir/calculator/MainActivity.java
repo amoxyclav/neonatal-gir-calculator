@@ -382,11 +382,14 @@ public class MainActivity extends Activity {
         webView.evaluateJavascript(
             "(function(){var path=location.pathname;var hash=location.hash.replace('#','')||'home';"
                 + "if(!path.endsWith('/index.html'))return 'outside';"
+                + "var picker=document.getElementById('fluidPickerDialog');if(picker&&!picker.hidden)return 'picker';"
                 + "return hash==='home'?'home':'calculator';})()",
             value -> {
                 backActionPending = false;
                 if (isFinishing()) return;
-                if (value != null && value.contains("home")) {
+                if (value != null && value.contains("picker")) {
+                    webView.evaluateJavascript("if(typeof closeFluidPicker==='function')closeFluidPicker();", null);
+                } else if (value != null && value.contains("home")) {
                     showExitConfirmation();
                 } else {
                     openTab("home");
