@@ -265,7 +265,7 @@ public class MainActivity extends Activity {
 
     private void updateFloatingActionVisibility() {
         boolean showHomeAction = "settings".equals(selectedPage) && !fluidPickerVisible;
-        boolean showProfileAction = ("home".equals(selectedPage) || "settings".equals(selectedPage)) && !fluidPickerVisible;
+        boolean showProfileAction = "settings".equals(selectedPage) && !fluidPickerVisible;
         if (homeButton != null) homeButton.setVisibility(showHomeAction ? View.VISIBLE : View.GONE);
         if (profileButton != null) profileButton.setVisibility(showProfileAction ? View.VISIBLE : View.GONE);
         if (bottomNavigation != null) bottomNavigation.setVisibility(fluidPickerVisible ? View.GONE : View.VISIBLE);
