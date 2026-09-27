@@ -618,7 +618,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <div class="stat combined-stat"><span>Energy</span><strong id="currentEnergy">0</strong><small>kcal/day</small><strong id="energyKg">0</strong><small>kcal/kg/day</small></div>
 <div class="stat combined-stat"><span>Protein / amino acids</span><strong id="currentProtein">0</strong><small>g/day</small><strong id="proteinKg">0</strong><small>g/kg/day</small></div>
 <div class="stat combined-stat"><span>Carbohydrate</span><strong id="currentCarb">0</strong><small>g/day</small><strong id="carbKg">0</strong><small>g/kg/day</small></div>
-<div class="stat combined-stat"><span>Calcium</span><strong id="currentCaKg">0</strong><small>mEq/kg/day</small><strong id="currentCa">0</strong><small>mEq/day</small></div><div class="stat combined-stat"><span>Sodium</span><strong id="currentNaKg">0</strong><small>mEq/kg/day</small><strong id="currentNa">0</strong><small>mEq/day</small></div><div class="stat combined-stat"><span>Potassium</span><strong id="currentKKg">0</strong><small>mEq/kg/day</small><strong id="currentK">0</strong><small>mEq/day</small></div>
+<div class="stat combined-stat"><span>Calcium</span><strong id="currentCaKg">0</strong><small>mg/kg/day</small><strong id="currentCa">0</strong><small>mg/day</small></div><div class="stat combined-stat"><span>Sodium</span><strong id="currentNaKg">0</strong><small>mEq/kg/day</small><strong id="currentNa">0</strong><small>mEq/day</small></div><div class="stat combined-stat"><span>Potassium</span><strong id="currentKKg">0</strong><small>mEq/kg/day</small><strong id="currentK">0</strong><small>mEq/day</small></div>
 </div><div id="fluidStatus" class="status">No current fluids selected.</div></div>
 
 <div class="section" id="targetSection"><h2>3. Target GIR + TFI-Aware Interactive Automatic Plan</h2>
@@ -662,7 +662,7 @@ header{background:rgba(255,255,255,.94);border-bottom-color:#dbe7fa;box-shadow:0
 <div class="stat combined-stat"><span>Energy</span><strong id="nutCurrentEnergy">0</strong><small>kcal/day</small><strong id="nutEnergyKg">0</strong><small>kcal/kg/day</small></div>
 <div class="stat combined-stat"><span>Protein / amino acids</span><strong id="nutCurrentProtein">0</strong><small>g/day</small><strong id="nutProteinKg">0</strong><small>g/kg/day</small></div>
 <div class="stat combined-stat"><span>Carbohydrate</span><strong id="nutCurrentCarb">0</strong><small>g/day</small><strong id="nutCarbKg">0</strong><small>g/kg/day</small></div>
-<div class="stat combined-stat"><span>Calcium</span><strong id="nutCurrentCaKg">0</strong><small>mEq/kg/day</small><strong id="nutCurrentCa">0</strong><small>mEq/day</small></div><div class="stat combined-stat"><span>Sodium</span><strong id="nutCurrentNaKg">0</strong><small>mEq/kg/day</small><strong id="nutCurrentNa">0</strong><small>mEq/day</small></div><div class="stat combined-stat"><span>Potassium</span><strong id="nutCurrentKKg">0</strong><small>mEq/kg/day</small><strong id="nutCurrentK">0</strong><small>mEq/day</small></div>
+<div class="stat combined-stat"><span>Calcium</span><strong id="nutCurrentCaKg">0</strong><small>mg/kg/day</small><strong id="nutCurrentCa">0</strong><small>mg/day</small></div><div class="stat combined-stat"><span>Sodium</span><strong id="nutCurrentNaKg">0</strong><small>mEq/kg/day</small><strong id="nutCurrentNa">0</strong><small>mEq/day</small></div><div class="stat combined-stat"><span>Potassium</span><strong id="nutCurrentKKg">0</strong><small>mEq/kg/day</small><strong id="nutCurrentK">0</strong><small>mEq/day</small></div>
 </div>
 </div>
 
@@ -1174,7 +1174,7 @@ function recalc(renderRows=true){
  $('currentTotal').textContent=fmt(x.total,1);$('remaining').textContent=fmt(x.remaining,1);$('currentGir').textContent=fmt(x.gir);
  $('currentEnergy').textContent=fmt(x.energy,1);$('currentProtein').textContent=fmt(x.protein,2);$('currentCarb').textContent=fmt(x.carb,2);
  $('energyKg').textContent=fmt(x.p.w?x.energy/x.p.w:0,1);$('proteinKg').textContent=fmt(x.p.w?x.protein/x.p.w:0,2);$('carbKg').textContent=fmt(x.p.w?x.carb/x.p.w:0,2);
- $('currentCa').textContent=fmt(x.calcium/CALCIUM_MG_PER_MEQ,2);$('currentCaKg').textContent=fmt(x.p.w?(x.calcium/CALCIUM_MG_PER_MEQ)/x.p.w:0,2);
+ $('currentCa').textContent=fmt(x.calcium,2);$('currentCaKg').textContent=fmt(x.p.w?x.calcium/x.p.w:0,2);
  $('currentNa').textContent=fmt(x.sodium,2);$('currentNaKg').textContent=fmt(x.p.w?x.sodium/x.p.w:0,2);
  $('currentK').textContent=fmt(x.potassium,2);$('currentKKg').textContent=fmt(x.p.w?x.potassium/x.p.w:0,2);
  $('fluidStatus').textContent=x.over?'Current fluids exceed permitted TFI (by '+fmt(x.total-x.permitted,1)+' mL).':'Current fluid total is within permitted TFI.';
