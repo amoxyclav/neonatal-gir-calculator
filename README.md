@@ -5,6 +5,8 @@ A free web-based neonatal calculation aid for GIR, total fluid intake (TFI), nut
 Website:
 https://amoxyclav.github.io/neonatal-gir-calculator/
 
+The published site is deployed through the repository's GitHub Actions workflow.
+
 ## Features
 
 - Weight, TFI and target GIR inputs
