@@ -5,7 +5,7 @@
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="author" content="Dr. Damam Sreeharsha">
 <meta name="google-site-verification" content="KEIWbeS9bc-9CR2UkSGAGOQHG7cIbTFrPCANzRLGJ8k" />
 <link rel="canonical" href="https://amoxyclav.github.io/neonatal-gir-calculator/">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="manifest" href="manifest.json">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Neonatal GIR & Nutrition Calculator">
@@ -595,28 +595,31 @@ body.fluid-picker-open{overflow:hidden!important}
 </style>
 </head>
 <body>
-<header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
-<nav class="nav" aria-label="Primary navigation"><a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Home</span></a><a href="#gir" data-page="gir">GIR</a><a href="#nutrition" data-page="nutrition">Nutrition</a><a href="#mixer" data-page="mixer">Mixer</a><a href="#settings" data-page="settings">Settings</a><a href="#profile" data-page="profile" class="profile-nav" aria-label="Profile" title="Profile"><span class="profile-avatar" id="navProfileAvatar" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></a></nav></div></header>
+<header class="app-sidebar"><div class="bar"><a class="brand" href="#home" data-page="home"><span class="brand-mark"><i class="bi bi-heart-pulse-fill" aria-hidden="true"></i></span><span class="brand-name">Neonatal<small>NICU tools</small></span></a>
+<nav class="nav" aria-label="Primary navigation">
+<a class="active nav-home" href="#home" data-page="home" aria-label="Home" title="Home"><i class="bi bi-house-door-fill" aria-hidden="true"></i><span class="nav-label">Home</span></a>
+<a href="#gir" data-page="gir"><i class="bi bi-droplet" aria-hidden="true"></i><span class="nav-label">GIR</span></a>
+<a href="#nutrition" data-page="nutrition"><i class="bi bi-bar-chart-line" aria-hidden="true"></i><span class="nav-label">Nutrition</span></a>
+<a href="#mixer" data-page="mixer"><i class="bi bi-prescription2" aria-hidden="true"></i><span class="nav-label">Mixer</span></a>
+<a href="#settings" data-page="settings"><i class="bi bi-gear" aria-hidden="true"></i><span class="nav-label">Settings</span></a>
+<a href="#profile" data-page="profile" class="profile-nav"><i class="bi bi-person-circle" aria-hidden="true"></i><span class="nav-label">Profile</span></a>
+</nav></div></header>
 <main>
 <section id="home" class="page active"><div class="home-hero home-hero-premium">
   <div class="hero-copy">
     <div class="hero-topline"><div class="home-eyebrow"><span></span> CLINICAL TOOLS FOR NEONATAL CARE</div><p class="home-welcome" id="homeWelcome" hidden></p></div>
     <h1>Neonatal GIR &amp;<br><span>Nutrition Calculator</span></h1>
     <p class="hero-lead">Calculate fluids, GIR and Energy-Protein Ratio for neonates with ease.</p>
-    <p class="hero-sub">Designed by a pediatrician, for everyday clinical use.</p>
+    <p class="hero-sub">Designed by a pediatrician, for everyday clinical use.</p><a class="btn primary home-open-calculator" href="#gir" data-page="gir"><i class="bi bi-droplet" aria-hidden="true"></i> Open GIR calculator <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
   </div>
-  <div class="home-hero-art" aria-hidden="true">
-    <div class="hero-glow"></div><div class="hero-orbit hero-orbit-a"></div><div class="hero-orbit hero-orbit-b"></div>
-    <div class="hero-glass-card"><div class="hero-card-top"><span class="hero-dot"></span><span>NEONATAL CARE</span></div><div class="hero-visual-symbol">✳</div><div class="hero-visual-title">Small calculations.<br><strong>Meaningful impact.</strong></div><div class="hero-visual-rule"></div><div class="hero-visual-foot">CLINICIAN-LED · TOOL-DRIVEN</div></div>
-    <span class="hero-float hero-float-one">GIR</span><span class="hero-float hero-float-two">Nutrition</span><span class="hero-float hero-float-three">Fluids</span>
-  </div>
+  <div class="home-hero-art" aria-hidden="true"><img src="assets/neonatal-fluid-hero.webp" alt="" fetchpriority="high"></div>
 </div><div id="shareStatus" class="status" style="display:none"></div><div class="home-tools home-tools-premium">
-  <a class="home-tool home-tool-gir" href="#gir" data-page="gir"><span class="tool-icon">💧</span><span class="home-tool-content"><b>GIR Calculator</b><small>Calculate GIR, fluids and electrolytes for neonates.</small><span class="tool-tags"><i>TFI planning</i><i>Multiple fluids</i><i>Electrolytes</i></span></span><span class="tool-arrow">›</span></a>
-  <a class="home-tool home-tool-nutrition" href="#nutrition" data-page="nutrition"><span class="tool-icon">📊</span><span class="home-tool-content"><b>Energy-Protein Ratio</b><small>Plan nutrition and macronutrients with ease.</small><span class="tool-tags"><i>Energy &amp; protein</i><i>Enteral + parenteral</i><i>Nutrition planning</i></span></span><span class="tool-arrow">›</span></a>
-  <a class="home-tool home-tool-mixer" href="#mixer" data-page="mixer"><span class="tool-icon">⚗️</span><span class="home-tool-content"><b>Fluid Mixer</b><small>Mix fluids to a desired composition.</small><span class="tool-tags"><i>Custom concentrations</i><i>Fluid preparation</i></span></span><span class="tool-arrow">›</span></a>
+  <a class="home-tool home-tool-gir" href="#gir" data-page="gir"><span class="tool-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></span><span class="home-tool-content"><b>GIR Calculator</b><small>Calculate GIR, fluids and electrolytes for neonates.</small><span class="tool-tags"><i>TFI planning</i><i>Multiple fluids</i><i>Electrolytes</i></span></span><span class="tool-arrow"><i class="bi bi-arrow-right" aria-hidden="true"></i></span></a>
+  <a class="home-tool home-tool-nutrition" href="#nutrition" data-page="nutrition"><span class="tool-icon"><i class="bi bi-bar-chart-fill" aria-hidden="true"></i></span><span class="home-tool-content"><b>Energy-Protein Ratio</b><small>Plan nutrition and macronutrients with ease.</small><span class="tool-tags"><i>Energy &amp; protein</i><i>Enteral + parenteral</i><i>Nutrition planning</i></span></span><span class="tool-arrow"><i class="bi bi-arrow-right" aria-hidden="true"></i></span></a>
+  <a class="home-tool home-tool-mixer" href="#mixer" data-page="mixer"><span class="tool-icon"><i class="bi bi-prescription2" aria-hidden="true"></i></span><span class="home-tool-content"><b>Fluid Mixer</b><small>Mix fluids to a desired composition.</small><span class="tool-tags"><i>Custom concentrations</i><i>Fluid preparation</i></span></span><span class="tool-arrow"><i class="bi bi-arrow-right" aria-hidden="true"></i></span></a>
 </div>
-<div class="note home-safety-note"><span class="safety-mark">i</span><span><strong>Clinical safety note</strong><br>Calculation aid only—not a prescribing system or a validated medical device. Verify product identity, concentration, compatibility, line access and preparation; follow local NICU protocols and independently check every result before patient care.</span></div>
-<div class="mut home-version">Version 1.4 <span>•</span> Last updated September 2026</div><div class="home-quickstart-wrap"><button id="quickGuideToggle" class="link-button home-quickstart-button" type="button"><span class="quickstart-icon">↗</span> Quick Start Guide <span class="quickstart-hint">Step-by-step</span></button></div>
+<div class="note home-safety-note"><span class="safety-mark"><i class="bi bi-shield-check" aria-hidden="true"></i></span><span><strong>Clinical safety note</strong><br>Calculation aid only—not a prescribing system or a validated medical device. Verify product identity, concentration, compatibility, line access and preparation; follow local NICU protocols and independently check every result before patient care.</span></div>
+<div class="mut home-version">Version 1.4 <span>•</span> Last updated September 2026</div><div class="home-quickstart-wrap"><button id="quickGuideToggle" class="link-button home-quickstart-button" type="button"><span class="quickstart-icon"><i class="bi bi-arrow-up-right" aria-hidden="true"></i></span> Quick Start Guide <span class="quickstart-hint">Step-by-step</span></button></div>
 <div id="quickGuide" class="section home-quick-guide" style="display:none;margin-top:12px">
 <h2>Quick Start Guide</h2>
 <ol class="guide-list">
@@ -625,7 +628,7 @@ body.fluid-picker-open{overflow:hidden!important}
 <li><strong>Fluid Mixer:</strong> Use <em>Making a New Bag</em> when preparing a target concentration from two stock concentrations. Use <em>Adjusting an Existing Bag</em> when you already have a fluid and need to add a stock solution to reach a target concentration.</li>
 <li>Preset compositions can be expanded and edited where permitted. Blank quantity fields are treated as zero. Always verify the actual product label, concentration, compatibility, preparation method, line access and local NICU protocol before administration.</li>
 </ol>
-</div><div class="home-community home-community-premium"><div class="home-feature"><div class="home-feature-icon">💡</div><div class="home-feature-copy"><h3>Suggest a Feature</h3><p>Request a calculator, guide, chart, or any feature.</p></div><a class="btn" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues/new" target="_blank" rel="noopener">Suggest</a></div><template id="saved-home-support-section"><div class="home-support"><h3>☕ Like the Neonatal GIR & Nutrition Calculator? Support the developer.</h3><p>This project is independently developed and maintained. If it has been useful in your clinical work or teaching, you can support its continued development and maintenance.</p><button class="btn" type="button" id="supportDeveloper">♥ Support the developer</button><div class="home-support-note">Support link will be added here.</div></div></template></div><div class="actions home-share-actions" style="margin-top:18px"><div class="home-share-copy"><strong>Share this clinical toolkit</strong><small>Keep these neonatal calculation tools within reach.</small></div><button class="btn primary" id="shareTool" type="button">↗ Share calculator</button></div></div></section>
+</div><div class="home-community home-community-premium"><div class="home-feature"><div class="home-feature-icon"><i class="bi bi-lightbulb" aria-hidden="true"></i></div><div class="home-feature-copy"><h3>Suggest a Feature</h3><p>Request a calculator, guide, chart, or any feature.</p></div><a class="btn" href="https://github.com/amoxyclav/neonatal-gir-calculator/issues/new" target="_blank" rel="noopener">Suggest</a></div><template id="saved-home-support-section"><div class="home-support"><h3>☕ Like the Neonatal GIR & Nutrition Calculator? Support the developer.</h3><p>This project is independently developed and maintained. If it has been useful in your clinical work or teaching, you can support its continued development and maintenance.</p><button class="btn" type="button" id="supportDeveloper">♥ Support the developer</button><div class="home-support-note">Support link will be added here.</div></div></template></div><div class="actions home-share-actions" style="margin-top:18px"><div class="home-share-copy"><strong>Share this clinical toolkit</strong><small>Keep these neonatal calculation tools within reach.</small></div><button class="btn primary" id="shareTool" type="button"><i class="bi bi-share" aria-hidden="true"></i> Share calculator</button></div></div></section>
 
 <section id="gir" class="page">
 
@@ -1768,4 +1771,73 @@ calculateMixerExistingBag();
 })();
 </script>
 <script src="local-profile.js"></script>
+<style id="clinical-showcase-theme">
+:root{--teal:#1558d6;--ink:#17233d;--mut:#64738b;--bg:#f6f8fc;--line:#e2e8f1;--ok:#246b4b;--bad:#a33f48;--warn:#815b1c;color-scheme:light}
+html{scroll-behavior:smooth}body{padding-left:116px;background:#f6f8fc;color:#17233d;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+header.app-sidebar{position:fixed;z-index:30;inset:0 auto 0 0;width:116px;height:100dvh;border:0;border-right:1px solid #e7ebf2;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:5px 0 22px rgba(26,43,75,.025)}
+.app-sidebar .bar{height:100%;max-width:none;padding:22px 10px 18px;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:28px}
+.app-sidebar .brand{display:flex;align-items:center;flex-direction:column;gap:9px;color:#1b2944;text-align:center;text-decoration:none;font-size:15px;letter-spacing:-.02em}
+.brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#eaf1ff;color:#1558d6;font-size:22px}
+.brand-name{font-weight:800}.brand-name small{display:block;margin-top:3px;color:#8290a5;font-size:10px;font-weight:650;letter-spacing:.02em}
+.app-sidebar .nav{width:100%;display:flex;flex:1;flex-direction:column;align-items:stretch;gap:8px;flex-wrap:nowrap}
+.app-sidebar .nav a{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 4px;border-radius:13px;color:#56647c;font-size:12px;font-weight:650;text-decoration:none;transition:background .18s,color .18s,transform .18s}
+.app-sidebar .nav a>i{font-size:21px;line-height:1}.app-sidebar .nav a:hover{background:#f3f6fb;color:#1558d6;transform:translateY(-1px)}
+.app-sidebar .nav a.active{background:#e8f0ff;color:#1558d6;font-weight:800}
+.app-sidebar .nav .profile-nav{margin-top:auto}
+main{width:min(100%,1600px);max-width:1600px;margin:0 auto;padding:28px clamp(22px,3.6vw,58px) 60px}
+.page.active{animation:showcase-enter .34s ease both}
+@keyframes showcase-enter{from{opacity:.45;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.home-hero-premium{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(350px,.95fr);gap:24px;align-items:center;min-height:440px;overflow:hidden;margin:0 0 22px;padding:24px 20px 22px 34px;border:0;border-radius:0;background:linear-gradient(105deg,#fff 0%,#fff 44%,#f4f8ff 100%);box-shadow:none}
+.home-hero-premium:before{content:"";position:absolute;z-index:-1;inset:0 0 0 48%;background:radial-gradient(ellipse at 67% 45%,rgba(219,234,255,.72),transparent 57%),radial-gradient(circle at 89% 67%,rgba(218,243,230,.56),transparent 15%)}
+.hero-copy{position:relative;z-index:2;max-width:710px}
+.home-eyebrow{display:flex;align-items:center;gap:14px;color:#556986;font-size:11px;font-weight:850;letter-spacing:.19em}
+.home-eyebrow span{width:38px;height:2px;background:#1558d6}
+.hero-copy h1{max-width:680px;margin:25px 0 20px;color:#17233d;font-size:clamp(37px,4vw,56px);font-weight:850;line-height:1.03;letter-spacing:-.065em}
+.hero-copy h1 span{color:#1558d6}
+.hero-copy .hero-lead{max-width:620px;margin:0;color:#253652;font-size:clamp(18px,1.85vw,24px);line-height:1.5}
+.hero-copy .hero-sub{margin:9px 0 24px;color:#687994;font-size:17px}
+.home-open-calculator{display:inline-flex;align-items:center;gap:13px;min-height:62px;padding:0 23px;border:0;border-radius:14px;background:linear-gradient(115deg,#1558d6,#2368e5);box-shadow:0 12px 24px rgba(21,88,214,.2);color:#fff;font-size:17px;font-weight:800;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.home-open-calculator .bi-arrow-right{margin-left:16px;font-size:20px}.home-open-calculator:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(21,88,214,.25)}
+.home-hero-art{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-width:0;min-height:370px;overflow:visible;background:none;animation:hero-art-enter .8s cubic-bezier(.2,.8,.2,1) both}
+.home-hero-art img{display:block;width:126%;max-width:none;height:430px;object-fit:cover;object-position:72% 50%;mix-blend-mode:multiply;filter:saturate(.92);transform:translateX(1%);mask-image:radial-gradient(ellipse 84% 78% at 72% 48%,#000 59%,rgba(0,0,0,.86) 73%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 84% 78% at 72% 48%,#000 59%,rgba(0,0,0,.86) 73%,transparent 100%)}
+@keyframes hero-art-enter{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.home-tools-premium{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0}
+.home-tools-premium .home-tool{min-width:0;min-height:196px;align-items:flex-start;gap:14px;padding:22px 20px;border:1px solid #dce8de;border-radius:20px;background:linear-gradient(145deg,#fbfefc,#f2faf4);box-shadow:0 8px 22px rgba(29,50,89,.035);color:#155e3a;transition:transform .2s,box-shadow .2s,border-color .2s}
+.home-tools-premium .home-tool:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(29,50,89,.09)}
+.home-tools-premium .home-tool-gir{border-color:#d7eddf;background:linear-gradient(145deg,#fbfefc,#f1faf4)}
+.home-tools-premium .home-tool-nutrition{border-color:#e6ddf5;background:linear-gradient(145deg,#fdfbff,#f7f2ff)}
+.home-tools-premium .home-tool-mixer{border-color:#dae7f8;background:linear-gradient(145deg,#fbfdff,#f1f7ff)}
+.home-tools-premium .tool-icon{display:grid;place-items:center;width:56px;height:56px;flex:0 0 56px;margin-top:1px;border:1px solid rgba(255,255,255,.9);border-radius:50%;background:#fff;color:#1783d1;font-size:25px;box-shadow:0 3px 10px rgba(45,84,150,.045)}
+.home-tool-nutrition .tool-icon{color:#4762cf}.home-tool-mixer .tool-icon{color:#2465c7}
+.home-tools-premium .home-tool-content{flex:1;min-width:0}
+.home-tools-premium .home-tool b{display:block;color:#145b39;font-size:20px;line-height:1.3;letter-spacing:-.025em}
+.home-tools-premium .home-tool-nutrition b{color:#38257f}.home-tools-premium .home-tool-mixer b{color:#124aa8}
+.home-tools-premium .home-tool small{display:block;margin-top:9px;color:#54657f;font-size:14px;line-height:1.5}
+.home-tools-premium .tool-arrow{display:grid;place-items:center;align-self:center;width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:rgba(255,255,255,.78);color:#1558d6;font-size:18px}
+.tool-tags{gap:6px;margin-top:14px}.tool-tags i{padding:6px 8px;border-color:rgba(89,119,154,.09);border-radius:9px;background:rgba(255,255,255,.67);color:#586a82;font-size:10px}
+.home-safety-note{margin:26px 0 12px;padding:16px 0;border:0;border-top:1px solid #e4e9f1;border-radius:0;background:transparent;color:#5d6c82;font-size:12px;line-height:1.65}
+.safety-mark{width:38px;height:38px;flex-basis:38px;border:0;border-radius:50%;background:#e9f5ed;color:#367850;font-size:19px}
+.home-safety-note strong{color:#3b4b63;font-size:13px}
+.home-version{margin:12px 2px 0!important}
+.section{margin:15px 0;padding:clamp(17px,2.2vw,26px);border:1px solid #e3e9f2;border-radius:18px;background:#fff;box-shadow:0 6px 22px rgba(28,48,81,.035)}
+.section>h2{margin:0 0 18px;color:#1d2d49;font-size:clamp(19px,2.2vw,24px);font-weight:780;letter-spacing:-.035em}
+label{color:#33435e;font-size:13px;font-weight:720}
+input,select{min-height:44px;margin-top:7px;padding:10px 12px;border:1px solid #d7dfeb;border-radius:11px;background:#fff;color:#17233d;transition:border-color .16s,box-shadow .16s}
+input:focus,select:focus{outline:none;border-color:#76a1ed;box-shadow:0 0 0 3px rgba(21,88,214,.12)}
+.btn{min-height:42px;padding:10px 15px;border:1px solid #cfdaea;border-radius:11px;background:#fff;color:#1558d6;font-weight:700;transition:transform .16s,box-shadow .16s,border-color .16s}
+.btn:hover{transform:translateY(-1px);border-color:#a9bfdf;box-shadow:0 5px 14px rgba(29,62,116,.07)}
+.btn.primary{border-color:#1558d6;background:#1558d6;color:white}
+.stats{gap:12px}.stat{min-width:0;padding:17px;border:1px solid #e0e8f3;border-radius:16px;background:linear-gradient(145deg,#fbfdff,#f1f6fc);box-shadow:0 5px 14px rgba(31,59,104,.035)}
+.stat span{color:#64748b;font-weight:750}.stat strong{color:#1c3767;font-size:clamp(22px,2.4vw,28px);letter-spacing:-.04em}
+.fluid,.nutrition-extra{border-color:#e0e7f0;border-radius:14px;background:#fff;box-shadow:0 3px 12px rgba(30,51,84,.025)}
+.plan{border-color:#dbe5f3;border-radius:16px;background:#f7f9fd}.note{border-color:#f0dfb1;border-radius:13px}
+table th{color:#3b4c68;font-weight:750}table td{color:#4c5b72}
+.home-feature{border-color:#dde5f0;border-radius:16px;background:#f8faff}.home-feature-icon{border:0;border-radius:14px;background:#eaf1ff;color:#1558d6;font-size:24px}.home-feature-copy h3{color:#213857}.home-feature-copy p{color:#64738b}
+.link-button{color:#1558d6}
+.creator-showcase{border-color:#dce6f3;background:#fff;box-shadow:0 10px 28px rgba(31,55,91,.045)}.creator-kicker,.creator-name{color:#1558d6}.creator-mark,.creator-monogram{background:#eaf1ff;color:#1558d6;border-color:#dce7fa;box-shadow:none}.creator-copy h2{color:#1b2944}.creator-description{color:#58687f}.creator-capabilities span,.creator-side-label{border-color:#e0e7f0;background:#f8faff;color:#53647d}
+button:focus-visible,a:focus-visible{outline:3px solid rgba(21,88,214,.38);outline-offset:3px}#homeWelcome[hidden]{display:none!important}
+@media(max-width:1000px){main{padding-right:24px;padding-left:24px}.home-hero-premium{grid-template-columns:minmax(0,1fr) minmax(250px,.8fr);gap:10px;padding-left:20px}.home-hero-art img{width:145%;height:360px}.home-tools-premium .home-tool{min-height:185px;padding:18px 15px;gap:10px}.home-tools-premium .tool-icon{width:46px;height:46px;flex-basis:46px;font-size:21px}.home-tools-premium .tool-arrow{width:32px;height:32px;flex-basis:32px}}
+@media(max-width:700px){body{padding-left:0}#homeWelcome[hidden]{display:none!important}header.app-sidebar{position:sticky;inset:0 0 auto;width:100%;height:auto;min-height:0;border-right:0;border-bottom:1px solid #e7ebf2;box-shadow:0 5px 18px rgba(26,43,75,.04)}.app-sidebar .bar{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px;padding:8px 12px calc(8px + env(safe-area-inset-top))}.app-sidebar .brand{flex-direction:row;gap:8px;text-align:left;font-size:14px}.brand-mark{width:34px;height:34px;border-radius:11px;font-size:18px}.brand-name small{font-size:9px;margin-top:1px}.app-sidebar .nav{grid-column:1/-1;display:flex;flex-direction:row;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 0 3px;scrollbar-width:none}.app-sidebar .nav::-webkit-scrollbar{display:none}.app-sidebar .nav a{flex:0 0 auto;min-height:42px;flex-direction:row;gap:6px;padding:8px 11px;border-radius:10px;font-size:12px}.app-sidebar .nav a>i{font-size:16px}.app-sidebar .nav .profile-nav{margin:0 0 0 auto}main{padding:12px 14px calc(34px + env(safe-area-inset-bottom))}.home-hero-premium{grid-template-columns:1fr;gap:0;min-height:0;margin:0 0 15px;padding:16px 16px 12px;border-radius:0;background:#fff}.home-hero-premium:before{inset:43% 0 0;background:radial-gradient(ellipse at 65% 45%,rgba(219,234,255,.68),transparent 60%)}.home-eyebrow{font-size:9px;letter-spacing:.14em}.home-eyebrow span{width:24px}.hero-copy h1{margin:12px 0 8px;font-size:clamp(31px,8.4vw,37px)}.hero-copy .hero-lead{font-size:16px}.hero-copy .hero-sub{margin:4px 0 12px;font-size:13px}.home-open-calculator{min-height:48px;padding:0 17px;font-size:14px}.home-open-calculator .bi-arrow-right{margin-left:6px}.home-hero-art{display:none!important;min-height:0;height:0;margin-top:0;overflow:hidden}.home-hero-art img{width:112%;height:245px;object-fit:cover;object-position:71% 50%;transform:translateX(4%)}.home-tools-premium{grid-template-columns:1fr;gap:10px}.home-tools-premium .home-tool{min-height:unset;padding:15px;border-radius:16px}.home-tools-premium .tool-icon{width:46px;height:46px;flex-basis:46px}.home-tools-premium .home-tool b{font-size:17px}.home-tools-premium .home-tool small{font-size:13px}.tool-tags{margin-top:10px}.home-safety-note{align-items:flex-start;gap:10px;margin:19px 0 10px;padding:14px 0;font-size:11px}.safety-mark{width:32px;height:32px;flex-basis:32px;font-size:16px}.section{padding:16px;border-radius:15px}.section>h2{margin-bottom:14px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:13px}.stat strong{font-size:22px}.home-feature{align-items:flex-start;flex-wrap:wrap;padding:15px}.home-feature .btn{margin-left:0}.nutrition-extra{padding:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.page.active,.home-hero-art{animation:none!important}*,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </body></html>
