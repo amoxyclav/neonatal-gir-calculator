@@ -593,6 +593,49 @@ body.fluid-picker-open{overflow:hidden!important}
  .fluid-picker-apply{min-height:42px;padding:9px 13px;font-size:13px}
 }
 </style>
+<style id="motion-graphics">
+/* A slow, editorial motion layer for the calculator's fluid identity. */
+.home-hero-art{isolation:isolate}
+.hero-glow{animation:heroGlowBreathe 8s ease-in-out infinite}
+.hero-orbit{isolation:isolate}
+.hero-orbit::before{content:"";position:absolute;top:50%;left:-3px;width:7px;height:7px;border:1px solid rgba(255,255,255,.95);border-radius:50%;background:#5c8fe3;box-shadow:0 0 0 4px rgba(104,151,226,.12),0 0 15px rgba(83,131,212,.55);transform:translateY(-50%)}
+.hero-orbit-a{animation:heroOrbitA 38s linear infinite}
+.hero-orbit-b{animation:heroOrbitB 52s linear infinite}
+.hero-glass-card{animation:heroCardFloat 7s ease-in-out infinite}
+.hero-dot{animation:heroSignal 3.2s ease-in-out infinite}
+.hero-visual-symbol{position:relative;isolation:isolate;overflow:hidden}
+.hero-visual-symbol::before{content:"";position:absolute;inset:12%;border-radius:inherit;background:radial-gradient(circle,rgba(255,255,255,.75),rgba(180,210,255,.12) 70%,transparent);animation:heroMarkGlow 4.8s ease-in-out infinite}
+.hero-drop-motion{position:relative;z-index:1;width:min(54px,100%);height:min(54px,100%);overflow:visible}
+.hero-drop-fill{animation:heroFluidRise 5.2s ease-in-out infinite}
+.hero-drop-wave{animation:heroFluidWave 4.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.hero-drop-bubble{opacity:0;transform-box:fill-box;transform-origin:center;animation:heroBubbleRise 3.4s ease-in-out infinite}
+.hero-drop-bubble-b{animation-delay:1.7s}
+.hero-float{animation:heroChipFloat 6s ease-in-out infinite}
+.hero-float-two{animation-delay:-2.1s}
+.hero-float-three{animation-delay:-4s}
+.home-tools-premium .home-tool{animation:homeToolArrive .7s cubic-bezier(.2,.75,.25,1) both}
+.home-tools-premium .home-tool:nth-child(2){animation-delay:.09s}
+.home-tools-premium .home-tool:nth-child(3){animation-delay:.18s}
+.page-transition-loader{isolation:isolate}
+.page-transition-loader::before{content:"";position:absolute;left:50%;top:50%;z-index:0;width:88px;height:88px;border:1px solid rgba(59,104,190,.18);border-top-color:#477ed0;border-right-color:rgba(96,139,216,.56);border-radius:50%;transform:translate(-50%,-50%);animation:transitionOrbit 1.8s linear infinite}
+.page-transition-drop{position:relative;z-index:1}
+@keyframes heroGlowBreathe{0%,100%{opacity:.78;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes heroOrbitA{from{transform:rotate(-25deg) scaleY(.62)}to{transform:rotate(335deg) scaleY(.62)}}
+@keyframes heroOrbitB{from{transform:rotate(35deg) scaleY(.72)}to{transform:rotate(-325deg) scaleY(.72)}}
+@keyframes heroCardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes heroSignal{0%,100%{box-shadow:0 0 0 4px #e1f4e9}50%{box-shadow:0 0 0 7px rgba(225,244,233,.45)}}
+@keyframes heroMarkGlow{0%,100%{opacity:.42;transform:scale(.92)}50%{opacity:.9;transform:scale(1.08)}}
+@keyframes heroFluidRise{0%,100%{transform:translateY(3px)}50%{transform:translateY(-2px)}}
+@keyframes heroFluidWave{0%,100%{transform:translateY(2px)}50%{transform:translateY(-3px)}}
+@keyframes heroBubbleRise{0%{opacity:0;transform:translateY(5px) scale(.7)}25%{opacity:.9}80%,100%{opacity:0;transform:translateY(-9px) scale(1.05)}}
+@keyframes heroChipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes homeToolArrive{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+@keyframes transitionOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+ .home-hero-art *, .home-tools-premium .home-tool, .page-transition-loader::before, .page-transition-drop{animation:none!important;transition:none!important}
+ .home-tools-premium .home-tool{opacity:1;translate:0 0}
+}
+</style>
 </head>
 <body>
 <header><div class="bar"><div class="brand">Neonatal GIR & Nutrition Calculator<small>Glucose • Fluids • Nutrition</small></div>
@@ -607,7 +650,7 @@ body.fluid-picker-open{overflow:hidden!important}
   </div>
   <div class="home-hero-art" aria-hidden="true">
     <div class="hero-glow"></div><div class="hero-orbit hero-orbit-a"></div><div class="hero-orbit hero-orbit-b"></div>
-    <div class="hero-glass-card"><div class="hero-card-top"><span class="hero-dot"></span><span>NEONATAL CARE</span></div><div class="hero-visual-symbol">✳</div><div class="hero-visual-title">Small calculations.<br><strong>Meaningful impact.</strong></div><div class="hero-visual-rule"></div><div class="hero-visual-foot">CLINICIAN-LED · TOOL-DRIVEN</div></div>
+    <div class="hero-glass-card"><div class="hero-card-top"><span class="hero-dot"></span><span>NEONATAL CARE</span></div><div class="hero-visual-symbol"><svg class="hero-drop-motion" viewBox="0 0 64 64" focusable="false" aria-hidden="true"><defs><linearGradient id="heroFluidDrop" x1="17" y1="7" x2="48" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#93c5fd"/><stop offset=".52" stop-color="#4c86e6"/><stop offset="1" stop-color="#385bc0"/></linearGradient><linearGradient id="heroFluidSurface" x1="12" y1="37" x2="51" y2="53" gradientUnits="userSpaceOnUse"><stop stop-color="#b5e4ff"/><stop offset="1" stop-color="#8ec5fb"/></linearGradient><clipPath id="heroFluidClip"><path d="M32 7.5S14 28.8 14 40.2C14 50.2 21.9 57 32 57s18-6.8 18-16.8C50 28.8 32 7.5 32 7.5Z"/></clipPath></defs><path d="M32 7.5S14 28.8 14 40.2C14 50.2 21.9 57 32 57s18-6.8 18-16.8C50 28.8 32 7.5 32 7.5Z" fill="url(#heroFluidDrop)" stroke="#315db2" stroke-opacity=".22" stroke-width="1.5"/><g clip-path="url(#heroFluidClip)"><path class="hero-drop-fill" d="M8 39c8-5 16 5 24 0s16 5 24 0v28H8Z" fill="url(#heroFluidSurface)"/><path class="hero-drop-wave" d="M8 43c8-5 16 5 24 0s16 5 24 0v25H8Z" fill="#d7f0ff" fill-opacity=".76"/><circle class="hero-drop-bubble hero-drop-bubble-a" cx="25" cy="48" r="1.8" fill="#fff"/><circle class="hero-drop-bubble hero-drop-bubble-b" cx="39" cy="49" r="1.4" fill="#fff"/></g><path d="M25.2 23.1c-3.5 4.8-6.4 9.3-7.1 13.1" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".82"/></svg></div><div class="hero-visual-title">Small calculations.<br><strong>Meaningful impact.</strong></div><div class="hero-visual-rule"></div><div class="hero-visual-foot">CLINICIAN-LED · TOOL-DRIVEN</div></div>
     <span class="hero-float hero-float-one">GIR</span><span class="hero-float hero-float-two">Nutrition</span><span class="hero-float hero-float-three">Fluids</span>
   </div>
 </div><div id="shareStatus" class="status" style="display:none"></div><div class="home-tools home-tools-premium">
