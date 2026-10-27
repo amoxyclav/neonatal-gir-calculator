@@ -190,6 +190,20 @@ const fs = require('fs');
     if(await page.locator('#fluidPickerDialog').isVisible()!==true) { const pickerState=await page.locator('#fluidPickerDialog').evaluate(el=>({hidden:el.hidden,attr:el.getAttribute('hidden'),display:getComputedStyle(el).display,width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})); throw new Error('Predefined-fluid picker dialog did not open: '+JSON.stringify(pickerState)+' runtime='+errors.join(' | ')); }
     if(await page.locator('#fluidPickerDialog .fluid-picker-group').count()<2) throw new Error('Predefined-fluid picker groups are missing.');
     if(await page.locator('#fluidPickerDialog .fluid-picker-option').count()<13) throw new Error('Predefined-fluid picker options are incomplete.');
+    for(const viewport of [{width:320,height:568},{width:390,height:844}]){
+      await page.setViewportSize(viewport);
+      const mobilePicker=await page.locator('#fluidPickerDialog').evaluate(dialog=>{
+        const panel=dialog.querySelector('.fluid-picker-panel');
+        const list=dialog.querySelector('.fluid-picker-list');
+        const button=dialog.querySelector('#applyPredefinedFluids');
+        const bounds=el=>{const r=el.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
+        return{viewport:{width:innerWidth,height:innerHeight},panel:bounds(panel),list:{clientHeight:list.clientHeight,scrollHeight:list.scrollHeight,overflowY:getComputedStyle(list).overflowY},button:bounds(button)};
+      });
+      if(mobilePicker.panel.left<0||mobilePicker.panel.top<0||mobilePicker.panel.right>mobilePicker.viewport.width+1||mobilePicker.panel.bottom>mobilePicker.viewport.height+1) throw new Error('Fluid picker panel exceeds the '+viewport.width+'px mobile viewport: '+JSON.stringify(mobilePicker));
+      if(mobilePicker.list.overflowY!=='auto'||mobilePicker.list.scrollHeight<=mobilePicker.list.clientHeight) throw new Error('Fluid list should scroll internally at '+viewport.width+'px: '+JSON.stringify(mobilePicker.list));
+      if(mobilePicker.button.left<0||mobilePicker.button.right>mobilePicker.viewport.width+1||mobilePicker.button.top<0||mobilePicker.button.bottom>mobilePicker.viewport.height+1) throw new Error('Add selected fluids button is outside the '+viewport.width+'px mobile viewport: '+JSON.stringify(mobilePicker.button));
+    }
+    await page.setViewportSize({width:1280,height:720});
     const pickerD5=page.locator('#fluidPickerDialog .fluid-picker-volume[data-fluid-name="D5"]');
     const pickerD10=page.locator('#fluidPickerDialog .fluid-picker-volume[data-fluid-name="D10"]');
     const d5Unit=page.locator('#fluidPickerDialog .fluid-picker-unit[data-fluid-name="D5"]');
